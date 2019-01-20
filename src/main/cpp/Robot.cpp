@@ -11,9 +11,20 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
-void Robot::RobotInit() {}
+void Robot::RobotInit() {	  
+		RioIO = new IO();
+		DriverControls = new ControllerManager();
+		Commands = new RobotCommands();
+		Drivetrain = new DriveManager(RioIO, Commands, DriverControls);
 
-void Robot::RobotPeriodic() {}
+		Drivetrain->DriveManagerInit();
+}
+
+void Robot::RobotPeriodic() {
+  RioIO->pollIO();
+  DriverControls->pollControllers(Commands);
+  Drivetrain->UpdateDashboard();
+}
 
 void Robot::AutonomousInit() {}
 
@@ -21,7 +32,13 @@ void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit() {}
 
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() {
+  Drivetrain->DriveManagerPeriodic();
+}
+
+void Robot::DisabledPeriodic(){
+  Drivetrain->DriveManagerDisabled();
+}
 
 void Robot::TestPeriodic() {}
 

@@ -8,9 +8,11 @@
 #pragma once
 
 #include <string>
-
 #include <frc/TimedRobot.h>
-#include <frc/smartdashboard/SendableChooser.h>
+#include "IO.h"
+#include "ControllerManager.h"
+#include "DriveManager.h"
+#include "RobotCommands.h"
 
 class Robot : public frc::TimedRobot {
  public:
@@ -21,7 +23,11 @@ class Robot : public frc::TimedRobot {
   void TeleopInit() override;
   void TeleopPeriodic() override;
   void TestPeriodic() override;
+  void DisabledPeriodic() override;
 
  private:
-
+  IO *RioIO;
+  ControllerManager *DriverControls;
+  RobotCommands *Commands;
+  DriveManager *Drivetrain;
 };
