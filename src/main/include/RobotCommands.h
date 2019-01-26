@@ -15,6 +15,24 @@ public:
 	double drvang;
 	double drvmag;
 	double drvrot;
+
+	bool hatchPickup;
+	bool cargoPickup;
+	bool elevatorHome;
+	bool ejectCargo;
+	bool placeHatchOne;
+	bool placeHatchTwo;
+	bool placeCargoInShip;
+	bool placeCargoRocketOne;
+	bool placeCargoRocketTwo;
+
+	bool hatchArmToggleManual;
+	bool ballArmMotorIntakeManual;
+	bool ballArmMotorEjectManual;
+	bool hatchClawManual;
+	bool ballEjectorManual;
+	bool ballArmToggleManual;
+	double elevatorDrivePowerManual;
 };
 
 #endif /* SRC_ROBOTCOMMANDS_H_ */

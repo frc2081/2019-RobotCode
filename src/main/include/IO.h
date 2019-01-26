@@ -57,7 +57,6 @@ public:
 	VictorSPX *drivelfmot;
 	VictorSPX *driverfmot;
 	VictorSPX *elevatormot;
-	
 
 	//Other Encoders
 	frc::Encoder *liftdriveenc;

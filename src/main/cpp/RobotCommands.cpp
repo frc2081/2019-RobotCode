@@ -12,6 +12,24 @@ RobotCommands::RobotCommands() {
 	drvang = 0;
 	drvrot = 0;
 
+	hatchPickup = false;
+	cargoPickup = false;
+	elevatorHome = false;
+	ejectCargo = false;
+	placeHatchOne = false;
+	placeHatchTwo = false;
+	placeCargoInShip = false;
+	placeCargoRocketOne = false;
+	placeCargoRocketTwo = false;
+
+	hatchArmToggleManual = false;
+	ballArmMotorIntakeManual = false;
+	ballArmMotorEjectManual = false;
+	hatchClawManual = false;
+	ballEjectorManual = false;
+	ballArmToggleManual = false;
+	elevatorDrivePowerManual = 0;
+
 }
 
 
