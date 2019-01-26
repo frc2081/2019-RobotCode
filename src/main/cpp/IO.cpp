@@ -37,7 +37,8 @@ IO::IO() {
 	swerveresetone = new frc::DigitalInput(0);
 	swerveresettwo = new frc::DigitalInput(1);
 
-	//Other Mothers
+	//Other Motors
+	ballintakemot = new VictorSPX(15)
 	liftdrivemot = new VictorSPX(16);
 	drivelbmot = new VictorSPX(17);
 	driverbmot = new VictorSPX(18);
