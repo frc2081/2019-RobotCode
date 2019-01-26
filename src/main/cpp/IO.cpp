@@ -37,12 +37,12 @@ IO::IO() {
 	swerveresettwo = new frc::DigitalInput(1);
 
 	//Other Motors
-	ballintakemot = new VictorSPX(15)
+	ballintakemot = new VictorSPX(15);
 	liftdrivemot = new VictorSPX(16);
-	drivelbmot = new VictorSPX(17);
-	driverbmot = new VictorSPX(18);
-	drivelfmot = new VictorSPX(19);
-	driverfmot = new VictorSPX(20);
+	liftlbmot = new VictorSPX(17);
+	liftrbmot = new VictorSPX(18);
+	liftlfmot = new VictorSPX(19);
+	liftrfmot = new VictorSPX(20);
 	elevatormot = new VictorSPX(21);
 
 
