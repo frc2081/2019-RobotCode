@@ -25,12 +25,12 @@
 		void UpdateDashboard();
 
 		//Drive Base dimesions
-		double drivebaseXDimesion = 27.5;
-		double drivebaseYDimension = 32;
+		double drivebaseXDimesion = 29;
+		double drivebaseYDimension = 17;
 
 		//Default PID calibrations for swerve drive
-		double turnP = 0; 
-		double turnI = -.04;
+		double turnP = .04; 
+		double turnI = .001;
 		double turnD = 0;
 
 		double drvP = 0;
@@ -54,12 +54,14 @@
 
 		double _lfwhlangoffset, _rfwhlangoffset, _lbwhlangoffset, _rbwhlangoffset;
 
+
 		double WhlAngCalcOffset(double, double);
 		void ZeroEncoders();
 		void CalculateVectors();
 		void ApplyIntellegintSwerve();
 		void AutoApplyPIDControl();
 		void ApplyPIDControl();
+		void UpdatePIDTunes();
 	};
 
 

@@ -22,6 +22,15 @@ DriveManager::DriveManager(IO *io, RobotCommands *com, ControllerManager *cntls)
 
 	_pidpollrate = 0.01;
 
+	/*
+	 * max speed - 11.5 ft/s -> 3.5052 m/s || 660 RPM of wheel
+	 * 138 pulses/rotation of wheel
+	 * 20 pulses/rotation of cim
+	 * 6.9 cim rotations/1 wheel rotation
+	 * 4554 RPM on cim - max
+	 */
+	_maxdrivespeed = 10; //Speed is in encoder pulses
+
 	_currangrf = 0;
 	_curranglf = 0;
 	_curranglb = 0;
@@ -30,15 +39,6 @@ DriveManager::DriveManager(IO *io, RobotCommands *com, ControllerManager *cntls)
 	_rfwhlangoffset = 0;
 	_lbwhlangoffset = 0;
 	_rbwhlangoffset = 0;
-
-	/*
-	 * max speed - 11.5 ft/s -> 3.5052 m/s || 660 RPM of wheel
-	 * 138 pulses/rotation of wheel
-	 * 20 pulses/rotation of cim
-	 * 6.9 cim rotations/1 wheel rotation
-	 * 4554 RPM on cim - max
-	 */
-	_maxdrivespeed = 91080; //Speed is in encoder pulses
 
 	//Set up swerve drive motor PID controllers
 	_lfdrvpid = new frc::PIDController(_drvpidp, _drvpidi, _drvpidd, _drvpidf, io->encdrvlf, io->drvlfmot, _pidpollrate);
@@ -49,6 +49,8 @@ DriveManager::DriveManager(IO *io, RobotCommands *com, ControllerManager *cntls)
 	_rfdrvpid->Enable();
 	_lbdrvpid->Enable();
 	_rbdrvpid->Enable();
+
+
 
 	//Set up swerve turning motor PID controllers
 	_lfturnpid = new frc::PIDController(_turnpidp, _turnpidi, _turnpidp, io->steerencdrvlf, io->turnlfmot, _pidpollrate);
@@ -78,11 +80,26 @@ DriveManager::DriveManager(IO *io, RobotCommands *com, ControllerManager *cntls)
 	_rfwhlangoffset = _prefs->GetDouble("RFOffset", 0);
 	_lbwhlangoffset = _prefs->GetDouble("LBOffset", 0);
 	_rbwhlangoffset = _prefs->GetDouble("RBOffset", 0);
+
+	_rfturnpid->Disable();
+	_lbturnpid->Disable();
+	_rbturnpid->Disable();
 }
 
-void DriveManager::DriveManagerInit() {}
+void DriveManager::DriveManagerInit() {
+
+	frc::SmartDashboard::PutNumber("Swerve Turn P", turnP);
+	frc::SmartDashboard::PutNumber("Swerve Turn I", turnI);
+	frc::SmartDashboard::PutNumber("Swerve Turn D", turnD);
+
+	frc::SmartDashboard::PutNumber("Swerve Drive P", drvP);
+	frc::SmartDashboard::PutNumber("Swerve Drive I", drvI);
+	frc::SmartDashboard::PutNumber("Swerve Drive D", drvD);
+	frc::SmartDashboard::PutNumber("Swerve Drive F", drvF);
+}
 
 void DriveManager::DriveManagerPeriodic() {
+	UpdatePIDTunes();
 	CalculateVectors();
 	ApplyIntellegintSwerve();
 	ApplyPIDControl();
@@ -247,4 +264,60 @@ void DriveManager::UpdateDashboard(){
 	frc::SmartDashboard::PutNumber("Swerve Right Front Encoder Offset", _rfwhlangoffset);
 	frc::SmartDashboard::PutNumber("Swerve Left Back Encoder Offset", _lbwhlangoffset);
 	frc::SmartDashboard::PutNumber("Swerve Right Back Encoder Offset", _rbwhlangoffset);
+
+	frc::SmartDashboard::PutBoolean("Swerve Reset Command 1", !_io->swerveresetone->Get());
+	frc::SmartDashboard::PutBoolean("Swerve Reset Command 2", !_io->swerveresettwo->Get());
+
+	frc::SmartDashboard::PutNumber("LF drv PID Setpoint", _lfdrvpid->GetSetpoint());
+	frc::SmartDashboard::PutNumber("LF drv PID Error", _lfdrvpid->GetError());
+	frc::SmartDashboard::PutNumber("Swerve LF Get", !_io->encdrvlf->PIDGet());
+}
+
+void DriveManager::UpdatePIDTunes(){
+
+	_turnpidp = frc::SmartDashboard::GetNumber("Swerve Turn P", turnP);
+	_turnpidi = frc::SmartDashboard::GetNumber("Swerve Turn I", turnI);
+	_turnpidd = frc::SmartDashboard::GetNumber("Swerve Turn D", turnD);
+
+	_drvpidp = frc::SmartDashboard::GetNumber("Swerve Drive P", drvP);
+	_drvpidi = frc::SmartDashboard::GetNumber("Swerve Drive I", drvI);
+	_drvpidd = frc::SmartDashboard::GetNumber("Swerve Drive D", drvD);
+	_drvpidf = frc::SmartDashboard::GetNumber("Swerve Drive F", drvF);
+
+	_lfturnpid->SetP(_turnpidp);
+	_lfturnpid->SetI(_turnpidi);
+	_lfturnpid->SetD(_turnpidd);
+	
+	_rfturnpid->SetP(_turnpidp);
+	_rfturnpid->SetI(_turnpidi);
+	_rfturnpid->SetD(_turnpidd);
+
+	_lbturnpid->SetP(_turnpidp);
+	_lbturnpid->SetI(_turnpidi);
+	_lbturnpid->SetD(_turnpidd);
+
+	_rbturnpid->SetP(_turnpidp);
+	_rbturnpid->SetI(_turnpidi);
+	_rbturnpid->SetD(_turnpidd);
+
+	_lfdrvpid->SetP(_drvpidp);
+	_lfdrvpid->SetI(_drvpidi);
+	_lfdrvpid->SetD(_drvpidd);
+	_lfdrvpid->SetF(_drvpidf);
+
+	_rfdrvpid->SetP(_drvpidp);
+	_rfdrvpid->SetI(_drvpidi);
+	_rfdrvpid->SetD(_drvpidd);
+	_rfdrvpid->SetF(_drvpidf);
+
+	_lbdrvpid->SetP(_drvpidp);
+	_lbdrvpid->SetI(_drvpidi);
+	_lbdrvpid->SetD(_drvpidd);
+	_lbdrvpid->SetF(_drvpidf);
+
+	_rbdrvpid->SetP(_drvpidp);
+	_rbdrvpid->SetI(_drvpidi);
+	_rbdrvpid->SetD(_drvpidd);
+	_rbdrvpid->SetF(_drvpidf);
+
 }
