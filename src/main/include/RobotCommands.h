@@ -15,6 +15,8 @@ public:
 	double drvang;
 	double drvmag;
 	double drvrot;
+	bool climbCommand;
+	bool climbAbort;
 };
 
 #endif /* SRC_ROBOTCOMMANDS_H_ */

@@ -52,10 +52,10 @@ public:
 	//Other Motors
 	VictorSPX *ballintakemot;
 	VictorSPX *liftdrivemot;
-	VictorSPX *drivelbmot;
-	VictorSPX *driverbmot;
-	VictorSPX *drivelfmot;
-	VictorSPX *driverfmot;
+	VictorSPX *liftlbmot;
+	VictorSPX *liftrbmot;
+	VictorSPX *liftlfmot;
+	VictorSPX *liftrfmot;
 	VictorSPX *elevatormot;
 	
 
