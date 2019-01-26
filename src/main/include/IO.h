@@ -10,6 +10,7 @@
 
 
 #include "frc/WPILib.h"
+#include "ctre/Phoenix.h"
 
 /*
  * Contains an instance of all sensors, motors, and actuators to be passed
@@ -24,7 +25,7 @@ public:
 	// The scaling to multiply the voltage by to get a meaningful unit 360 degrees / 5 volts = 72
 	const int sweerveanglogvoltagetodegrees = 72;
 	const double swerveencodercountstodistancecentimeters = .238;
-
+	
 	//Swerve Drive Motors
 	frc::Victor *drvlbmot;
 	frc::Victor *drvrbmot;
@@ -47,6 +48,42 @@ public:
 
 	frc::DigitalInput *swerveresetone;
 	frc::DigitalInput *swerveresettwo;
+
+	//Other Motors
+	VictorSPX *ballintakemot;
+	VictorSPX *liftdrivemot;
+	VictorSPX *drivelbmot;
+	VictorSPX *driverbmot;
+	VictorSPX *drivelfmot;
+	VictorSPX *driverfmot;
+	VictorSPX *elevatormot;
+	
+
+	//Other Encoders
+	frc::Encoder *liftdriveenc;
+	frc::Encoder *liftlbenc;
+	frc::Encoder *liftrbenc;
+	frc::Encoder *liftlfenc;
+	frc::Encoder *liftrfenc;
+	frc::Encoder *elevatorenc;
+
+	frc::Compressor *compressor;
+
+	//Solenoids
+	frc::Solenoid *ballarmsolenoidin;
+	frc::Solenoid *hatcharmsolenoidin;
+	frc::Solenoid *ballshootersolenoidin;
+	frc::Solenoid *hatchclawsolenoidin;
+	frc::Solenoid *ballarmsolenoidout;
+	frc::Solenoid *hatcharmsolenoidout;
+	frc::Solenoid *ballshootersolenoidout;
+	frc::Solenoid *hatchclawsolenoidout;
+	
+
+
+
+
+
 
 	double armP = .7;
 	double armI = 0;
