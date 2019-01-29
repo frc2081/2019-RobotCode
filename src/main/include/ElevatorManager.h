@@ -10,7 +10,10 @@
 
 class ElevatorManager {
 
-    enum class STATE{
+
+        public:
+
+    enum class ElevatorManagerState{
         Transit,
         HatchPickupWait,
         HatchPickup,
@@ -27,7 +30,9 @@ class ElevatorManager {
         BallPlaceL2Wait,
         BallPlaceL2,
         BallEject
-    }
+    };
+
+    ElevatorManagerState ElevatorManagerCurrentState;
 
     double ElevatorPosCmd;
     double BallIntakePowerCmd;
@@ -37,21 +42,22 @@ class ElevatorManager {
     bool BallArmPos;
 
     //temp values
-    double ElevHomePos = 0;
-    double ElevHatchL1Pos = 15;
-    double ElevHatchL2Pos = 60;
-    double ElevBallPickupPos = 20;
-    double ElevBallCargoPos = 50;
-    double ElevBallL1Pos = 30;
-    double ElevBallL2Pos = 75;
-    double BallArmIntake = 1;
-    double BallArmIdle = 0;
-    double BallArmEject = -1;
-    bool extended = true;
-    bool retracted = false;
+    double ElevHomePos;
+    double ElevHatchL1Pos;
+    double ElevHatchL2Pos;
+    double ElevBallPickupPos;
+    double ElevBallCargoPos;
+    double ElevBallL1Pos;
+    double ElevBallL2Pos;
+    double BallArmIntake;
+    double BallArmIdle;
+    double BallArmEject;
+    bool extended;
+    bool retracted;
 
+    ElevatorManager(IO *io, RobotCommands *cmds);
+    void ElevatorManagerPeriodic();
 
-
-    public:
-    ElevatorManager();
+    IO *_io;
+    RobotCommands *_cmds;
 };

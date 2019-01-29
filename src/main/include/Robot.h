@@ -13,6 +13,7 @@
 #include "ControllerManager.h"
 #include "DriveManager.h"
 #include "RobotCommands.h"
+#include "ElevatorManager.h"
 
 class Robot : public frc::TimedRobot {
  public:
@@ -30,4 +31,5 @@ class Robot : public frc::TimedRobot {
   ControllerManager *DriverControls;
   RobotCommands *Commands;
   DriveManager *Drivetrain;
+  ElevatorManager *Elevator;
 };
