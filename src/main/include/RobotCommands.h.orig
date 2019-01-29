@@ -15,8 +15,11 @@ public:
 	double drvang;
 	double drvmag;
 	double drvrot;
+<<<<<<< HEAD
 	bool climbCommand;
 	bool climbAbort;
+=======
+
 	bool hatchPickup;
 	bool cargoPickup;
 	bool elevatorHome;
@@ -34,6 +37,7 @@ public:
 	bool ballEjectorManual;
 	bool ballArmToggleManual;
 	double elevatorDrivePowerManual;
+>>>>>>> origin/controller-manager
 };
 
 #endif /* SRC_ROBOTCOMMANDS_H_ */

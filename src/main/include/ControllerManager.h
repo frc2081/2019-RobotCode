@@ -22,6 +22,7 @@ public:
 
 private:
 	cntl::cntl *drivecontroller;
+	cntl::cntl *mechanismcontroller;
 };
 
 #endif /* SRC_CONTROLLERINPUT_CONTROLLERMANAGER_H_ */
