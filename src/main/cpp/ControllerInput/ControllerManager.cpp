@@ -31,29 +31,9 @@ void ControllerManager::pollControllers(RobotCommands *Commands){
 	frc::SmartDashboard::PutNumber("Swerve Speed Command", Commands->drvmag);
 	frc::SmartDashboard::PutNumber("Swerve Rotation Command", Commands->drvrot);
 
-/*
-	drvang
-	drvmag
-	drvrot
 
-	hatchPickup
-	cargoPickup
-	elevatorHome
-	ejectCargo
-	placeHatchOne
-	placeHatchTwo
-	placeCargoInShip
-	placeCargoRocketOne
-	placeCargoRocketTwo
+//commands are the "automatic" version of command, unless specidied as "manual"
 
-	hatchArmToggleManual
-	ballArmMotorIntakeManual
-	ballArmMotorEjectManual
-	hatchClawManual
-	ballEjectorManual
-	ballArmToggleManual
-	elevatorDrivePowerManual
-*/
 	//grab hatch from hatch loading station
 	if (mechanismcontroller->bRB->State()) Commands->hatchPickup = true;
 	else Commands->hatchPickup = false;
@@ -64,73 +44,77 @@ void ControllerManager::pollControllers(RobotCommands *Commands){
 	else Commands->cargoPickup = false;
 	frc::SmartDashboard::PutBoolean("cargoPickup", Commands->cargoPickup);
 
-	//elevatorHome
+	//move elevator to home
 	if (mechanismcontroller->bBack->State()) Commands->elevatorHome = true;
 	else Commands->elevatorHome = false;
 	frc::SmartDashboard::PutBoolean("elevatorHome", Commands->elevatorHome);
 
-	//ejectCargo
+	//eject cargo
 	if (mechanismcontroller->bRS->State()) Commands->ejectCargo = true;
 	else Commands->ejectCargo = false;
 	frc::SmartDashboard::PutBoolean("ejectCargo", Commands->ejectCargo);
 
-	//placeHatchOne
+	//place hatch on rocket level one
 	if (mechanismcontroller->bA->State()) Commands->placeHatchOne = true;
 	else Commands->placeHatchOne = false;
 	frc::SmartDashboard::PutBoolean("placeHatchOne", Commands->placeHatchOne);
 
-	//placeHatchTwo
+	//place hatch on rocket level two
 	if (mechanismcontroller->bB->State()) Commands->placeHatchTwo = true;
 	else Commands->placeHatchTwo = false;
 	frc::SmartDashboard::PutBoolean("placeHatchTwo", Commands->placeHatchTwo);
 
-	//placeCargoInShip
+	//place crag in cargo ship
 	if (mechanismcontroller->bStart->State()) Commands->placeCargoInShip = true;
 	else Commands->placeCargoInShip = false;
 	frc::SmartDashboard::PutBoolean("placeCargoInShip", Commands->placeCargoInShip);
 
-	//placeCargoRocketOne
+	//place cargo on rocket level one
 	if (mechanismcontroller->bX->State()) Commands->placeCargoRocketOne = true;
 	else Commands->placeCargoRocketOne = false;
 	frc::SmartDashboard::PutBoolean("placeCargoRocketOne", Commands->placeCargoRocketOne);
 
-	//placeCargoRocketTwo
+	//place cargo on rocket level two
 	if (mechanismcontroller->bY->State()) Commands->placeCargoRocketTwo = true;
 	else Commands->placeCargoRocketTwo = false;
 	frc::SmartDashboard::PutBoolean("placeCargoRocketTwo", Commands->placeCargoRocketTwo);
 
-	//hatchArmToggleManual
+	//hatch arm toggle manual
 	if (mechanismcontroller->bA->State()) Commands->hatchArmToggleManual = true;
 	else Commands->hatchArmToggleManual = false;
 	frc::SmartDashboard::PutBoolean("hatchArmToggleManual", Commands->hatchArmToggleManual);
 
-	//ballArmMotorIntakeManual
+	//ball arm motor intake manual
 	if (mechanismcontroller->bX->State()) Commands->ballArmMotorIntakeManual = true;
 	else Commands->ballArmMotorIntakeManual = false;
 	frc::SmartDashboard::PutBoolean("ballArmMotorIntakeManual", Commands->ballArmMotorIntakeManual);
 
-	//ballArmMotorEjectManual
+	//ball arm eject manual
 	if (mechanismcontroller->bY->State()) Commands->ballArmMotorEjectManual = true;
 	else Commands->ballArmMotorEjectManual = false;
 	frc::SmartDashboard::PutBoolean("ballArmMotorEjectManual", Commands->ballArmMotorEjectManual);
 
-	//hatchClawManual
+	//open/close hatch claw manual
 	if (mechanismcontroller->bBack->State()) Commands->hatchClawManual = true;
 	else Commands->hatchClawManual = false;
 	frc::SmartDashboard::PutBoolean("hatchClawManual", Commands->hatchClawManual);
 
-	//ballEjectorManual
+	//eject ball manual
 	if (mechanismcontroller->bStart->State()) Commands->ballEjectorManual = true;
 	else Commands->ballEjectorManual = false;
 	frc::SmartDashboard::PutBoolean("ballEjectorManual", Commands->ballEjectorManual);
 
-	//ballArmToggleManual
+	//toggle ball arm as up or down manual
 	if (mechanismcontroller->bB->State()) Commands->ballArmToggleManual = true;
 	else Commands->ballArmToggleManual = false;
 	frc::SmartDashboard::PutBoolean("ballArmToggleManual", Commands->ballArmToggleManual);
 
-	//elevatorDrivePowerManual
+	//pick up hatch manual
 	if (mechanismcontroller->bRB->State()) Commands->hatchPickup = true;
 	else Commands->hatchPickup = false;
 	frc::SmartDashboard::PutBoolean("hatchPickup", Commands->hatchPickup);
+
+	//move elevator up or down manual
+	Commands->elevatorDrivePowerManual = mechanismcontroller->LY;
+	frc::SmartDashboard::PutNumber("elevator", Commands->elevatorDrivePowerManual);
 }
