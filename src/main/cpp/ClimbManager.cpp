@@ -9,21 +9,28 @@
 
 ClimbManager::ClimbManager() {
 
-    ClimbManagerOutput = new ClimbManagerOutputs();
-
     state = STATE::robotOnFirstLevel;
 
 }
 
-ClimbManager::ClimbManagerInit() {
+void ClimbManager::ClimbManagerInit() {
+    liftlbenc = 0;
+    liftrbenc = 0;
+    liftlfenc = 0;
+    liftrfenc = 0;
+    liftdriveenc = 0;
+    
     initialLBLiftEncoderValue = liftlbenc;
     initialRBLiftEncoderValue = liftrbenc;
     initialLFLiftEncoderValue = liftlfenc;
     initialRFLiftEncoderValue = liftrfenc;
     initialLiftDriveEncoderValue = liftdriveenc;
+
+    climbCommand = false;
+    climbCommand = false;
 }
 
-ClimbManager::ClimbManagerPeriodic() {
+void ClimbManager::ClimbManagerPeriodic() {
     switch(state) {
         case STATE::robotOnFirstLevel:
             /*
@@ -135,5 +142,6 @@ ClimbManager::ClimbManagerPeriodic() {
             back extension motor: stopped
             drivetrain: stopped
             */
+           break;
     }
 }

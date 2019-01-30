@@ -12,6 +12,8 @@ class ClimbManager {
 
     public:
     ClimbManager();
+    void ClimbManagerPeriodic();
+    void ClimbManagerInit();
     private:
     //TODO: get actual encoder values; this is incorrect
     double liftRBEncoderValue = 1000;
@@ -37,4 +39,12 @@ class ClimbManager {
     };
 
     STATE state;
+    double liftlbenc;
+double liftrbenc;
+double liftlfenc;
+double liftrfenc;
+double liftdriveenc;
+
+bool climbCommand;
+bool climbAbort;
 };

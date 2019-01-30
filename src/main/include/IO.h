@@ -77,12 +77,6 @@ public:
 	frc::Solenoid *hatcharmsolenoidout;
 	frc::Solenoid *ballshootersolenoidout;
 	frc::Solenoid *hatchclawsolenoidout;
-	
-
-
-
-
-
 
 	double armP = .7;
 	double armI = 0;
