@@ -27,6 +27,14 @@ public:
 	bool placeCargoRocketOne;
 	bool placeCargoRocketTwo;
 
+	bool autoHatchPickup;
+	bool autoPlaceHatchOne;
+	bool autoPlaceHatchTwo;
+	bool autoPlaceCargoInShip;
+	bool autoPlaceCargoRocketOne;
+	bool autoPlaceCargoRocketTwo;
+
+	
 	bool hatchArmToggleManual;
 	bool ballArmMotorIntakeManual;
 	bool ballArmMotorEjectManual;

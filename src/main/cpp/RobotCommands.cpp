@@ -24,6 +24,13 @@ RobotCommands::RobotCommands() {
 	placeCargoRocketOne = false;
 	placeCargoRocketTwo = false;
 
+	autoHatchPickup = false;
+	autoPlaceHatchOne = false;
+	autoPlaceHatchTwo = false;
+	autoPlaceCargoInShip = false;
+	autoPlaceCargoRocketOne = false;
+	autoPlaceCargoRocketTwo = false;
+
 	hatchArmToggleManual = false;
 	ballArmMotorIntakeManual = false;
 	ballArmMotorEjectManual = false;
@@ -33,6 +40,4 @@ RobotCommands::RobotCommands() {
 	elevatorDrivePowerManual = 0;
 
 }
-
-
 
