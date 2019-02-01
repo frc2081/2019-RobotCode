@@ -29,7 +29,7 @@ DriveManager::DriveManager(IO *io, RobotCommands *com, ControllerManager *cntls)
 	 * 6.9 cim rotations/1 wheel rotation
 	 * 4554 RPM on cim - max
 	 */
-	_maxdrivespeed = 10; //Speed is in encoder pulses
+	_maxdrivespeed = 1; //Speed is in encoder pulses
 
 	_currangrf = 0;
 	_curranglf = 0;
@@ -80,10 +80,6 @@ DriveManager::DriveManager(IO *io, RobotCommands *com, ControllerManager *cntls)
 	_rfwhlangoffset = _prefs->GetDouble("RFOffset", 0);
 	_lbwhlangoffset = _prefs->GetDouble("LBOffset", 0);
 	_rbwhlangoffset = _prefs->GetDouble("RBOffset", 0);
-
-	_rfturnpid->Disable();
-	_lbturnpid->Disable();
-	_rbturnpid->Disable();
 }
 
 void DriveManager::DriveManagerInit() {
@@ -224,15 +220,22 @@ void DriveManager::ApplyPIDControl() {
 	_lbturnpid->SetSetpoint(WhlAngCalcOffset(_swervelib->whl->angleLB, _lbwhlangoffset));
 	_rbturnpid->SetSetpoint(WhlAngCalcOffset(_swervelib->whl->angleRB, _rbwhlangoffset));
 
+
+
 	_swervelib->whl->speedLF *= _maxdrivespeed;
 	_swervelib->whl->speedRF *= _maxdrivespeed;
 	_swervelib->whl->speedLB *= _maxdrivespeed;
 	_swervelib->whl->speedRB *= _maxdrivespeed;
 
-	_lfdrvpid->SetSetpoint(_swervelib->whl->speedLF);
-	_rfdrvpid->SetSetpoint(_swervelib->whl->speedRF);
-	_lbdrvpid->SetSetpoint(_swervelib->whl->speedLB);
-	_rbdrvpid->SetSetpoint(_swervelib->whl->speedRB);
+	_io->drvlfmot->Set(_swervelib->whl->speedLF);
+	_io->drvrfmot->Set(_swervelib->whl->speedRF);
+	_io->drvlbmot->Set(_swervelib->whl->speedLB);
+	_io->drvrbmot->Set(_swervelib->whl->speedRB);
+
+	//_lfdrvpid->SetSetpoint(_swervelib->whl->speedLF);
+	//_rfdrvpid->SetSetpoint(_swervelib->whl->speedRF);
+	//_lbdrvpid->SetSetpoint(_swervelib->whl->speedLB);
+	//_rbdrvpid->SetSetpoint(_swervelib->whl->speedRB);
 }
 
 void DriveManager::UpdateDashboard(){
