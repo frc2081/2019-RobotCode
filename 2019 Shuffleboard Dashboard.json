@@ -590,6 +590,38 @@
                   "_title": "Solenoid[0,4]/Value",
                   "Colors/Color when true": "#7CFC00FF",
                   "Colors/Color when false": "#8B0000FF"
+                },
+                {
+                  "_type": "Encoder",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Encoder[22]",
+                  "_title": "/LiveWindow/Ungrouped/Encoder[22]"
+                },
+                {
+                  "_type": "Encoder",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Encoder[10]",
+                  "_title": "/LiveWindow/Ungrouped/Encoder[10]"
+                },
+                {
+                  "_type": "Encoder",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Encoder[19]",
+                  "_title": "/LiveWindow/Ungrouped/Encoder[19]"
+                },
+                {
+                  "_type": "Encoder",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Encoder[8]",
+                  "_title": "/LiveWindow/Ungrouped/Encoder[8]"
+                },
+                {
+                  "_type": "Speed Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Victor[2]",
+                  "_title": "/LiveWindow/Ungrouped/Victor[2]",
+                  "Visuals/Orientation": "HORIZONTAL"
+                },
+                {
+                  "_type": "Speed Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/VictorSP[8]",
+                  "_title": "VictorSP[8]",
+                  "Visuals/Orientation": "HORIZONTAL"
                 }
               ]
             }
@@ -602,6 +634,74 @@
             "content": {
               "_type": "PID Command",
               "_title": "PID Command"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Climber",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "tiles": {
+          "3,0": {
+            "size": [
+              2,
+              3
+            ],
+            "content": {
+              "_type": "Subsystem Layout",
+              "_title": "Climber",
+              "Layout/Label position": "BOTTOM",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Climb P",
+                  "_title": "/SmartDashboard/Climb P"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Climb I",
+                  "_title": "SmartDashboard/Climb I"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Climb D",
+                  "_title": "SmartDashboard/Climb D"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Climb F",
+                  "_title": "SmartDashboard/Climb F"
+                }
+              ]
+            }
+          },
+          "5,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Climber Actual Position",
+              "_title": "SmartDashboard/Climber Actual Position"
+            }
+          },
+          "5,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Climb Set Point",
+              "_title": "SmartDashboard/Climb Set Point"
             }
           }
         }
