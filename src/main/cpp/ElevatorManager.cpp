@@ -217,7 +217,7 @@ switch(ElevatorManagerCurrentState){
             ElevatorManagerCurrentState = ElevatorManagerState::Transit;
             BallEjectTimerLimit = 0;
             }
-
+        if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
         break;
 
     }
