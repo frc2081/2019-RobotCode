@@ -11,6 +11,11 @@ RobotCommands::RobotCommands() {
 	drvmag = 0;
 	drvang = 0;
 	drvrot = 0;
+	autodrvmag = 0;
+	autodrvang = 0;
+	autodrvrot = 0;
+	guidanceSysActive = false;
+
 	climbCommand = false;
 	climbAbort = false;
 
