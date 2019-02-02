@@ -21,6 +21,7 @@ public:
 
 	IO();
 	void pollIO();
+	void robotMechanismPeriodic();
 
 	// The scaling to multiply the voltage by to get a meaningful unit 360 degrees / 5 volts = 72
 	const int sweerveanglogvoltagetodegrees = 72;
@@ -84,6 +85,11 @@ public:
 
 private:
 
+};
+
+enum class HatchArmPos{
+	HatchArmExtended,
+	HatchArmRetracted
 };
 
 #endif /* SRC_IO_H_ */

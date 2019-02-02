@@ -6,6 +6,7 @@
  */
 
 #include "IO.h"
+#include "ElevatorManager.h"
 
 IO::IO() {
 
@@ -75,3 +76,31 @@ IO::IO() {
 
 void IO::pollIO(){
 }
+
+/*void IO::robotMechanismPeriodic(ElevatorManager test_12){
+	if(test_12.HatchArmPos){
+		hatcharmsolenoidin->Set(true);
+		hatcharmsolenoidout->Set(false);
+	}
+	else{
+		hatcharmsolenoidin->Set(false);
+		hatcharmsolenoidout->Set(true);
+	}
+	
+}
+*/
+
+
+/*
+void IO::robotMechanismPeriodic(){
+	if(HatchArmPos == HatchArmExtended){
+		hatcharmsolenoidin.set(true);
+		hatcharmsolenoidout.set(false);
+	}
+	else{
+		hatcharmsolenoidin.set(false);
+		hatcharmsolenoidout.set(true);
+	}
+	
+}
+*/

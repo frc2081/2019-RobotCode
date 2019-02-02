@@ -59,6 +59,7 @@ class ElevatorManager {
 
     ElevatorManager(IO *io, RobotCommands *cmds);
     void ElevatorManagerPeriodic();
+    void ElevatorManagerMechanism(IO *io);
 
     IO *_io;
     RobotCommands *_cmds;

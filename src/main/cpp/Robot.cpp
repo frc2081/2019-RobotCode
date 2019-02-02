@@ -37,6 +37,7 @@ void Robot::TeleopInit() {}
 void Robot::TeleopPeriodic() {
   Drivetrain->DriveManagerPeriodic();
   Elevator->ElevatorManagerPeriodic();
+  Elevator->ElevatorManagerMechanism(RioIO);
 }
 
 void Robot::DisabledPeriodic(){
