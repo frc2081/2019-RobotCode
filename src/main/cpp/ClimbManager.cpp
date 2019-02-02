@@ -7,141 +7,146 @@
 
 #include "ClimbManager.h"
 
-ClimbManager::ClimbManager() {
+ClimbManager::ClimbManager(IO *io, RobotCommands *cmds) {
+
+    _io = io;
+    _cmds = cmds;
 
     state = STATE::robotOnFirstLevel;
 
 }
 
 void ClimbManager::ClimbManagerInit() {
-    liftlbenc = 0;
-    liftrbenc = 0;
-    liftlfenc = 0;
-    liftrfenc = 0;
-    liftdriveenc = 0;
-    
-    initialLBLiftEncoderValue = liftlbenc;
-    initialRBLiftEncoderValue = liftrbenc;
-    initialLFLiftEncoderValue = liftlfenc;
-    initialRFLiftEncoderValue = liftrfenc;
-    initialLiftDriveEncoderValue = liftdriveenc;
-
-    climbCommand = false;
-    climbCommand = false;
+    initialLiftDriveEncoderValue = _io->liftdriveenc->Get();
 }
 
 void ClimbManager::ClimbManagerPeriodic() {
     switch(state) {
         case STATE::robotOnFirstLevel:
             /*
-            TODO:
+            STATE FEATURES:
             front extension motor: stopped
             rack motor: stopped
             back extension motor: stopped
             drivetrain: stopped
             */
-           //liftlbmot, liftrbmot, liftlfmot, liftrfmot need to be turned off 
+           liftFrontPosDes = liftPos::RETRACTED;
+           liftRearPosDes = liftPos::RETRACTED;
 
-           if (climbCommand) {
+           if (_cmds->climbCommand) {
                state = STATE::prepareToClimb;
            }
            break;
         case STATE::prepareToClimb:
             /*
-            TODO:
+            STATE FEATURES:
             front extension motor: extending
             rack motor: stopped
             back extension motor: extending
             drivetrain: stopped
             */
-           //liftlbmot, liftrbmot, liftlfmot, liftrfmot need to be turned on with specified power 
+           liftFrontPosDes = liftPos::EXTENDEDLEVELTWO;
+           liftRearPosDes = liftPos::EXTENDEDLEVELTWO;
+           moveFast = false;
+           syncFrontRearLifts = true;
 
-           if (climbAbort) {
+           if (_cmds->climbAbort) {
                state = STATE::robotClimbComplete;
                break;
-           }
-            else if (liftlbenc - initialLBLiftEncoderValue >= liftLBEncoderValue &&
-                    liftrbenc - initialRBLiftEncoderValue >= liftRBEncoderValue &&
-                    liftlfenc - initialLFLiftEncoderValue >= liftLFEncoderValue &&
-                    liftrfenc - initialRFLiftEncoderValue >= liftRFEncoderValue            
-            ) {
+           } else if (liftFrontPosDes == liftFrontPosAct && liftRearPosDes == liftRearPosAct) {
                state = STATE::moveForwardStage1;
                break;
            }
            break;
         case STATE::moveForwardStage1:
             /*
-            TODO:
+            STATE FEATURES:
             front extension motor: stopped
             rack motor: moving forward
             back extension mottor: stopped
             drivetrain: stopped
             */
-           //liftlbmot, liftrbmot, liftlfmot, liftrfmot need to be turned off 
            //liftdrivemot needs to be turned on
 
-           if (climbAbort) {
+           if (_cmds->climbAbort) {
                state = STATE::robotClimbComplete;
                break;
-           }
-           else if (liftdriveenc - initialLiftDriveEncoderValue >= moveForwardState1EncoderValue)
-           {
+           } else if (_io->liftdriveenc->Get() - initialLiftDriveEncoderValue >=
+            moveForwardStage1EncoderValue) {
                state = STATE::robotStoppedHalfway;
                break;
            }
            break;
         case STATE::robotStoppedHalfway:
             /*
-            TODO:
+            STATE FEATURES:
             front extension motor: retracting
             rack motor: stopped
             back extension motor: stopped
             drivetrain: stopped
             */
-           //liftlbmot, liftrbmot need to be turned off 
-           //liftrfmot, liftlfmot need to be turned on in reverse
-           //liftdrivemot needs to be turned on
+           liftFrontPosDes = liftPos::RETRACTED;
+           moveFast = true;
+           syncFrontRearLifts = false;     
+           //liftdrivemot needs to be turned off
 
-           if (climbAbort) {
+           if (_cmds->climbAbort) {
                state = STATE::robotClimbComplete;
                break;
-           }
-           else if (liftlfenc <= initialLFLiftEncoderValue &&
-                    liftrfenc <= initialLFLiftEncoderValue)
-           {
+           } else if (liftFrontPosDes == liftFrontPosAct) {
                state = STATE::moveForwardStage2;
                break;
            }
             break;
         case STATE::moveForwardStage2:
             /*
-            TODO:
+            STATE FEATURES:
             front extension motor: stopped
             rack motor: moving forward
             back extension motor: stopped
             drivetrain: moving forward
             */
-           //liftlbmot, liftrbmot, liftlfmot, liftrfmot need to be turned off 
            //liftdrivemot needs to be turned on
            //swerve drive motors need to be turned on
 
-
+           if (_cmds->climbAbort) {
+                state = STATE::robotClimbComplete;
+                break;
+           } else if (_io->liftdriveenc->Get() - initialLiftDriveEncoderValue >=
+            moveForwardStage2EncoderValue) {
+                state = STATE::robotStoppedOnPlatform;
+                break;
+           }
+            break;
         case STATE::robotStoppedOnPlatform:
             /*
-            TODO:
+            STATE FEATURES:
             front extension motor: stopped
             rack motor: stopped
             back extension motor: retracting
             drivetrain: stopped
             */
+           liftRearPosDes = liftPos::RETRACTED;
+
+           //liftdrivemot needs to be turned off
+           //swerve motors need to be off
+           if (_cmds->climbAbort ||
+                liftRearPosDes == liftFrontPosAct) {
+                state = STATE::robotClimbComplete;
+                break;
+           }
+            break;
         case STATE::robotClimbComplete:
             /*
-            TODO:
+            STATE FEATURES:
             front extension motor: stopped
             rack motor: stopped
             back extension motor: stopped
             drivetrain: stopped
             */
+           syncFrontRearLifts = true;     
+           moveFast = false;
+           //swerve motors need to be off
            break;
     }
 }

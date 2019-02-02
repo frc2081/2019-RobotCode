@@ -17,7 +17,7 @@ void Robot::RobotInit() {
 		DriverControls = new ControllerManager();
 		Commands = new RobotCommands();
 		Drivetrain = new DriveManager(RioIO, Commands, DriverControls);
-    Elevator = new ElevatorManager(RioIO, Commands);
+    Climber = new ClimbManager(RioIO, Commands);
 
 		Drivetrain->DriveManagerInit();
 }

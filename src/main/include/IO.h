@@ -57,6 +57,7 @@ public:
 	VictorSPX *liftlfmot;
 	VictorSPX *liftrfmot;
 	VictorSPX *elevatormot;
+	
 
 	//Other Encoders
 	frc::Encoder *liftdriveenc;
@@ -77,6 +78,12 @@ public:
 	frc::Solenoid *hatcharmsolenoidout;
 	frc::Solenoid *ballshootersolenoidout;
 	frc::Solenoid *hatchclawsolenoidout;
+	
+
+
+
+
+
 
 	double armP = .7;
 	double armI = 0;

@@ -14,24 +14,6 @@ RobotCommands::RobotCommands() {
 	climbCommand = false;
 	climbAbort = false;
 
-	hatchPickup = false;
-	cargoPickup = false;
-	elevatorHome = false;
-	ejectCargo = false;
-	placeHatchOne = false;
-	placeHatchTwo = false;
-	placeCargoInShip = false;
-	placeCargoRocketOne = false;
-	placeCargoRocketTwo = false;
-
-	hatchArmToggleManual = false;
-	ballArmMotorIntakeManual = false;
-	ballArmMotorEjectManual = false;
-	hatchClawManual = false;
-	ballEjectorManual = false;
-	ballArmToggleManual = false;
-	elevatorDrivePowerManual = 0;
-
 }
 
 

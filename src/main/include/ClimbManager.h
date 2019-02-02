@@ -7,25 +7,23 @@
 
 #include "RobotCommands.h"
 #include "IO.h"
+//#include "liftPID.h"
 
 class ClimbManager {
 
     public:
-    ClimbManager();
-    void ClimbManagerPeriodic();
+    ClimbManager(IO *io, RobotCommands *cmds);
+
+    IO *_io;
+    RobotCommands *_cmds;
+
     void ClimbManagerInit();
+    void ClimbManagerPeriodic();
     private:
     //TODO: get actual encoder values; this is incorrect
-    double liftRBEncoderValue = 1000;
-    double liftLBEncoderValue = 1000;
-    double liftRFEncoderValue = 1000;
-    double liftLFEncoderValue = 1000;
-    double moveForwardState1EncoderValue = 1000;
+    double moveForwardStage1EncoderValue = 1000;
+    double moveForwardStage2EncoderValue = 1000;
 
-    double initialLBLiftEncoderValue = 0;
-    double initialRBLiftEncoderValue = 0;
-    double initialLFLiftEncoderValue = 0;
-    double initialRFLiftEncoderValue = 0;
     double initialLiftDriveEncoderValue = 0;
 
     enum class STATE {
@@ -39,12 +37,13 @@ class ClimbManager {
     };
 
     STATE state;
-    double liftlbenc;
-double liftrbenc;
-double liftlfenc;
-double liftrfenc;
-double liftdriveenc;
+    //TEMPORARY STUFF:: to be replaced when we get an actual source module for this
+    enum class liftPos {
+        RETRACTED,
+        EXTENDEDLEVELONE,
+        EXTENDEDLEVELTWO
+    };
 
-bool climbCommand;
-bool climbAbort;
+    liftPos liftFrontPosDes, liftFrontPosAct, liftRearPosDes, liftRearPosAct;
+    bool moveFast, syncFrontRearLifts;
 };
