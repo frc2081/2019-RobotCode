@@ -32,6 +32,9 @@ void ClimbManager::ClimbManagerPeriodic() {
             */
            liftFrontPosDes = liftPos::RETRACTED;
            liftRearPosDes = liftPos::RETRACTED;
+           _cmds->drvang = 0;
+           _cmds->drvmag = 0;
+           _cmds->drvrot = 0;
 
            if (_cmds->climbCommand) {
                state = STATE::prepareToClimb;
@@ -67,6 +70,7 @@ void ClimbManager::ClimbManagerPeriodic() {
             drivetrain: stopped
             */
            //liftdrivemot needs to be turned on
+           
 
            if (_cmds->climbAbort) {
                state = STATE::robotClimbComplete;
@@ -108,6 +112,9 @@ void ClimbManager::ClimbManagerPeriodic() {
             */
            //liftdrivemot needs to be turned on
            //swerve drive motors need to be turned on
+           _cmds->drvang = 0;
+           _cmds->drvmag = 0.05;
+           _cmds->drvrot = 0;
 
            if (_cmds->climbAbort) {
                 state = STATE::robotClimbComplete;
@@ -130,6 +137,8 @@ void ClimbManager::ClimbManagerPeriodic() {
 
            //liftdrivemot needs to be turned off
            //swerve motors need to be off
+           _cmds->drvmag = 0;
+
            if (_cmds->climbAbort ||
                 liftRearPosDes == liftFrontPosAct) {
                 state = STATE::robotClimbComplete;
@@ -144,8 +153,14 @@ void ClimbManager::ClimbManagerPeriodic() {
             back extension motor: stopped
             drivetrain: stopped
             */
+           liftFrontPosDes = liftPos::RETRACTED;
+           liftRearPosDes = liftPos::RETRACTED;
            syncFrontRearLifts = true;     
            moveFast = false;
+           _cmds->drvang = 0;
+           _cmds->drvmag = 0;
+           _cmds->drvrot = 0;
+
            //swerve motors need to be off
            break;
     }
