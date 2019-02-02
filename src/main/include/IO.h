@@ -81,6 +81,7 @@ public:
 	double armP = .7;
 	double armI = 0;
 	double armD = 0;
+ 	double liftDistPerCountInches;
 
 private:
 

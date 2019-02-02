@@ -70,6 +70,11 @@ IO::IO() {
 	hatcharmsolenoidout = new frc::Solenoid(5);
 	ballshootersolenoidout = new frc::Solenoid(6);
 	hatchclawsolenoidout = new frc::Solenoid(7);
+  
+	//Configure IO
+  	liftrfenc->SetDistancePerPulse(liftDistPerCountInches);
+  	liftlfenc->SetDistancePerPulse(liftDistPerCountInches);
+
 
 }
 
