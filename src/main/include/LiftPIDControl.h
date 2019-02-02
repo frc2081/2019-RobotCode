@@ -4,7 +4,7 @@
 
 class LiftPIDControl {
     public:
-    LiftPIDControl(IO *RioIO);
+    LiftPIDControl(IO *io);
 
     enum class liftPos{
     RETRACTED,
@@ -15,13 +15,13 @@ class LiftPIDControl {
   liftPos liftFrontPosDes, liftFrontPosAct, liftRearPosDes, liftRearPosAct;
   bool moveFast, syncFrontRearLifts;
 
-  void liftPIDControlPeriodic();
+  void liftPIDControlTeleopPeriodic();
+  void liftPIDControlRobotPeriodic();
 
 private:
-  frc::PIDController *liftlfPID;
-  frc::PIDController *liftrfPID;
-  frc::PIDController *liftlbPID;
-  frc::PIDController *liftrbPID;
+
+  IO *_io;
+  frc::PIDController *liftlfPID, *liftrfPID, *liftlbPID, *liftrbPID;
 
   double liftPIDp, liftPIDi, liftPIDd, liftPIDf, liftPIDPeriod;
   double liftFrontSetPoint, liftRearSetPoint;
