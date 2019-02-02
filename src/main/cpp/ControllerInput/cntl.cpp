@@ -79,8 +79,8 @@ void cntl::UpdateCntl() {
 	ApplyDeadzone(&LY, _stick->GetY(), _deadzone);
 	ApplyDeadzone(&RX, _stick->GetRawAxis(4), _deadzone);
 	ApplyDeadzone(&RY, _stick->GetRawAxis(5), _deadzone);
-	ApplyDeadzone(&RTrig, _stick->GetRawAxis(6), _deadzone);
-	ApplyDeadzone(&LTrig, _stick->GetRawAxis(7), _deadzone);
+	ApplyDeadzone(&RTrig, _stick->GetRawAxis(3), _deadzone);
+	ApplyDeadzone(&LTrig, _stick->GetRawAxis(2), _deadzone);
 
 	ApplyLimit(&LX, kLX);
 	ApplyLimit(&LY, kLY);

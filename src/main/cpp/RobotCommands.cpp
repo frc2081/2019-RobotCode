@@ -14,7 +14,12 @@ RobotCommands::RobotCommands() {
 	climbCommand = false;
 	climbAbort = false;
 
+	autoHatchPickup = false;
+	autoPlaceHatchOne = false;
+	autoPlaceHatchTwo = false;
+	autoPlaceCargoInShip = false;
+	autoPlaceCargoRocketOne = false;
+	autoPlaceCargoRocketTwo = false;
+
 }
-
-
 
