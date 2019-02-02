@@ -36,6 +36,7 @@ void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic() {
   Drivetrain->DriveManagerPeriodic();
+  Elevator->ElevatorManagerPeriodic();
 }
 
 void Robot::DisabledPeriodic(){

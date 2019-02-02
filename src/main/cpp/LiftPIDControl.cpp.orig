@@ -1,9 +1,14 @@
 #include "LiftPIDControl.h"
 
+<<<<<<< HEAD
+LiftPIDControl::LiftPIDControl(IO *RioIO) {
+  //Init lift movement commands and actual positions
+=======
 LiftPIDControl::LiftPIDControl(IO *io) {
 
   _io = io;
    //Init lift movement commands and actual positions
+>>>>>>> origin/master
   liftFrontPosDes = liftPos::RETRACTED;
   liftFrontPosAct = liftPos::RETRACTED;
   liftRearPosDes = liftPos::RETRACTED;
@@ -31,6 +36,19 @@ LiftPIDControl::LiftPIDControl(IO *io) {
   liftPosExtendedLevelTwoRear = 22; //Lift rear leg position in inches to raise the robot to Hab level 2
   liftMovementRate = .05; //Speed in inches per loop that the lift should move at when raising or lowering the robot
 
+<<<<<<< HEAD
+  liftrfPID = new frc::PIDController(liftPIDp, liftPIDi, liftPIDd, liftPIDf, RioIO->liftrfenc, RioIO->liftrfmot, liftPIDPeriod);
+  liftlfPID = new frc::PIDController(liftPIDp, liftPIDi, liftPIDd, liftPIDf, RioIO->liftlfenc, RioIO->liftlfmot, liftPIDPeriod);
+  //liftBLPID = new frc::PIDController(liftPIDp, liftPIDi, liftPIDd, liftPIDf, RioIO->liftlbenc, RioIO->liftlbmot, liftPIDPeriod);
+  //liftBRPID = new frc::PIDController(liftPIDp, liftPIDi, liftPIDd, liftPIDf, RioIO->liftrbenc, RioIO->liftrbmot, liftPIDPeriod);
+  
+  liftrfPID->SetTolerance(3);
+  liftlfPID->SetTolerance(3);
+  liftrfPID->Enable(); 
+  liftlfPID->Enable();
+  //liftBLPID->Enable();
+  //liftBRPID->Enable();
+=======
   liftrfPID = new frc::PIDController(liftPIDp, liftPIDi, liftPIDd, liftPIDf, _io->liftrfenc, _io->liftrfmot, liftPIDPeriod);
   liftlfPID = new frc::PIDController(liftPIDp, liftPIDi, liftPIDd, liftPIDf, _io->liftlfenc, _io->liftlfmot, liftPIDPeriod);
   liftlbPID = new frc::PIDController(liftPIDp, liftPIDi, liftPIDd, liftPIDf, _io->liftlbenc, _io->liftlbmot, liftPIDPeriod);
@@ -44,6 +62,7 @@ LiftPIDControl::LiftPIDControl(IO *io) {
   liftlfPID->Enable();
   //liftlbPID->Enable();
   //liftlfPID->Enable();
+>>>>>>> origin/master
 
   liftPIDp = frc::SmartDashboard::PutNumber("Climb P", liftPIDp);
   liftPIDi = frc::SmartDashboard::PutNumber("Climb I", liftPIDi);
@@ -57,11 +76,19 @@ LiftPIDControl::LiftPIDControl(IO *io) {
   liftPosExtendedLevelOneRear = frc::SmartDashboard::PutNumber("Lift Rear Hab Level 1 Set Point", liftPosExtendedLevelOneRear);
   liftPosExtendedLevelTwoRear = frc::SmartDashboard::PutNumber("Lift Rear Hab Level 2 Set Point", liftPosExtendedLevelTwoRear);
   liftMovementRate = frc::SmartDashboard::PutNumber("Lift Movement Rate", liftMovementRate);
+<<<<<<< HEAD
+}
+
+void LiftPIDControl::liftPIDControlPeriodic()
+{
+  //Get all dashboard-adjustable cal values and set them
+=======
 }    
 
 void LiftPIDControl::liftPIDControlRobotPeriodic(){
 
 //Get all dashboard-adjustable cal values and set them
+>>>>>>> origin/master
   liftPIDp = frc::SmartDashboard::GetNumber("Climb P", liftPIDp);
   liftPIDi = frc::SmartDashboard::GetNumber("Climb I", liftPIDi);
   liftPIDd = frc::SmartDashboard::GetNumber("Climb D", liftPIDd);
@@ -75,6 +102,8 @@ void LiftPIDControl::liftPIDControlRobotPeriodic(){
   liftPosExtendedLevelTwoRear = frc::SmartDashboard::GetNumber("Lift Rear Hab Level 2 Set Point", liftPosExtendedLevelTwoRear);
   liftMovementRate = frc::SmartDashboard::GetNumber("Lift Movement Rate", liftMovementRate);
 
+<<<<<<< HEAD
+=======
   //Write all data to dashboard
   frc::SmartDashboard::PutNumber("Climb P", liftPIDp);
   frc::SmartDashboard::PutNumber("Climb I", liftPIDi);
@@ -103,6 +132,7 @@ void LiftPIDControl::liftPIDControlRobotPeriodic(){
 
 void LiftPIDControl::liftPIDControlTeleopPeriodic() {
 
+>>>>>>> origin/master
   liftrfPID->SetP(liftPIDp);
   liftrfPID->SetI(liftPIDi);
   liftrfPID->SetD(liftPIDd);
@@ -123,6 +153,33 @@ void LiftPIDControl::liftPIDControlTeleopPeriodic() {
   liftBRPID->SetD(liftPIDd);
   liftBRPID->SetF(liftPIDf);*/
 
+<<<<<<< HEAD
+  //Write all data to dashboard
+  frc::SmartDashboard::PutNumber("Climb P", liftPIDp);
+  frc::SmartDashboard::PutNumber("Climb I", liftPIDi);
+  frc::SmartDashboard::PutNumber("Climb D", liftPIDd);
+  frc::SmartDashboard::PutNumber("Climb F", liftPIDf);
+  frc::SmartDashboard::PutNumber("Climb Front Set Point", liftFrontSetPoint);
+  frc::SmartDashboard::PutNumber("Climb Rear Set Point", liftRearSetPoint);
+  frc::SmartDashboard::PutNumber("Climber RF PID Actual SetPoint", liftrfPID->GetSetpoint());
+  frc::SmartDashboard::PutNumber("Climber LF PID Actual SetPoint", liftlfPID->GetSetpoint());
+  //frc::SmartDashboard::PutNumber("Climber LB PID Actual SetPoint", liftlbPID->GetSetpoint());
+  //frc::SmartDashboard::PutNumber("Climber RB PID Actual SetPoint", liftrbPID->GetSetpoint());
+  frc::SmartDashboard::PutNumber("Climber RF Actual Position", RioIO->liftrfenc->GetDistance());
+  frc::SmartDashboard::PutNumber("Climber LF Actual Position", RioIO->liftlfenc->GetDistance());
+  //frc::SmartDashboard::PutNumber("Climber LB Actual Position", liftlbenc->GetDistance());
+  //frc::SmartDashboard::PutNumber("Climber RB Actual Position", liftrbenc->GetDistance());
+  frc::SmartDashboard::PutBoolean("Fast Movement", moveFast);
+  frc::SmartDashboard::PutNumber("Climber Desync Distance", liftDesyncDistanceThreshold);
+  frc::SmartDashboard::PutNumber("Lift Front Retracted Set Point", liftPosRetractedFront);
+  frc::SmartDashboard::PutNumber("Lift Front Hab Level 1 Set Point", liftPosExtendedLevelOneFront);
+  frc::SmartDashboard::PutNumber("Lift Front Hab Level 2 Set Point", liftPosExtendedLevelTwoFront);
+  frc::SmartDashboard::PutNumber("Lift Rear Retracted Set Point", liftPosRetractedRear);
+  frc::SmartDashboard::PutNumber("Lift Rear Hab Level 1 Set Point", liftPosExtendedLevelOneRear);
+  frc::SmartDashboard::PutNumber("Lift Rear Hab Level 2 Set Point", liftPosExtendedLevelTwoRear);
+  frc::SmartDashboard::PutNumber("Lift Movement Rate", liftMovementRate);
+}    
+=======
    //liftDrive->Set(-stick->GetY());
   
   //Basic tuning code
@@ -183,3 +240,4 @@ void LiftPIDControl::disableLiftPID() {
   liftlfPID->Disable();
   liftlfPID->Disable();
 }
+>>>>>>> origin/master
