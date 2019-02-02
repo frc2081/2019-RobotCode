@@ -50,13 +50,13 @@ public:
 	frc::DigitalInput *swerveresettwo;
 
 	//Other Motors
-	VictorSPX *ballintakemot;
-	VictorSPX *liftdrivemot;
-	VictorSPX *liftlbmot;
-	VictorSPX *liftrbmot;
-	VictorSPX *liftlfmot;
-	VictorSPX *liftrfmot;
-	VictorSPX *elevatormot;
+	frc::Victor *ballintakemot;
+	frc::Victor *liftdrivemot;
+	frc::Victor *liftlbmot;
+	frc::Victor *liftrbmot;
+	frc::Victor *liftlfmot;
+	frc::Victor *liftrfmot;
+	frc::Victor *elevatormot;
 
 	//Other Encoders
 	frc::Encoder *liftdriveenc;
@@ -81,6 +81,7 @@ public:
 	double armP = .7;
 	double armI = 0;
 	double armD = 0;
+ 	double liftDistPerCountInches;
 
 private:
 

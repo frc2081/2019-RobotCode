@@ -6,12 +6,13 @@
  */
 
 #include "IO.h"
+#include "ctre/Phoenix.h"
 
 IO::IO() {
 
 	//******************PWM assingments*****************
 	//Swerve Drive Motors
-	drvlbmot = new frc::Victor(3);
+	drvlbmot  = new frc::Victor(3);
 	drvrbmot  = new frc::Victor(2);
 	drvlfmot  = new frc::Victor(1);
 	drvrfmot  = new frc::Victor(0);
@@ -21,13 +22,13 @@ IO::IO() {
 	turnrfmot = new frc::Victor(4);
 
 	//Other Motors
-	ballintakemot = new VictorSPX(15);
-	liftdrivemot = new VictorSPX(16);
-	liftlbmot = new VictorSPX(17);
-	liftrbmot = new VictorSPX(18);
-	liftlfmot = new VictorSPX(19);
-	liftrfmot = new VictorSPX(20);
-	elevatormot = new VictorSPX(21); //fix port #
+	ballintakemot = new frc::Victor(15);
+	liftdrivemot = new frc::Victor(16);
+	liftlbmot = new frc::Victor(17);
+	liftrbmot = new frc::Victor(18);
+	liftlfmot = new frc::Victor(19);
+	liftrfmot = new frc::Victor(20);
+	elevatormot = new frc::Victor(21); //fix port #
 	
 	//******************DIO assingments*****************
 	//Swerve Angle Reset Inputs
@@ -70,6 +71,11 @@ IO::IO() {
 	hatcharmsolenoidout = new frc::Solenoid(5);
 	ballshootersolenoidout = new frc::Solenoid(6);
 	hatchclawsolenoidout = new frc::Solenoid(7);
+  
+	//Configure IO
+  	liftrfenc->SetDistancePerPulse(liftDistPerCountInches);
+  	liftlfenc->SetDistancePerPulse(liftDistPerCountInches);
+
 
 }
 
