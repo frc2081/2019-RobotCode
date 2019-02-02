@@ -54,6 +54,8 @@ class ElevatorManager {
     double BallArmEject;
     bool extended;
     bool retracted;
+    int BallEjectTimer;
+    int BallEjectTimerLimit;
 
     ElevatorManager(IO *io, RobotCommands *cmds);
     void ElevatorManagerPeriodic();
