@@ -3,6 +3,7 @@
  *
  *  Created on: Jan 20, 2019
  *      Author: blzzrd
+ *      Contributor: IChism
  */
 
 #include "ClimbManager.h"
@@ -12,7 +13,7 @@ ClimbManager::ClimbManager(IO *io, RobotCommands *cmds) {
     _io = io;
     _cmds = cmds;
 
-    state = STATE::robotOnFirstLevel;
+    climbState = ClimbSTATE::robotOnFirstLevel;
 
 }
 
@@ -21,8 +22,20 @@ void ClimbManager::ClimbManagerInit() {
 }
 
 void ClimbManager::ClimbManagerPeriodic() {
-    switch(state) {
-        case STATE::robotOnFirstLevel:
+    //display current values on the Smart Dashboard
+    frc::SmartDashboard::PutNumber("ClimbManager current State", static_cast<int>(climbState));
+    frc::SmartDashboard::PutNumber("Desired FRONT lift position", static_cast<int>(liftFrontPosDes));
+    frc::SmartDashboard::PutNumber("Desired REAR lift position", static_cast<int>(liftRearPosDes));
+    frc::SmartDashboard::PutNumber("Actual FRONT lift position", static_cast<int>(liftFrontPosAct));
+    frc::SmartDashboard::PutNumber("Actual REAR lift position", static_cast<int>(liftRearPosAct));
+    frc::SmartDashboard::PutNumber("Lift Drive Motor Encoder", _io->liftdriveenc->Get());
+    frc::SmartDashboard::PutBoolean("Fast Climber", moveFast);
+    frc::SmartDashboard::PutBoolean("Sync Front and Rear Lifts", syncFrontRearLifts);
+    frc::SmartDashboard::PutBoolean("Abort Climb Command is Active", _cmds->climbAbort);
+    frc::SmartDashboard::PutBoolean("Start Climb Command is Active", _cmds->climbCommand);
+    //state machine
+    switch(climbState) {
+        case ClimbSTATE::robotOnFirstLevel:
             /*
             STATE FEATURES:
             front extension motor: stopped
@@ -37,10 +50,10 @@ void ClimbManager::ClimbManagerPeriodic() {
            _cmds->drvrot = 0;
 
            if (_cmds->climbCommand) {
-               state = STATE::prepareToClimb;
+               climbState = ClimbSTATE::prepareToClimb;
            }
            break;
-        case STATE::prepareToClimb:
+        case ClimbSTATE::prepareToClimb:
             /*
             STATE FEATURES:
             front extension motor: extending
@@ -54,14 +67,14 @@ void ClimbManager::ClimbManagerPeriodic() {
            syncFrontRearLifts = true;
 
            if (_cmds->climbAbort) {
-               state = STATE::robotClimbComplete;
+               climbState = ClimbSTATE::robotClimbComplete;
                break;
            } else if (liftFrontPosDes == liftFrontPosAct && liftRearPosDes == liftRearPosAct) {
-               state = STATE::moveForwardStage1;
+               climbState = ClimbSTATE::moveForwardStage1;
                break;
            }
            break;
-        case STATE::moveForwardStage1:
+        case ClimbSTATE::moveForwardStage1:
             /*
             STATE FEATURES:
             front extension motor: stopped
@@ -70,18 +83,18 @@ void ClimbManager::ClimbManagerPeriodic() {
             drivetrain: stopped
             */
            //liftdrivemot needs to be turned on
-           
+           _io->liftdrivemot->Set(liftMotorPower);
 
            if (_cmds->climbAbort) {
-               state = STATE::robotClimbComplete;
+               climbState = ClimbSTATE::robotClimbComplete;
                break;
            } else if (_io->liftdriveenc->Get() - initialLiftDriveEncoderValue >=
             moveForwardStage1EncoderValue) {
-               state = STATE::robotStoppedHalfway;
+               climbState = ClimbSTATE::robotStoppedHalfway;
                break;
            }
            break;
-        case STATE::robotStoppedHalfway:
+        case ClimbSTATE::robotStoppedHalfway:
             /*
             STATE FEATURES:
             front extension motor: retracting
@@ -93,16 +106,17 @@ void ClimbManager::ClimbManagerPeriodic() {
            moveFast = true;
            syncFrontRearLifts = false;     
            //liftdrivemot needs to be turned off
+           _io->liftdrivemot->Set(0);
 
            if (_cmds->climbAbort) {
-               state = STATE::robotClimbComplete;
+               climbState = ClimbSTATE::robotClimbComplete;
                break;
            } else if (liftFrontPosDes == liftFrontPosAct) {
-               state = STATE::moveForwardStage2;
+               climbState = ClimbSTATE::moveForwardStage2;
                break;
            }
             break;
-        case STATE::moveForwardStage2:
+        case ClimbSTATE::moveForwardStage2:
             /*
             STATE FEATURES:
             front extension motor: stopped
@@ -111,21 +125,23 @@ void ClimbManager::ClimbManagerPeriodic() {
             drivetrain: moving forward
             */
            //liftdrivemot needs to be turned on
+           _io->liftdrivemot->Set(liftMotorPower);
+
            //swerve drive motors need to be turned on
            _cmds->drvang = 0;
-           _cmds->drvmag = 0.05;
+           _cmds->drvmag = drivetrainPower;
            _cmds->drvrot = 0;
 
            if (_cmds->climbAbort) {
-                state = STATE::robotClimbComplete;
+                climbState = ClimbSTATE::robotClimbComplete;
                 break;
            } else if (_io->liftdriveenc->Get() - initialLiftDriveEncoderValue >=
             moveForwardStage2EncoderValue) {
-                state = STATE::robotStoppedOnPlatform;
+                climbState = ClimbSTATE::robotStoppedOnPlatform;
                 break;
            }
             break;
-        case STATE::robotStoppedOnPlatform:
+        case ClimbSTATE::robotStoppedOnPlatform:
             /*
             STATE FEATURES:
             front extension motor: stopped
@@ -136,16 +152,17 @@ void ClimbManager::ClimbManagerPeriodic() {
            liftRearPosDes = liftPos::RETRACTED;
 
            //liftdrivemot needs to be turned off
+           _io->liftdrivemot->Set(0);
            //swerve motors need to be off
            _cmds->drvmag = 0;
 
            if (_cmds->climbAbort ||
                 liftRearPosDes == liftFrontPosAct) {
-                state = STATE::robotClimbComplete;
+                climbState = ClimbSTATE::robotClimbComplete;
                 break;
            }
             break;
-        case STATE::robotClimbComplete:
+        case ClimbSTATE::robotClimbComplete:
             /*
             STATE FEATURES:
             front extension motor: stopped
@@ -160,7 +177,7 @@ void ClimbManager::ClimbManagerPeriodic() {
            _cmds->drvang = 0;
            _cmds->drvmag = 0;
            _cmds->drvrot = 0;
-
+           _io->liftdrivemot->Set(0);
            //swerve motors need to be off
            break;
     }

@@ -3,11 +3,13 @@
  *
  *  Created on: Jan 20, 2019
  *      Author: blzzrd
+ *      Contributor: IChism
  */
 
 #include "RobotCommands.h"
 #include "IO.h"
-//#include "liftPID.h"
+#include "frc/WPIlib.h"
+#include "liftPIDControl.h"
 
 class ClimbManager {
 
@@ -24,9 +26,12 @@ class ClimbManager {
     double moveForwardStage1EncoderValue = 1000;
     double moveForwardStage2EncoderValue = 1000;
 
-    double initialLiftDriveEncoderValue = 0;
+    double initialLiftDriveEncoderValue = 0;\
+    //TODO: get actual drive values; this is incorrect
+    double drivetrainPower = 0.05;
+    double liftMotorPower = 0.05;
 
-    enum class STATE {
+    enum class ClimbSTATE {
         robotOnFirstLevel,
         prepareToClimb,
         moveForwardStage1,
@@ -36,7 +41,7 @@ class ClimbManager {
         robotClimbComplete,
     };
 
-    STATE state;
+    ClimbSTATE climbState;
     //TEMPORARY STUFF:: to be replaced when we get an actual source module for this
     enum class liftPos {
         RETRACTED,

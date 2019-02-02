@@ -14,12 +14,30 @@ RobotCommands::RobotCommands() {
 	climbCommand = false;
 	climbAbort = false;
 
+	hatchPickup = false;
+	cargoPickup = false;
+	elevatorHome = false;
+	ejectCargo = false;
+	placeHatchOne = false;
+	placeHatchTwo = false;
+	placeCargoInShip = false;
+	placeCargoRocketOne = false;
+	placeCargoRocketTwo = false;
+
 	autoHatchPickup = false;
 	autoPlaceHatchOne = false;
 	autoPlaceHatchTwo = false;
 	autoPlaceCargoInShip = false;
 	autoPlaceCargoRocketOne = false;
 	autoPlaceCargoRocketTwo = false;
+
+	hatchArmToggleManual = false;
+	ballArmMotorIntakeManual = false;
+	ballArmMotorEjectManual = false;
+	hatchClawManual = false;
+	ballEjectorManual = false;
+	ballArmToggleManual = false;
+	elevatorDrivePowerManual = 0;
 
 }
 
