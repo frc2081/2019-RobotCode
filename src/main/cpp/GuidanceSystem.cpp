@@ -159,6 +159,12 @@ void GuidanceSystem::GuidanceSystemPeriodic(){
 
 void GuidanceSystem::calcHomingVectors() {
     //If a target is present, calculate drive vectors to navigate robot to the target
+    drvMagCenter = 0;
+    drvMagRange = 0;
+    drvMagFinal = 0;
+    drvAng = 0;
+    drvRot = 0;
+
     if(targetAcquired == true)
     {
         //Attempt to align the robot horizontally by centering the
@@ -173,14 +179,18 @@ void GuidanceSystem::calcHomingVectors() {
         //the targets are the same width (0 parallax means we are square
         //to the target)
         //Note: kp is negative for correct rotation direction
-        errorAngle = (widthLeftTarget - widthRightTarget);
-        drvRot = errorAngle * kpAngle;
+        if(homingInStages && fabs(errorCenter < homingErrorTolerance)) {
+            errorAngle = (widthLeftTarget - widthRightTarget);
+            drvRot = errorAngle * kpAngle;
+        }
 
         //Drive the robot forward until the targets match a
         //predetermined desires height that puts the robot at the
         //correct distance from the target
-        errorHeight = (targetDesiredHeight - heightRightTarget);
-        drvMagRange = errorHeight * kpRange;
+        if(homingInStages && fabs(errorCenter < homingErrorTolerance) && fabs(errorAngle < homingErrorTolerance)){
+            errorHeight = (targetDesiredHeight - heightRightTarget);
+            drvMagRange = errorHeight * kpRange;
+        }
 
         //Select final drive mag to be larger of the two requested values
         //This ensures that the drv mag will always be non-zero until both
@@ -190,12 +200,6 @@ void GuidanceSystem::calcHomingVectors() {
 
         //Convert drive angle from "-180 to 180" degrees to "0 to 360" degrees 
         if(drvAng < 0) { drvAng += 360;}
-    } else {
-        drvMagCenter = 0;
-        drvMagRange = 0;
-        drvMagFinal = 0;
-        drvAng = 0;
-        drvRot = 0;
     }
 }
 
@@ -211,25 +215,40 @@ void GuidanceSystem::updateDashboard()
     widthLeftTarget = frc::SmartDashboard::GetNumber("Target Width Left", widthLeftTarget);
     frc::SmartDashboard::PutNumber("Target Width Right", widthRightTarget);
     widthRightTarget = frc::SmartDashboard::GetNumber("Target Width Right", widthRightTarget);
-    frc::SmartDashboard::PutNumber("Guidance Actual Height", heightRightTarget);
+    frc::SmartDashboard::PutNumber("Guide Actual Height", heightRightTarget);
     heightRightTarget = frc::SmartDashboard::GetNumber("Guidance Actual Height", heightRightTarget);
-    frc::SmartDashboard::PutNumber("Guidance Target Height", targetDesiredHeight);
+    frc::SmartDashboard::PutNumber("Guide Target Height", targetDesiredHeight);
     targetDesiredHeight = frc::SmartDashboard::GetNumber("Guidance Target Height", targetDesiredHeight);
-    frc::SmartDashboard::PutNumber("Guidance kp Center Mag", kpCenterMag);
+    frc::SmartDashboard::PutNumber("Guide kp Center Mag", kpCenterMag);
     kpCenterMag = frc::SmartDashboard::GetNumber("Guidance kp Center Mag", kpCenterMag);
-    frc::SmartDashboard::PutNumber("Guidance kp Center Angle", kpCenterAng);
+    frc::SmartDashboard::PutNumber("Guide kp Center Angle", kpCenterAng);
     kpCenterAng = frc::SmartDashboard::GetNumber("Guidance kp Center Angle", kpCenterAng);
-    frc::SmartDashboard::PutNumber("Guidance kp Angle", kpAngle);
+    frc::SmartDashboard::PutNumber("Guide kp Angle", kpAngle);
     kpAngle = frc::SmartDashboard::GetNumber("Guidance kp Angle", kpAngle);
-    frc::SmartDashboard::PutNumber("Guidance kp Range", kpRange);
+    frc::SmartDashboard::PutNumber("Guide kp Range", kpRange);
     kpRange = frc::SmartDashboard::GetNumber("Guidance kp Range", kpRange);
-
-    frc::SmartDashboard::PutNumber("Guidance error Center", errorCenter);
-    frc::SmartDashboard::PutNumber("Guidance error Angle", errorAngle);
-    frc::SmartDashboard::PutNumber("Guidance error Range", errorHeight);
+    frc::SmartDashboard::PutNumber("Guide Final Approach Time", finalApproachDuration);
+    finalApproachDuration = frc::SmartDashboard::GetNumber("Guide Final Approach Time", finalApproachDuration);
+    frc::SmartDashboard::PutNumber("Guide Placement Time", placementDuration);
+    placementDuration = frc::SmartDashboard::GetNumber("Guide Final Approach Time", placementDuration);
+    frc::SmartDashboard::PutNumber("Guide Back Away Time", placementDuration);
+    backAwayDuration = frc::SmartDashboard::GetNumber("Guide Final Approach Time", backAwayDuration);
+    frc::SmartDashboard::PutNumber("Guide Final Drv Mag", finalApproachDrvMag);
+    finalApproachDuration = frc::SmartDashboard::GetNumber("Guide Final DrvMag", finalApproachDrvMag);
+    frc::SmartDashboard::PutBoolean("Guide Homing In Stages", homingInStages);
+    homingInStages = frc::SmartDashboard::GetBoolean("Guide Homing In Stages", homingInStages);
+    frc::SmartDashboard::PutNumber("Guide Homing Stages Err Tol", homingErrorTolerance);
+    homingErrorTolerance = frc::SmartDashboard::GetNumber("Guide Homing Stages Err Tol", homingErrorTolerance);
     
-    frc::SmartDashboard::PutNumber("Guidance Drv Mag Center", drvMagCenter);
-    frc::SmartDashboard::PutNumber("Guidance Drv Mag Range" , drvMagRange);
-    frc::SmartDashboard::PutNumber("Guidnace Drv Angle", drvAng);
-    frc::SmartDashboard::PutNumber("Guidnace Drv Rotation", drvRot);
+    frc::SmartDashboard::PutNumber("Guide error Center", errorCenter);
+    frc::SmartDashboard::PutNumber("Guide error Angle", errorAngle);
+    frc::SmartDashboard::PutNumber("Guide error Range", errorHeight);
+    frc::SmartDashboard::PutNumber("Guide Drv Mag Center", drvMagCenter);
+    frc::SmartDashboard::PutNumber("Guide Drv Mag Range" , drvMagRange);
+    frc::SmartDashboard::PutNumber("Guide Drv Angle", drvAng);
+    frc::SmartDashboard::PutNumber("Guide Drv Rotation", drvRot);
+    frc::SmartDashboard::PutNumber("Guide System State", static_cast<int>(GuidanceState));
+    frc::SmartDashboard::PutBoolean("Guide System Active", guidanceSysActive);
+
+
 }

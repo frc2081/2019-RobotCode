@@ -49,6 +49,12 @@ class GuidanceSystem{
         //Indicates if guidance system is in control of the robot
         bool guidanceSysActive = false;
 
+        //Controls if homing seeks on one parameter at a time or all at once
+        bool homingInStages = false;
+
+        //Tolerance for previous homing stage to be considered complete when homing in stages
+        double homingErrorTolerance = 10;
+
         //Proportional Coefficients     
         double kpCenterAng = .5;
         double kpCenterMag = .5;
