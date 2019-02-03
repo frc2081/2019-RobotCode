@@ -118,32 +118,32 @@ void ControllerManager::pollControllers(RobotCommands *Commands){
 
 	if(mechanismcontroller->bLS->State()){
 		//grab hatch from hatch loading station
-		if (mechanismcontroller->bRB->State()) Commands->hatchPickup = true;
+		if (mechanismcontroller->bRB->RE()) Commands->hatchPickup = true;
 		else Commands->hatchPickup = false;
 		frc::SmartDashboard::PutBoolean("hatchPickup", Commands->hatchPickup);
 
 		//place hatch on rocket level one
-		if (mechanismcontroller->bA->State()) Commands->placeHatchOne = true;
+		if (mechanismcontroller->bA->RE()) Commands->placeHatchOne = true;
 		else Commands->placeHatchOne = false;
 		frc::SmartDashboard::PutBoolean("placeHatchOne", Commands->placeHatchOne);
 
 		//place hatch on rocket level two
-		if (mechanismcontroller->bB->State()) Commands->placeHatchTwo = true;
+		if (mechanismcontroller->bB->RE()) Commands->placeHatchTwo = true;
 		else Commands->placeHatchTwo = false;
 		frc::SmartDashboard::PutBoolean("placeHatchTwo", Commands->placeHatchTwo);
 
 		//place cargo in cargo ship
-		if (mechanismcontroller->bStart->State()) Commands->placeCargoInShip = true;
+		if (mechanismcontroller->bStart->RE()) Commands->placeCargoInShip = true;
 		else Commands->placeCargoInShip = false;
 		frc::SmartDashboard::PutBoolean("placeCargoInShip", Commands->placeCargoInShip);
 
 		//place cargo on rocket level one
-		if (mechanismcontroller->bX->State()) Commands->placeCargoRocketOne = true;
+		if (mechanismcontroller->bX->RE()) Commands->placeCargoRocketOne = true;
 		else Commands->placeCargoRocketOne = false;
 		frc::SmartDashboard::PutBoolean("placeCargoRocketOne", Commands->placeCargoRocketOne);
 
 		//place cargo on rocket level two
-		if (mechanismcontroller->bY->State()) Commands->placeCargoRocketTwo = true;
+		if (mechanismcontroller->bY->RE()) Commands->placeCargoRocketTwo = true;
 		else Commands->placeCargoRocketTwo = false;
 		frc::SmartDashboard::PutBoolean("placeCargoRocketTwo", Commands->placeCargoRocketTwo);
 	}

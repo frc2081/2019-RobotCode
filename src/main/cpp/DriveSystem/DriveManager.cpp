@@ -22,6 +22,10 @@ DriveManager::DriveManager(IO *io, RobotCommands *com, ControllerManager *cntls)
 
 	_pidpollrate = 0.01;
 
+	_drvang = 0;
+	_drvmag = 0;
+	_drvrot = 0;
+
 	/*
 	 * max speed - 11.5 ft/s -> 3.5052 m/s || 660 RPM of wheel
 	 * 138 pulses/rotation of wheel
@@ -49,8 +53,6 @@ DriveManager::DriveManager(IO *io, RobotCommands *com, ControllerManager *cntls)
 	//_rfdrvpid->Enable();
 	//_lbdrvpid->Enable();
 	//_rbdrvpid->Enable();
-
-
 
 	//Set up swerve turning motor PID controllers
 	_lfturnpid = new frc::PIDController(_turnpidp, _turnpidi, _turnpidp, io->steerencdrvlf, io->turnlfmot, _pidpollrate);
@@ -151,12 +153,25 @@ double DriveManager::WhlAngCalcOffset(double command, double offset) {
 //This prevents the swerve wheels from always returning to "0" angle when there is no command from the driver
 //Doing so makes for much smoother starts and stops
 void DriveManager::CalculateVectors() {
+
+	//Determine if the driver or the guidance system is in control of the drivetrain
+	//and use the appropriate drive commands
+	if(_commands->guidanceSysActive == true){
+		_drvang = _commands->autodrvang;
+		_drvmag = _commands->autodrvmag;
+		_drvrot = _commands->autodrvrot;
+	} else {
+		_drvang = _commands->drvang;
+		_drvmag = _commands->drvmag;
+		_drvrot = _commands->drvrot;
+	}
+	
 	_currangrf = _swervelib->whl->angleRF;
 	_curranglf = _swervelib->whl->angleLF;
 	_currangrb = _swervelib->whl->angleRB;
 	_curranglb = _swervelib->whl->angleLB;
-	if (_commands->drvmag != 0 || _commands->drvrot != 0) {
-		_swervelib->CalcWheelVect(_commands->drvmag, _commands->drvang, _commands->drvrot);
+	if (_drvmag != 0 || _drvrot != 0) {
+		_swervelib->CalcWheelVect(_drvmag, _drvang, _drvrot);
 	} else {
 		_swervelib->whl->speedLF = 0;
 		_swervelib->whl->speedRF = 0;
@@ -219,8 +234,6 @@ void DriveManager::ApplyPIDControl() {
 	_rfturnpid->SetSetpoint(WhlAngCalcOffset(_swervelib->whl->angleRF, _rfwhlangoffset));
 	_lbturnpid->SetSetpoint(WhlAngCalcOffset(_swervelib->whl->angleLB, _lbwhlangoffset));
 	_rbturnpid->SetSetpoint(WhlAngCalcOffset(_swervelib->whl->angleRB, _rbwhlangoffset));
-
-
 
 	_swervelib->whl->speedLF *= _maxdrivespeed;
 	_swervelib->whl->speedRF *= _maxdrivespeed;
@@ -322,5 +335,4 @@ void DriveManager::UpdatePIDTunes(){
 	_rbdrvpid->SetI(_drvpidi);
 	_rbdrvpid->SetD(_drvpidd);
 	_rbdrvpid->SetF(_drvpidf);
-
 }

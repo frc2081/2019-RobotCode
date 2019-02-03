@@ -3,32 +3,35 @@
  *
  *  Created on: Jan 20, 2019
  *      Author: blzzrd
+ *      Contributor: IChism
  */
 
 #include "RobotCommands.h"
 #include "IO.h"
+#include "frc/WPIlib.h"
+#include "liftPIDControl.h"
 
 class ClimbManager {
 
     public:
-    ClimbManager();
-    void ClimbManagerPeriodic();
+    ClimbManager(IO *io, RobotCommands *cmds);
+
+    IO *_io;
+    RobotCommands *_cmds;
+
     void ClimbManagerInit();
+    void ClimbManagerPeriodic();
     private:
     //TODO: get actual encoder values; this is incorrect
-    double liftRBEncoderValue = 1000;
-    double liftLBEncoderValue = 1000;
-    double liftRFEncoderValue = 1000;
-    double liftLFEncoderValue = 1000;
-    double moveForwardState1EncoderValue = 1000;
+    double moveForwardStage1EncoderValue = 1000;
+    double moveForwardStage2EncoderValue = 1000;
 
-    double initialLBLiftEncoderValue = 0;
-    double initialRBLiftEncoderValue = 0;
-    double initialLFLiftEncoderValue = 0;
-    double initialRFLiftEncoderValue = 0;
-    double initialLiftDriveEncoderValue = 0;
+    double initialLiftDriveEncoderValue = 0;\
+    //TODO: get actual drive values; this is incorrect
+    double drivetrainPower = 0.05;
+    double liftMotorPower = 0.05;
 
-    enum class STATE {
+    enum class ClimbSTATE {
         robotOnFirstLevel,
         prepareToClimb,
         moveForwardStage1,
@@ -38,13 +41,14 @@ class ClimbManager {
         robotClimbComplete,
     };
 
-    STATE state;
-    double liftlbenc;
-double liftrbenc;
-double liftlfenc;
-double liftrfenc;
-double liftdriveenc;
+    ClimbSTATE climbState;
+    //TEMPORARY STUFF:: to be replaced when we get an actual source module for this
+    enum class liftPos {
+        RETRACTED,
+        EXTENDEDLEVELONE,
+        EXTENDEDLEVELTWO
+    };
 
-bool climbCommand;
-bool climbAbort;
+    liftPos liftFrontPosDes, liftFrontPosAct, liftRearPosDes, liftRearPosAct;
+    bool moveFast, syncFrontRearLifts;
 };
