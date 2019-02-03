@@ -44,9 +44,7 @@ SwerveLib::SwerveLib(double width, double length) {
 	whl = new wheel();
 }
 
-void SwerveLib::CalcWheelVect(double mag,
-						 double ang,
-						 double rotation) {
+void SwerveLib::CalcWheelVect(double mag, double ang, double rotation) {
 
 	//Constructs a X and Y vector from the given magnitude and angle
 	_centerVecX = mag * cos(degrees_to_radians(ang+90));
