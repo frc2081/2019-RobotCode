@@ -15,6 +15,12 @@ public:
 	double drvang;
 	double drvmag;
 	double drvrot;
+
+	double autodrvang;
+	double autodrvmag;
+	double autodrvrot;
+	bool guidanceSysActive;
+
 	bool climbCommand;
 	bool climbAbort;
 	bool hatchPickup;
