@@ -8,11 +8,35 @@ class GuidanceSystem{
     public:
         GuidanceSystem(RobotCommands *cmds);
         void GuidanceSystemPeriodic();
+
+    private:
         RobotCommands *_cmds;
+        void calcHomingVectors();
+        void updateDashboard();
+
+        enum class GuidanceSysState {
+            NOTACTIVE,
+            TRACKING,
+            FINALAPPROACH,
+            PLACEMENT,
+            BACKAWAY,
+            DONE
+        };
+
+        GuidanceSysState GuidanceState;
         
+        //Timers and durations
+        //All times in ms, divided by 20 to convert into control system loops (20ms each)
+        int finalApproachDuration = 500 / 20;
+        int placementDuration = 500 / 20;
+        int backAwayDuration = 500 / 20;
+        int guidanceCompleteDelay = 3000  / 20;
+
+        int timer;
+
         //Placeholder target data from vision system
         //All values in image pixels
-        bool targetAcquired = true;
+        bool targetAcquired = false;
         int distanceLeftTarget = -80;
         int distanceRightTarget = 50;
         int widthLeftTarget = 10;
@@ -49,5 +73,9 @@ class GuidanceSystem{
         //Desired swerve rotation in radians/s
         double drvRot;
 
+        //final approach and back away drive values
+        double finalApproachDrvMag = .3;
+        double finalApproachDrvAng = 0;
+        double finalApproachDrvRot = 0;
 };
 

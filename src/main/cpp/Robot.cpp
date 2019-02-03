@@ -18,6 +18,7 @@ void Robot::RobotInit() {
 		Commands = new RobotCommands();
 		Drivetrain = new DriveManager(RioIO, Commands, DriverControls);
     Climber = new ClimbManager(RioIO, Commands);
+    Elevator = new ElevatorManager(RioIO, Commands);
 
 		Drivetrain->DriveManagerInit();
 }
@@ -30,7 +31,10 @@ void Robot::RobotPeriodic() {
 
 void Robot::AutonomousInit() {}
 
-void Robot::AutonomousPeriodic() {}
+void Robot::AutonomousPeriodic() {
+  Drivetrain->DriveManagerPeriodic();
+  Elevator->ElevatorManagerPeriodic();
+}
 
 void Robot::TeleopInit() {}
 

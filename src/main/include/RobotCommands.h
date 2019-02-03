@@ -40,7 +40,6 @@ public:
 	bool autoPlaceCargoRocketOne;
 	bool autoPlaceCargoRocketTwo;
 
-	
 	bool hatchArmToggleManual;
 	bool ballArmMotorIntakeManual;
 	bool ballArmMotorEjectManual;
