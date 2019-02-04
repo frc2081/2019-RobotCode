@@ -46,9 +46,6 @@ void ClimbManager::ClimbManagerPeriodic() {
             */
            lift->liftFrontPosDes = lift->liftPos::RETRACTED;
            lift->liftRearPosDes = lift->liftPos::RETRACTED;
-           _cmds->drvang = 0;
-           _cmds->drvmag = 0;
-           _cmds->drvrot = 0;
 
            if (_cmds->climbCommandLevelTwo) {
                climbState = ClimbSTATE::prepareToClimb;
@@ -66,6 +63,12 @@ void ClimbManager::ClimbManagerPeriodic() {
            lift->liftRearPosDes = lift->liftPos::EXTENDEDLEVELTWO;
            lift->moveFast = false;
            lift->syncFrontRearLifts = true;
+
+            //Take drivetrain control away from the driver
+            _cmds->guidanceSysActive = true;
+            _cmds->autodrvang = 0;
+            _cmds->autodrvmag = 0;
+            _cmds->autodrvrot = 0;
 
            if (_cmds->climbAbort) {
                climbState = ClimbSTATE::robotClimbComplete;
@@ -129,9 +132,10 @@ void ClimbManager::ClimbManagerPeriodic() {
            _io->liftdrivemot->Set(liftMotorPower);
 
            //swerve drive motors need to be turned on
-           _cmds->drvang = 0;
-           _cmds->drvmag = drivetrainPower;
-           _cmds->drvrot = 0;
+            _cmds->guidanceSysActive = true;
+            _cmds->autodrvang = 0;
+            _cmds->autodrvmag = drivetrainPower;
+            _cmds->autodrvrot = 0;
 
            if (_cmds->climbAbort) {
                 climbState = ClimbSTATE::robotClimbComplete;
@@ -155,7 +159,10 @@ void ClimbManager::ClimbManagerPeriodic() {
            //liftdrivemot needs to be turned off
            _io->liftdrivemot->Set(0);
            //swerve motors need to be off
-           _cmds->drvmag = 0;
+            _cmds->guidanceSysActive = true;
+            _cmds->autodrvang = 0;
+            _cmds->autodrvmag = 0;
+            _cmds->autodrvrot = 0;
 
            if (_cmds->climbAbort ||
                 lift->liftRearPosDes == lift->liftFrontPosAct) {
@@ -175,9 +182,12 @@ void ClimbManager::ClimbManagerPeriodic() {
            lift->liftRearPosDes = lift->liftPos::RETRACTED;
            lift->syncFrontRearLifts = true;     
            lift->moveFast = false;
-           _cmds->drvang = 0;
-           _cmds->drvmag = 0;
-           _cmds->drvrot = 0;
+
+           //Don't give the drive control back while the robot is on the platform...
+            _cmds->guidanceSysActive = true;
+            _cmds->autodrvang = 0;
+            _cmds->autodrvmag = 0;
+            _cmds->autodrvrot = 0;
            _io->liftdrivemot->Set(0);
            //swerve motors need to be off
            break;
