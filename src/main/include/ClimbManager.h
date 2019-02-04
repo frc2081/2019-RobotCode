@@ -18,6 +18,7 @@ class ClimbManager {
 
     IO *_io;
     RobotCommands *_cmds;
+    LiftPIDControl *lift;
 
     void ClimbManagerInit();
     void ClimbManagerPeriodic();
@@ -42,13 +43,4 @@ class ClimbManager {
     };
 
     ClimbSTATE climbState;
-    //TEMPORARY STUFF:: to be replaced when we get an actual source module for this
-    enum class liftPos {
-        RETRACTED,
-        EXTENDEDLEVELONE,
-        EXTENDEDLEVELTWO
-    };
-
-    liftPos liftFrontPosDes, liftFrontPosAct, liftRearPosDes, liftRearPosAct;
-    bool moveFast, syncFrontRearLifts;
 };

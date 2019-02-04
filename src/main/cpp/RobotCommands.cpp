@@ -16,7 +16,8 @@ RobotCommands::RobotCommands() {
 	autodrvrot = 0;
 	guidanceSysActive = false;
 
-	climbCommand = false;
+	climbCommandLevelOne = false;
+	climbCommandLevelTwo = false;
 	climbAbort = false;
 
 	hatchPickup = false;

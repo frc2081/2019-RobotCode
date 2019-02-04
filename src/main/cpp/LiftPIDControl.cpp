@@ -112,16 +112,16 @@ void LiftPIDControl::liftPIDControlTeleopPeriodic() {
   liftlfPID->SetI(liftPIDi);
   liftlfPID->SetD(liftPIDd);
   liftlfPID->SetF(liftPIDf);
-/*
-  liftBLPID->SetP(liftPIDp);
-  liftBLPID->SetI(liftPIDi);
-  liftBLPID->SetD(liftPIDd);
-  liftBLPID->SetF(liftPIDf);
 
-  liftBRPID->SetP(liftPIDp);
-  liftBRPID->SetI(liftPIDi);
-  liftBRPID->SetD(liftPIDd);
-  liftBRPID->SetF(liftPIDf);*/
+  liftlbPID->SetP(liftPIDp);
+  liftlbPID->SetI(liftPIDi);
+  liftlbPID->SetD(liftPIDd);
+  liftlbPID->SetF(liftPIDf);
+
+  liftrbPID->SetP(liftPIDp);
+  liftrbPID->SetI(liftPIDi);
+  liftrbPID->SetD(liftPIDd);
+  liftrbPID->SetF(liftPIDf);
 
    //liftDrive->Set(-stick->GetY());
   
@@ -154,18 +154,17 @@ void LiftPIDControl::liftPIDControlTeleopPeriodic() {
 
   liftrfPID->SetSetpoint(liftFrontSetPoint);
   liftlfPID->SetSetpoint(liftFrontSetPoint);
-  /*liftlfPID->SetSetpoint(liftFrontSetPoint);
   liftlbPID->SetSetpoint(liftRearSetPoint);
-  liftrbPID->SetSetpoint(liftRearSetPoint);*/
+  liftrbPID->SetSetpoint(liftRearSetPoint);
 
   //Safety code to stop the lifts if they get out of sync with each other
   //Might improve this in the future to keep them running and limit command so they stay in sync
-  /*double rfPos = liftrfenc->GetDistance();
-  double lfPos = liftlfenc->GetDistance();
-  double rbPos = liftrbenc->GetDistance();
-  double lbPos = liftlbenc->GetDistance();
+  double rfPos = _io->liftrfenc->GetDistance();
+  double lfPos = _io->liftlfenc->GetDistance();
+  double rbPos = _io->liftrbenc->GetDistance();
+  double lbPos = _io->liftlbenc->GetDistance();
   if(abs(rfPos - lfPos) > liftDesyncDistanceThreshold) {disableLiftPID();}
-  if(abs(rbPos - lbPos) > liftDesyncDistanceThreshold) {disableLiftPID();}*/
+  if(abs(rbPos - lbPos) > liftDesyncDistanceThreshold) {disableLiftPID();}
 }
 
 double LiftPIDControl::rampToValue(double currVal, double desVal, double rampRate){

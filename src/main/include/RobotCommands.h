@@ -21,7 +21,8 @@ public:
 	double autodrvrot;
 	bool guidanceSysActive;
 
-	bool climbCommand;
+	bool climbCommandLevelOne;
+	bool climbCommandLevelTwo;
 	bool climbAbort;
 	bool hatchPickup;
 	bool cargoPickup;
