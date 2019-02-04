@@ -31,9 +31,12 @@ void Robot::RobotPeriodic() {
 void Robot::AutonomousInit() {}
 
 void Robot::AutonomousPeriodic() {
+<<<<<<< HEAD
   Drivetrain->DriveManagerPeriodic();
   Elevator->ElevatorManagerPeriodic();
-  RioIO->ioPeriodic();
+=======
+    RioIO->ioPeriodic();
+>>>>>>> IO
 }
 
 void Robot::TeleopInit() {}

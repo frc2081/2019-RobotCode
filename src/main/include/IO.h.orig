@@ -57,6 +57,16 @@ public:
 	frc::DigitalInput *swerveresettwo;
 
 	//Other Motors
+<<<<<<< HEAD
+	frc::Victor *ballintakemot;
+	frc::Victor *liftdrivemot;
+	frc::Victor *liftlbmot;
+	frc::Victor *liftrbmot;
+	frc::Victor *liftlfmot;
+	frc::Victor *liftrfmot;
+	frc::Victor *elevatormot;
+	
+=======
 	frc::VictorSP *ballintakemot;
 	frc::VictorSP *liftdrivemot;
 	frc::VictorSP *liftlbmot;
@@ -64,7 +74,7 @@ public:
 	frc::VictorSP *liftlfmot;
 	frc::VictorSP *liftrfmot;
 	frc::VictorSP *elevatormot;
-	
+>>>>>>> IO
 
 	//Other Encoders
 	frc::Encoder *liftdriveenc;

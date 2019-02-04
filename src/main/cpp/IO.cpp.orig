@@ -6,10 +6,24 @@
  */
 
 #include "IO.h"
+<<<<<<< HEAD
 #include "ctre/Phoenix.h"
+=======
+#include "ElevatorManager.h"
+>>>>>>> IO
 
 IO::IO() {
 	//Swerve Drive Motors
+<<<<<<< HEAD
+	drvlbmot  = new frc::Victor(3);
+	drvrbmot  = new frc::Victor(7);
+	drvlfmot  = new frc::Victor(9);
+	drvrfmot  = new frc::Victor(13);
+	turnlbmot = new frc::Victor(3);
+	turnrbmot = new frc::Victor(6);
+	turnlfmot = new frc::Victor(8);
+	turnrfmot = new frc::Victor(12);
+=======
 	drvlbmot = new frc::VictorSP(3);
 	drvrbmot  = new frc::VictorSP(2);
 	drvlfmot  = new frc::VictorSP(1);
@@ -18,7 +32,8 @@ IO::IO() {
 	turnrbmot = new frc::VictorSP(6);
 	turnlfmot = new frc::VictorSP(5);
 	turnrfmot = new frc::VictorSP(4);
-	
+
+	//Other Motors
 	ballintakemot = new frc::VictorSP(15);
 	liftdrivemot = new frc::VictorSP(16);
 	liftlbmot = new frc::VictorSP(17);
@@ -26,6 +41,8 @@ IO::IO() {
 	liftlfmot = new frc::VictorSP(19);
 	liftrfmot = new frc::VictorSP(20);
 	elevatormot = new frc::VictorSP(21); //fix port #
+>>>>>>> IO
+	
 
 	//Swerve Drive Encoders
 	encdrvlb = new frc::Encoder(16, 17, false, frc::Encoder::EncodingType::k4X);
