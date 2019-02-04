@@ -45,13 +45,13 @@ IO::IO() {
 	swerveresettwo = new frc::DigitalInput(1);
 
 	//Other Motors
-	ballintakemot = new frc::Victor(15);
-	liftdrivemot = new frc::Victor(16);
-	liftlbmot = new frc::Victor(17);
-	liftrbmot = new frc::Victor(18);
-	liftlfmot = new frc::Victor(19);
-	liftrfmot = new frc::Victor(20);
-	elevatormot = new frc::Victor(21); //fix port #
+	ballintakemot = new frc::VictorSP(15);
+	liftdrivemot = new frc::VictorSP(16);
+	liftlbmot = new frc::VictorSP(17);
+	liftrbmot = new frc::VictorSP(18);
+	liftlfmot = new frc::VictorSP(19);
+	liftrfmot = new frc::VictorSP(20);
+	elevatormot = new frc::VictorSP(21); //fix port #
 
 
 	//Other Encoders
