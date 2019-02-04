@@ -12,23 +12,23 @@ IO::IO() {
 
 	//******************PWM assingments*****************
 	//Swerve Drive Motors
-	drvlbmot = new frc::Victor(3);
-	drvrbmot  = new frc::Victor(2);
-	drvlfmot  = new frc::Victor(1);
-	drvrfmot  = new frc::Victor(0);
-	turnlbmot = new frc::Victor(7);
-	turnrbmot = new frc::Victor(6);
-	turnlfmot = new frc::Victor(5);
-	turnrfmot = new frc::Victor(4);
+	drvlbmot = new frc::VictorSP(3);
+	drvrbmot  = new frc::VictorSP(2);
+	drvlfmot  = new frc::VictorSP(1);
+	drvrfmot  = new frc::VictorSP(0);
+	turnlbmot = new frc::VictorSP(7);
+	turnrbmot = new frc::VictorSP(6);
+	turnlfmot = new frc::VictorSP(5);
+	turnrfmot = new frc::VictorSP(4);
 
 	//Other Motors
-	ballintakemot = new VictorSPX(15);
-	liftdrivemot = new VictorSPX(16);
-	liftlbmot = new VictorSPX(17);
-	liftrbmot = new VictorSPX(18);
-	liftlfmot = new VictorSPX(19);
-	liftrfmot = new VictorSPX(20);
-	elevatormot = new VictorSPX(21); //fix port #
+	ballintakemot = new frc::VictorSP(15);
+	liftdrivemot = new frc::VictorSP(16);
+	liftlbmot = new frc::VictorSP(17);
+	liftrbmot = new frc::VictorSP(18);
+	liftlfmot = new frc::VictorSP(19);
+	liftrfmot = new frc::VictorSP(20);
+	elevatormot = new frc::VictorSP(21); //fix port #
 	
 	//******************DIO assingments*****************
 	//Swerve Angle Reset Inputs
@@ -72,9 +72,24 @@ IO::IO() {
 	ballshootersolenoidout = new frc::Solenoid(6);
 	hatchclawsolenoidout = new frc::Solenoid(7);
 
+	elevatorenc->SetDistancePerPulse(elevatorEncoderCountsToDistanceInches);
+	elevatorDesiredPos = 0;
+	elevatorActualPos = 0;
+
 }
 
-void IO::pollIO(){
+void IO::ioPeriodic(){
+	elevatorActualPos = elevatorenc->GetDistance();
+
+	if(elevatorActualPos < elevatorDesiredPos - elevatorPosTolerance){
+		elevatormot->Set(1.0);
+	} else if (elevatorActualPos > elevatorDesiredPos + elevatorPosTolerance){
+		elevatormot->Set(-1.0);
+	} else elevatormot->Set(0.0);
+
+	frc::SmartDashboard::PutNumber("Elevator Des Pos", elevatorDesiredPos);
+	frc::SmartDashboard::PutNumber("Elevator Act Pos", elevatorActualPos);
+	frc::SmartDashboard::PutNumber("Elevator Motor Power", elevatormot->Get());
 }
 
 /*void IO::robotMechanismPeriodic(ElevatorManager test_12){

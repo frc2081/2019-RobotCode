@@ -224,8 +224,10 @@ switch(ElevatorManagerCurrentState){
 
     if(_cmds->ejectCargo){ElevatorManagerCurrentState = ElevatorManagerState::BallEject;}
 
-    frc::SmartDashboard::PutNumber("Current State: ", static_cast<double>(ElevatorManagerCurrentState));
-
+    frc::SmartDashboard::PutNumber("Elevator Current State: ", static_cast<double>(ElevatorManagerCurrentState));
+    frc::SmartDashboard::PutBoolean("Elevator Hatch Arm Position", HatchArmPos);
+    frc::SmartDashboard::PutBoolean("Elevator Hatch Claw Position", HatchClawPos);
+    _io->elevatorDesiredPos = ElevatorPosCmd;
 }
 
 void ElevatorManager::ElevatorManagerMechanism(IO *io){

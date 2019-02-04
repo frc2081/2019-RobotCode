@@ -20,22 +20,28 @@ class IO {
 public:
 
 	IO();
-	void pollIO();
+	void ioPeriodic();
 	void robotMechanismPeriodic();
+
+	int elevatorDesiredPos, elevatorActualPos;
+	int elevatorPosTolerance = 0.5;
+	double elevatorMovePower = 1;
 
 	// The scaling to multiply the voltage by to get a meaningful unit 360 degrees / 5 volts = 72
 	const int sweerveanglogvoltagetodegrees = 72;
 	const double swerveencodercountstodistancecentimeters = .238;
 	
+	const double elevatorEncoderCountsToDistanceInches = .00097;
+
 	//Swerve Drive Motors
-	frc::Victor *drvlbmot;
-	frc::Victor *drvrbmot;
-	frc::Victor *drvlfmot;
-	frc::Victor *drvrfmot;
-	frc::Victor *turnlbmot;
-	frc::Victor *turnrbmot;
-	frc::Victor *turnlfmot;
-	frc::Victor *turnrfmot;
+	frc::VictorSP *drvlbmot;
+	frc::VictorSP *drvrbmot;
+	frc::VictorSP *drvlfmot;
+	frc::VictorSP *drvrfmot;
+	frc::VictorSP *turnlbmot;
+	frc::VictorSP *turnrbmot;
+	frc::VictorSP *turnlfmot;
+	frc::VictorSP *turnrfmot;
 
 	//Swerve Drive Encoders
 	frc::Encoder *encdrvlb;
@@ -51,13 +57,13 @@ public:
 	frc::DigitalInput *swerveresettwo;
 
 	//Other Motors
-	VictorSPX *ballintakemot;
-	VictorSPX *liftdrivemot;
-	VictorSPX *liftlbmot;
-	VictorSPX *liftrbmot;
-	VictorSPX *liftlfmot;
-	VictorSPX *liftrfmot;
-	VictorSPX *elevatormot;
+	frc::VictorSP *ballintakemot;
+	frc::VictorSP *liftdrivemot;
+	frc::VictorSP *liftlbmot;
+	frc::VictorSP *liftrbmot;
+	frc::VictorSP *liftlfmot;
+	frc::VictorSP *liftrfmot;
+	frc::VictorSP *elevatormot;
 
 	//Other Encoders
 	frc::Encoder *liftdriveenc;
