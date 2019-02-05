@@ -14,9 +14,8 @@
 class ClimbManager {
 
     public:
-    ClimbManager(IO *io, RobotCommands *cmds, LiftPIDControl *cntrl);
+    ClimbManager(IO *io, RobotCommands *cmds);
 
-    LiftPIDControl *_cntrl;
     IO *_io;
     RobotCommands *_cmds;
     LiftPIDControl *lift;
@@ -32,7 +31,7 @@ class ClimbManager {
     //TODO: get actual drive values; this is incorrect
     double drivetrainPower = 0.05;
     double liftMotorPower = 0.05;
-
+    //state machine initialization
     enum class ClimbSTATE {
         robotOnFirstLevel,
         prepareToClimb,
@@ -44,4 +43,6 @@ class ClimbManager {
     };
 
     ClimbSTATE climbState;
+    //level manager variable
+    int climbLevel = 0;
 };

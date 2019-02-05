@@ -8,7 +8,7 @@
 
 #include "ClimbManager.h"
 
-ClimbManager::ClimbManager(IO *io, RobotCommands *cmds, LiftPIDControl *cntrl) {
+ClimbManager::ClimbManager(IO *io, RobotCommands *cmds) {
 
     _io = io;
     _cmds = cmds;
@@ -33,7 +33,8 @@ void ClimbManager::ClimbManagerPeriodic() {
     frc::SmartDashboard::PutBoolean("Fast Climber", lift->moveFast);
     frc::SmartDashboard::PutBoolean("Sync Front and Rear Lifts", lift->syncFrontRearLifts);
     frc::SmartDashboard::PutBoolean("Abort Climb Command is Active", _cmds->climbAbort);
-    frc::SmartDashboard::PutBoolean("Start Climb Command is Active", _cmds->climbCommandLevelTwo);
+    frc::SmartDashboard::PutBoolean("Start Climb lvl2 Command is Active", _cmds->climbCommandLevelTwo);
+    frc::SmartDashboard::PutBoolean("Start Climb lvl1 Command is Active", _cmds->climbCommandLevelOne);
     //state machine
     switch(climbState) {
         case ClimbSTATE::robotOnFirstLevel:
@@ -48,6 +49,10 @@ void ClimbManager::ClimbManagerPeriodic() {
            lift->liftRearPosDes = lift->liftPos::RETRACTED;
 
            if (_cmds->climbCommandLevelTwo) {
+               climbLevel = 2;
+               climbState = ClimbSTATE::prepareToClimb;
+           } else if (_cmds->climbCommandLevelOne) {
+               climbLevel = 1;
                climbState = ClimbSTATE::prepareToClimb;
            }
            break;
@@ -59,10 +64,15 @@ void ClimbManager::ClimbManagerPeriodic() {
             back extension motor: extending
             drivetrain: stopped
             */
-           lift->liftFrontPosDes = lift->liftPos::EXTENDEDLEVELTWO;
-           lift->liftRearPosDes = lift->liftPos::EXTENDEDLEVELTWO;
-           lift->moveFast = false;
-           lift->syncFrontRearLifts = true;
+            if (climbLevel == 2) {
+                lift->liftFrontPosDes = lift->liftPos::EXTENDEDLEVELTWO;
+                lift->liftRearPosDes = lift->liftPos::EXTENDEDLEVELTWO;
+            } else if (climbLevel == 1) {
+                lift->liftFrontPosDes = lift->liftPos::EXTENDEDLEVELONE;
+                lift->liftRearPosDes = lift->liftPos::EXTENDEDLEVELONE;
+            }
+            lift->moveFast = false;
+            lift->syncFrontRearLifts = true;
 
             //Take drivetrain control away from the driver
             _cmds->guidanceSysActive = true;
@@ -73,8 +83,8 @@ void ClimbManager::ClimbManagerPeriodic() {
            if (_cmds->climbAbort) {
                climbState = ClimbSTATE::robotClimbComplete;
                break;
-           } else if (lift->liftFrontPosDes == lift->liftFrontPosAct && lift->liftRearPosDes == lift->liftRearPosAct) {
-           _cntrl->liftRearPosDes == _cntrl->liftRearPosAct) {
+           } else if (lift->liftFrontPosDes == lift->liftFrontPosAct &&
+                    lift->liftRearPosDes == lift->liftRearPosAct) {
                climbState = ClimbSTATE::moveForwardStage1;
                break;
            }
