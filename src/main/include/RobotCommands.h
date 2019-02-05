@@ -15,7 +15,14 @@ public:
 	double drvang;
 	double drvmag;
 	double drvrot;
-	bool climbCommand;
+
+	double autodrvang;
+	double autodrvmag;
+	double autodrvrot;
+	bool guidanceSysActive;
+
+	bool climbCommandLevelOne;
+	bool climbCommandLevelTwo;
 	bool climbAbort;
 	bool hatchPickup;
 	bool cargoPickup;
@@ -34,7 +41,6 @@ public:
 	bool autoPlaceCargoRocketOne;
 	bool autoPlaceCargoRocketTwo;
 
-	
 	bool hatchArmToggleManual;
 	bool ballArmMotorIntakeManual;
 	bool ballArmMotorEjectManual;

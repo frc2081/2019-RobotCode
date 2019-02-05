@@ -11,7 +11,13 @@ RobotCommands::RobotCommands() {
 	drvmag = 0;
 	drvang = 0;
 	drvrot = 0;
-	climbCommand = false;
+	autodrvmag = 0;
+	autodrvang = 0;
+	autodrvrot = 0;
+	guidanceSysActive = false;
+
+	climbCommandLevelOne = false;
+	climbCommandLevelTwo = false;
 	climbAbort = false;
 
 	hatchPickup = false;

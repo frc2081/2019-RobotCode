@@ -10,15 +10,22 @@
 
 IO::IO() {
 	//Swerve Drive Motors
-	drvlbmot  = new frc::Victor(3);
-	drvrbmot  = new frc::Victor(7);
-	drvlfmot  = new frc::Victor(9);
-	drvrfmot  = new frc::Victor(13);
-	turnlbmot = new frc::Victor(3);
-	turnrbmot = new frc::Victor(6);
-	turnlfmot = new frc::Victor(8);
-	turnrfmot = new frc::Victor(12);
+	drvlbmot = new frc::VictorSP(3);
+	drvrbmot  = new frc::VictorSP(2);
+	drvlfmot  = new frc::VictorSP(1);
+	drvrfmot  = new frc::VictorSP(0);
+	turnlbmot = new frc::VictorSP(7);
+	turnrbmot = new frc::VictorSP(6);
+	turnlfmot = new frc::VictorSP(5);
+	turnrfmot = new frc::VictorSP(4);
 	
+	ballintakemot = new frc::VictorSP(15);
+	liftdrivemot = new frc::VictorSP(16);
+	liftlbmot = new frc::VictorSP(17);
+	liftrbmot = new frc::VictorSP(18);
+	liftlfmot = new frc::VictorSP(19);
+	liftrfmot = new frc::VictorSP(20);
+	elevatormot = new frc::VictorSP(21); //fix port #
 
 	//Swerve Drive Encoders
 	encdrvlb = new frc::Encoder(16, 17, false, frc::Encoder::EncodingType::k4X);
@@ -38,13 +45,13 @@ IO::IO() {
 	swerveresettwo = new frc::DigitalInput(1);
 
 	//Other Motors
-	ballintakemot = new frc::Victor(15);
-	liftdrivemot = new frc::Victor(16);
-	liftlbmot = new frc::Victor(17);
-	liftrbmot = new frc::Victor(18);
-	liftlfmot = new frc::Victor(19);
-	liftrfmot = new frc::Victor(20);
-	elevatormot = new frc::Victor(21); //fix port #
+	ballintakemot = new frc::VictorSP(15);
+	liftdrivemot = new frc::VictorSP(16);
+	liftlbmot = new frc::VictorSP(17);
+	liftrbmot = new frc::VictorSP(18);
+	liftlfmot = new frc::VictorSP(19);
+	liftrfmot = new frc::VictorSP(20);
+	elevatormot = new frc::VictorSP(21); //fix port #
 
 
 	//Other Encoders
@@ -72,7 +79,50 @@ IO::IO() {
   	liftlfenc->SetDistancePerPulse(liftDistPerCountInches);
 
 
+	elevatorenc->SetDistancePerPulse(elevatorEncoderCountsToDistanceInches);
+	elevatorDesiredPos = 0;
+	elevatorActualPos = 0;
+
 }
 
-void IO::pollIO(){
+void IO::ioPeriodic(){
+	elevatorActualPos = elevatorenc->GetDistance();
+
+	if(elevatorActualPos < elevatorDesiredPos - elevatorPosTolerance){
+		elevatormot->Set(1.0);
+	} else if (elevatorActualPos > elevatorDesiredPos + elevatorPosTolerance){
+		elevatormot->Set(-1.0);
+	} else elevatormot->Set(0.0);
+
+	frc::SmartDashboard::PutNumber("Elevator Des Pos", elevatorDesiredPos);
+	frc::SmartDashboard::PutNumber("Elevator Act Pos", elevatorActualPos);
+	frc::SmartDashboard::PutNumber("Elevator Motor Power", elevatormot->Get());
 }
+
+/*void IO::robotMechanismPeriodic(ElevatorManager test_12){
+	if(test_12.HatchArmPos){
+		hatcharmsolenoidin->Set(true);
+		hatcharmsolenoidout->Set(false);
+	}
+	else{
+		hatcharmsolenoidin->Set(false);
+		hatcharmsolenoidout->Set(true);
+	}
+	
+}
+*/
+
+
+/*
+void IO::robotMechanismPeriodic(){
+	if(HatchArmPos == HatchArmExtended){
+		hatcharmsolenoidin.set(true);
+		hatcharmsolenoidout.set(false);
+	}
+	else{
+		hatcharmsolenoidin.set(false);
+		hatcharmsolenoidout.set(true);
+	}
+	
+}
+*/

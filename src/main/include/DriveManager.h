@@ -53,7 +53,7 @@
 		double _currangrf, _curranglf, _curranglb, _currangrb;
 
 		double _lfwhlangoffset, _rfwhlangoffset, _lbwhlangoffset, _rbwhlangoffset;
-
+		double _drvang, _drvmag, _drvrot;
 
 		double WhlAngCalcOffset(double, double);
 		void ZeroEncoders();

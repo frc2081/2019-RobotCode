@@ -224,7 +224,47 @@ switch(ElevatorManagerCurrentState){
 
     if(_cmds->ejectCargo){ElevatorManagerCurrentState = ElevatorManagerState::BallEject;}
 
-    frc::SmartDashboard::PutNumber("Current State: ", static_cast<double>(ElevatorManagerCurrentState));
+    frc::SmartDashboard::PutNumber("Elevator Current State: ", static_cast<double>(ElevatorManagerCurrentState));
+    frc::SmartDashboard::PutBoolean("Elevator Hatch Arm Position", HatchArmPos);
+    frc::SmartDashboard::PutBoolean("Elevator Hatch Claw Position", HatchClawPos);
+    _io->elevatorDesiredPos = ElevatorPosCmd;
+}
 
+void ElevatorManager::ElevatorManagerMechanism(IO *io){
+    	if(HatchArmPos){
+		io->hatcharmsolenoidin->Set(true);
+		io->hatcharmsolenoidout->Set(false);
+	    }
+	    else{
+		io->hatcharmsolenoidin->Set(false);
+		io->hatcharmsolenoidout->Set(true);
+	    }
+
+        if(HatchClawPos){
+        io->hatchclawsolenoidout->Set(true);
+        io->hatchclawsolenoidin->Set(false);
+        }
+        else{
+        io->hatchclawsolenoidout->Set(false);
+        io->hatchclawsolenoidin->Set(true);
+        }
+
+        if(BallShooterPos){
+        io->ballshootersolenoidout->Set(true);
+        io->ballshootersolenoidin->Set(false);
+        }
+        else{
+        io->ballshootersolenoidout->Set(false);
+        io->ballshootersolenoidin->Set(true);
+        }
+
+        if(BallArmPos){
+        io->ballarmsolenoidout->Set(true);
+        io->ballarmsolenoidin->Set(false);
+        }
+        else{
+        io->ballarmsolenoidout->Set(false);
+        io->ballarmsolenoidin->Set(true);
+        }
 }
 

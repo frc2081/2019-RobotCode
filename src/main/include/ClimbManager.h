@@ -19,6 +19,7 @@ class ClimbManager {
     LiftPIDControl *_cntrl;
     IO *_io;
     RobotCommands *_cmds;
+    LiftPIDControl *lift;
 
     void ClimbManagerInit();
     void ClimbManagerPeriodic();

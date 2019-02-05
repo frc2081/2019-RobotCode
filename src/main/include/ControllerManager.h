@@ -11,6 +11,7 @@
 #include "cntl.h"
 #include "ControllerSettings.h"
 #include "RobotCommands.h"
+#include "LiftPIDControl.h"
 
 
 
