@@ -57,7 +57,6 @@ public:
 	frc::Victor *liftlfmot;
 	frc::Victor *liftrfmot;
 	frc::Victor *elevatormot;
-	
 
 	//Other Encoders
 	frc::Encoder *liftdriveenc;

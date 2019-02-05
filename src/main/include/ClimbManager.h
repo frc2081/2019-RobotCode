@@ -9,13 +9,14 @@
 #include "RobotCommands.h"
 #include "IO.h"
 #include "frc/WPIlib.h"
-#include "liftPIDControl.h"
+#include "LiftPIDControl.h"
 
 class ClimbManager {
 
     public:
-    ClimbManager(IO *io, RobotCommands *cmds);
+    ClimbManager(IO *io, RobotCommands *cmds, LiftPIDControl *cntrl);
 
+    LiftPIDControl *_cntrl;
     IO *_io;
     RobotCommands *_cmds;
 
@@ -26,7 +27,7 @@ class ClimbManager {
     double moveForwardStage1EncoderValue = 1000;
     double moveForwardStage2EncoderValue = 1000;
 
-    double initialLiftDriveEncoderValue = 0;\
+    double initialLiftDriveEncoderValue = 0;
     //TODO: get actual drive values; this is incorrect
     double drivetrainPower = 0.05;
     double liftMotorPower = 0.05;
@@ -42,13 +43,4 @@ class ClimbManager {
     };
 
     ClimbSTATE climbState;
-    //TEMPORARY STUFF:: to be replaced when we get an actual source module for this
-    enum class liftPos {
-        RETRACTED,
-        EXTENDEDLEVELONE,
-        EXTENDEDLEVELTWO
-    };
-
-    liftPos liftFrontPosDes, liftFrontPosAct, liftRearPosDes, liftRearPosAct;
-    bool moveFast, syncFrontRearLifts;
 };

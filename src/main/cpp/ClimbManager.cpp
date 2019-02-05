@@ -8,10 +8,11 @@
 
 #include "ClimbManager.h"
 
-ClimbManager::ClimbManager(IO *io, RobotCommands *cmds) {
+ClimbManager::ClimbManager(IO *io, RobotCommands *cmds, LiftPIDControl *cntrl) {
 
     _io = io;
     _cmds = cmds;
+    _cntrl = cntrl;
 
     climbState = ClimbSTATE::robotOnFirstLevel;
 
@@ -43,8 +44,8 @@ void ClimbManager::ClimbManagerPeriodic() {
             back extension motor: stopped
             drivetrain: stopped
             */
-           liftFrontPosDes = liftPos::RETRACTED;
-           liftRearPosDes = liftPos::RETRACTED;
+           _cntrl->liftFrontPosDes = liftPos::RETRACTED;
+           _cntrl->liftRearPosDes = liftPos::RETRACTED;
            _cmds->drvang = 0;
            _cmds->drvmag = 0;
            _cmds->drvrot = 0;
@@ -61,15 +62,16 @@ void ClimbManager::ClimbManagerPeriodic() {
             back extension motor: extending
             drivetrain: stopped
             */
-           liftFrontPosDes = liftPos::EXTENDEDLEVELTWO;
-           liftRearPosDes = liftPos::EXTENDEDLEVELTWO;
-           moveFast = false;
-           syncFrontRearLifts = true;
+           _cntrl->liftFrontPosDes = liftPos::EXTENDEDLEVELTWO;
+           _cntrl->liftRearPosDes = liftPos::EXTENDEDLEVELTWO;
+           _cntrl->moveFast = false;
+           _cntrl->syncFrontRearLifts = true;
 
            if (_cmds->climbAbort) {
                climbState = ClimbSTATE::robotClimbComplete;
                break;
-           } else if (liftFrontPosDes == liftFrontPosAct && liftRearPosDes == liftRearPosAct) {
+           } else if (_cntrl->liftFrontPosDes == _cntrl->liftFrontPosAct && 
+           _cntrl->liftRearPosDes == _cntrl->liftRearPosAct) {
                climbState = ClimbSTATE::moveForwardStage1;
                break;
            }
@@ -102,16 +104,16 @@ void ClimbManager::ClimbManagerPeriodic() {
             back extension motor: stopped
             drivetrain: stopped
             */
-           liftFrontPosDes = liftPos::RETRACTED;
-           moveFast = true;
-           syncFrontRearLifts = false;     
+           _cntrl->liftFrontPosDes = liftPos::RETRACTED;
+           _cntrl->moveFast = true;
+           _cntrl->syncFrontRearLifts = false;     
            //liftdrivemot needs to be turned off
            _io->liftdrivemot->Set(0);
 
            if (_cmds->climbAbort) {
                climbState = ClimbSTATE::robotClimbComplete;
                break;
-           } else if (liftFrontPosDes == liftFrontPosAct) {
+           } else if (_cntrl->liftFrontPosDes == _cntrl->liftFrontPosAct) {
                climbState = ClimbSTATE::moveForwardStage2;
                break;
            }
@@ -149,7 +151,7 @@ void ClimbManager::ClimbManagerPeriodic() {
             back extension motor: retracting
             drivetrain: stopped
             */
-           liftRearPosDes = liftPos::RETRACTED;
+           _cntrl->liftRearPosDes = liftPos::RETRACTED;
 
            //liftdrivemot needs to be turned off
            _io->liftdrivemot->Set(0);
@@ -157,7 +159,7 @@ void ClimbManager::ClimbManagerPeriodic() {
            _cmds->drvmag = 0;
 
            if (_cmds->climbAbort ||
-                liftRearPosDes == liftFrontPosAct) {
+                _cntrl->liftRearPosDes == _cntrl->liftFrontPosAct) {
                 climbState = ClimbSTATE::robotClimbComplete;
                 break;
            }
@@ -170,10 +172,10 @@ void ClimbManager::ClimbManagerPeriodic() {
             back extension motor: stopped
             drivetrain: stopped
             */
-           liftFrontPosDes = liftPos::RETRACTED;
-           liftRearPosDes = liftPos::RETRACTED;
-           syncFrontRearLifts = true;     
-           moveFast = false;
+           _cntrl->liftFrontPosDes = liftPos::RETRACTED;
+           _cntrl->liftRearPosDes = liftPos::RETRACTED;
+           _cntrl->syncFrontRearLifts = true;     
+           _cntrl->moveFast = false;
            _cmds->drvang = 0;
            _cmds->drvmag = 0;
            _cmds->drvrot = 0;
