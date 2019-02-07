@@ -10,53 +10,47 @@
 
 IO::IO() {
 	//Swerve Drive Motors
+	drvrfmot = new frc::VictorSP(0);		
+	drvlfmot = new frc::VictorSP(1);
+	drvrbmot = new frc::VictorSP(2);
 	drvlbmot = new frc::VictorSP(3);
-	drvrbmot  = new frc::VictorSP(2);
-	drvlfmot  = new frc::VictorSP(1);
-	drvrfmot  = new frc::VictorSP(0);
-	turnlbmot = new frc::VictorSP(7);
-	turnrbmot = new frc::VictorSP(6);
-	turnlfmot = new frc::VictorSP(5);
 	turnrfmot = new frc::VictorSP(4);
+	turnlfmot = new frc::VictorSP(5);
+	turnrbmot = new frc::VictorSP(6);
+	turnlbmot = new frc::VictorSP(7);
+	//Other Motors
+	liftdrivemot = new frc::VictorSP(8);	
+	elevatormot = new frc::VictorSP(9);
+
+	liftrfmot = new frc::VictorSP(10);	
+	liftlfmot = new frc::VictorSP(11);
+	liftrbmot = new frc::VictorSP(12);
+	liftlbmot = new frc::VictorSP(13);
+	//PWM 14-18 used as DIO inputs
+	ballintakemot = new frc::VictorSP(19);
 
 	//Swerve Drive Encoders
-	encdrvlb = new frc::Encoder(14, 15, false, frc::Encoder::EncodingType::k4X);
-	encdrvlf = new frc::Encoder(10, 11 , false, frc::Encoder::EncodingType::k4X);
-	encdrvrb = new frc::Encoder(16, 17, false, frc::Encoder::EncodingType::k4X);
-	encdrvrf= new frc::Encoder(8, 9, false, frc::Encoder::EncodingType::k4X);
+	encdrvrf= new frc::Encoder(0, 1, false, frc::Encoder::EncodingType::k4X);
+	encdrvlf = new frc::Encoder(2, 3, false, frc::Encoder::EncodingType::k4X);
+	encdrvrb = new frc::Encoder(4, 5, false, frc::Encoder::EncodingType::k4X);
+	encdrvlb = new frc::Encoder(6, 7, false, frc::Encoder::EncodingType::k4X);	
+	swerveresetone = new frc::DigitalInput(8);
+	swerveresettwo = new frc::DigitalInput(9);
+	//DIO 10-13 are used as PWM outputs for climb motors		
+	steerencdrvrf = new frc::AnalogPotentiometer(2,360,0);	
+	steerencdrvlf = new frc::AnalogPotentiometer(0,360,0);	
+	steerencdrvrb = new frc::AnalogPotentiometer(3,360,0);	
 	steerencdrvlb = new frc::AnalogPotentiometer(1,360,0);
-	steerencdrvlf = new frc::AnalogPotentiometer(0,360,0);
-	steerencdrvrb = new frc::AnalogPotentiometer(3,360,0);
-	steerencdrvrf = new frc::AnalogPotentiometer(2,360,0);
-
-	//encdrvlb->SetDistancePerPulse(swerveencodercountstodistancecentimeters);
-	//encdrvrb->SetDistancePerPulse(swerveencodercountstodistancecentimeters);
-	//encdrvlf->SetDistancePerPulse(swerveencodercountstodistancecentimeters);
-	//encdrvrf->SetDistancePerPulse(swerveencodercountstodistancecentimeters);
-	swerveresetone = new frc::DigitalInput(0);
-	swerveresettwo = new frc::DigitalInput(1);
-
-	//Other Motors
-	ballintakemot = new frc::VictorSP(17);
-	liftdrivemot = new frc::VictorSP(16);
-	liftlbmot = new frc::VictorSP(14);
-	liftrbmot = new frc::VictorSP(15);
-	liftlfmot = new frc::VictorSP(8);
-	liftrfmot = new frc::VictorSP(9);
-	elevatormot = new frc::VictorSP(12); //fix port #
-
-
-	//Other Encoders
-	liftdriveenc = new frc::Encoder(10, 11, false, frc::Encoder::EncodingType::k4X);
-	liftlbenc = new frc::Encoder(11, 12, false, frc::Encoder::EncodingType::k4X);
-	liftrbenc = new frc::Encoder(13, 14, false, frc::Encoder::EncodingType::k4X);
-	liftlfenc = new frc::Encoder(15, 16, false, frc::Encoder::EncodingType::k4X);
-	liftrfenc = new frc::Encoder(17 ,18, false, frc::Encoder::EncodingType::k4X);
-	elevatorenc = new frc::Encoder(19,20, false, frc::Encoder::EncodingType::k4X);
-
-	compressor = new frc::Compressor();
-	
+	//Other Encoders and DIO
+	liftrfenc = new frc::Encoder(14 ,15, false, frc::Encoder::EncodingType::k4X);
+	liftlfenc = new frc::Encoder(16, 17, false, frc::Encoder::EncodingType::k4X);
+	liftrbenc = new frc::Encoder(18, 19, false, frc::Encoder::EncodingType::k4X);
+	liftlbenc = new frc::Encoder(20, 21, false, frc::Encoder::EncodingType::k4X);	
+	liftdriveenc = new frc::Counter(22);
+	elevatorenc = new frc::Encoder(24, 25, false, frc::Encoder::EncodingType::k4X);
+		
 	//Solenoids
+	compressor = new frc::Compressor();
 	ballarmsolenoidin = new frc::Solenoid(0);
 	hatcharmsolenoidin = new frc::Solenoid(1);
 	ballshootersolenoidin = new frc::Solenoid(2);
@@ -71,6 +65,11 @@ IO::IO() {
   	liftlfenc->SetDistancePerPulse(liftDistPerCountInches);
 	liftrbenc->SetDistancePerPulse(liftDistPerCountInches);
   	liftlbenc->SetDistancePerPulse(liftDistPerCountInches);
+
+	//encdrvlb->SetDistancePerPulse(swerveencodercountstodistancecentimeters);
+	//encdrvrb->SetDistancePerPulse(swerveencodercountstodistancecentimeters);
+	//encdrvlf->SetDistancePerPulse(swerveencodercountstodistancecentimeters);
+	//encdrvrf->SetDistancePerPulse(swerveencodercountstodistancecentimeters);
 
 	elevatorenc->SetDistancePerPulse(elevatorEncoderCountsToDistanceInches);
 	elevatorDesiredPos = 0;

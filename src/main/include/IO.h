@@ -66,12 +66,12 @@ public:
 	frc::VictorSP *elevatormot;
 
 	//Other Encoders
-	frc::Encoder *liftdriveenc;
 	frc::Encoder *liftlbenc;
 	frc::Encoder *liftrbenc;
 	frc::Encoder *liftlfenc;
 	frc::Encoder *liftrfenc;
 	frc::Encoder *elevatorenc;
+	frc::Counter *liftdriveenc;
 
 	frc::Compressor *compressor;
 
@@ -84,12 +84,6 @@ public:
 	frc::Solenoid *hatcharmsolenoidout;
 	frc::Solenoid *ballshootersolenoidout;
 	frc::Solenoid *hatchclawsolenoidout;
-	
-
-
-
-
-
 
 	double armP = .7;
 	double armI = 0;
