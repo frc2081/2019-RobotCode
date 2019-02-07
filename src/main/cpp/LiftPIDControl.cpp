@@ -42,21 +42,22 @@ LiftPIDControl::LiftPIDControl(IO *io) {
   liftlbPID->SetPercentTolerance(3);
   liftrfPID->Enable(); 
   liftlfPID->Enable();
-  //liftlbPID->Enable();
-  //liftlfPID->Enable();
+  liftlbPID->Enable();
+  liftlfPID->Enable();
 
-  liftPIDp = frc::SmartDashboard::PutNumber("Climb P", liftPIDp);
-  liftPIDi = frc::SmartDashboard::PutNumber("Climb I", liftPIDi);
-  liftPIDd = frc::SmartDashboard::PutNumber("Climb D", liftPIDd);
-  liftPIDf = frc::SmartDashboard::PutNumber("Climb F", liftPIDf);
-  liftDesyncDistanceThreshold = frc::SmartDashboard::PutNumber("Climber Desync Distance", liftDesyncDistanceThreshold);
-  liftPosRetractedFront = frc::SmartDashboard::PutNumber("Lift Front Retracted Set Point", liftPosRetractedFront);
-  liftPosExtendedLevelOneFront = frc::SmartDashboard::PutNumber("Lift Front Hab Level 1 Set Point", liftPosExtendedLevelOneFront);
-  liftPosExtendedLevelTwoFront = frc::SmartDashboard::PutNumber("Lift Front Hab Level 2 Set Point", liftPosExtendedLevelTwoFront);
-  liftPosRetractedRear = frc::SmartDashboard::PutNumber("Lift Rear Retracted Set Point", liftPosRetractedRear);
-  liftPosExtendedLevelOneRear = frc::SmartDashboard::PutNumber("Lift Rear Hab Level 1 Set Point", liftPosExtendedLevelOneRear);
-  liftPosExtendedLevelTwoRear = frc::SmartDashboard::PutNumber("Lift Rear Hab Level 2 Set Point", liftPosExtendedLevelTwoRear);
-  liftMovementRate = frc::SmartDashboard::PutNumber("Lift Movement Rate", liftMovementRate);
+  frc::SmartDashboard::PutNumber("Climb P", liftPIDp);
+  frc::SmartDashboard::PutNumber("Climb I", liftPIDi);
+  frc::SmartDashboard::PutNumber("Climb D", liftPIDd);
+  frc::SmartDashboard::PutNumber("Climb F", liftPIDf);
+  frc::SmartDashboard::PutNumber("Climber Desync Distance", liftDesyncDistanceThreshold);
+  frc::SmartDashboard::PutNumber("Lift Front Retracted Set Point", liftPosRetractedFront);
+  frc::SmartDashboard::PutNumber("Lift Front Hab Level 1 Set Point", liftPosExtendedLevelOneFront);
+  frc::SmartDashboard::PutNumber("Lift Front Hab Level 2 Set Point", liftPosExtendedLevelTwoFront);
+  frc::SmartDashboard::PutNumber("Lift Rear Retracted Set Point", liftPosRetractedRear);
+  frc::SmartDashboard::PutNumber("Lift Rear Hab Level 1 Set Point", liftPosExtendedLevelOneRear);
+  frc::SmartDashboard::PutNumber("Lift Rear Hab Level 2 Set Point", liftPosExtendedLevelTwoRear);
+  frc::SmartDashboard::PutNumber("Lift Movement Rate", liftMovementRate);
+
 }    
 
 void LiftPIDControl::liftPIDControlRobotPeriodic(){
@@ -177,8 +178,8 @@ double LiftPIDControl::rampToValue(double currVal, double desVal, double rampRat
 }
 
 void LiftPIDControl::disableLiftPID() {
-  liftlfPID->Disable();
-  liftlfPID->Disable();
-  liftlfPID->Disable();
-  liftlfPID->Disable();
+  liftlfPID->SetSetpoint(_io->liftlfenc->GetDistance());
+  liftrfPID->SetSetpoint(_io->liftrfenc->GetDistance());
+  liftlbPID->SetSetpoint(_io->liftlbenc->GetDistance());
+  liftrbPID->SetSetpoint(_io->liftrbenc->GetDistance());
 }

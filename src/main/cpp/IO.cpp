@@ -19,19 +19,19 @@ IO::IO() {
 	turnlfmot = new frc::VictorSP(5);
 	turnrfmot = new frc::VictorSP(4);
 	
-	ballintakemot = new frc::VictorSP(15);
+	ballintakemot = new frc::VictorSP(17);
 	liftdrivemot = new frc::VictorSP(16);
-	liftlbmot = new frc::VictorSP(17);
-	liftrbmot = new frc::VictorSP(18);
-	liftlfmot = new frc::VictorSP(19);
-	liftrfmot = new frc::VictorSP(20);
-	elevatormot = new frc::VictorSP(21); //fix port #
+	liftlbmot = new frc::VictorSP(14);
+	liftrbmot = new frc::VictorSP(15);
+	liftlfmot = new frc::VictorSP(8);
+	liftrfmot = new frc::VictorSP(9);
+	elevatormot = new frc::VictorSP(); //fix port #
 
 	//Swerve Drive Encoders
-	encdrvlb = new frc::Encoder(16, 17, false, frc::Encoder::EncodingType::k4X);
-	encdrvlf = new frc::Encoder(2, 3, false, frc::Encoder::EncodingType::k4X);
-	encdrvrb = new frc::Encoder(4, 5, false, frc::Encoder::EncodingType::k4X);
-	encdrvrf= new frc::Encoder(6, 7, false, frc::Encoder::EncodingType::k4X);
+	encdrvlb = new frc::Encoder(14, 15, false, frc::Encoder::EncodingType::k4X);
+	encdrvlf = new frc::Encoder(10, 11 , false, frc::Encoder::EncodingType::k4X);
+	encdrvrb = new frc::Encoder(16, 17, false, frc::Encoder::EncodingType::k4X);
+	encdrvrf= new frc::Encoder(8, 9, false, frc::Encoder::EncodingType::k4X);
 	steerencdrvlb = new frc::AnalogPotentiometer(1,360,0);
 	steerencdrvlf = new frc::AnalogPotentiometer(0,360,0);
 	steerencdrvrb = new frc::AnalogPotentiometer(3,360,0);
@@ -82,7 +82,6 @@ IO::IO() {
 	elevatorenc->SetDistancePerPulse(elevatorEncoderCountsToDistanceInches);
 	elevatorDesiredPos = 0;
 	elevatorActualPos = 0;
-
 }
 
 void IO::ioPeriodic(){

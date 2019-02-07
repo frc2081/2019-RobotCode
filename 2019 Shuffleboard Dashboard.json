@@ -408,9 +408,9 @@
               "_title": "SmartDashboard/Climber RF Actual Position"
             }
           },
-          "6,2": {
+          "9,3": {
             "size": [
-              2,
+              1,
               1
             ],
             "content": {
@@ -430,9 +430,9 @@
               "_title": "SmartDashboard/Climber RF PID Actual SetPoint"
             }
           },
-          "6,3": {
+          "8,3": {
             "size": [
-              2,
+              1,
               1
             ],
             "content": {
@@ -478,6 +478,61 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Climb Front Set Point",
               "_title": "SmartDashboard/Climb Front Set Point"
+            }
+          },
+          "3,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Lift Drive Speed",
+              "_title": "SmartDashboard/Lift Drive Speed"
+            }
+          },
+          "1,4": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Climber LB Actual Position",
+              "_title": "SmartDashboard/Climber LB Actual Position"
+            }
+          },
+          "3,4": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Climber RB Actual Position",
+              "_title": "SmartDashboard/Climber RB Actual Position"
+            }
+          },
+          "5,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Lift Front Separation",
+              "_title": "SmartDashboard/Lift Front Separation"
+            }
+          },
+          "5,4": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Lift Rear Separation",
+              "_title": "SmartDashboard/Lift Rear Separation"
             }
           }
         }
