@@ -87,10 +87,10 @@ void LiftPIDControl::liftPIDControlRobotPeriodic(){
   frc::SmartDashboard::PutNumber("Climber LF PID Actual SetPoint", liftlfPID->GetSetpoint());
   frc::SmartDashboard::PutNumber("Climber LB PID Actual SetPoint", liftlbPID->GetSetpoint());
   frc::SmartDashboard::PutNumber("Climber RB PID Actual SetPoint", liftrbPID->GetSetpoint());
-  frc::SmartDashboard::PutNumber("Climber RF Actual Position", _io->liftrfenc->GetDistance());
-  frc::SmartDashboard::PutNumber("Climber LF Actual Position", _io->liftlfenc->GetDistance());
-  frc::SmartDashboard::PutNumber("Climber LB Actual Position", _io->liftlbenc->GetDistance());
-  frc::SmartDashboard::PutNumber("Climber RB Actual Position", _io->liftrbenc->GetDistance());
+  //frc::SmartDashboard::PutNumber("Climber RF Actual Position", _io->liftrfenc->GetDistance());
+  //frc::SmartDashboard::PutNumber("Climber LF Actual Position", _io->liftlfenc->GetDistance());
+  //frc::SmartDashboard::PutNumber("Climber LB Actual Position", _io->liftlbenc->GetDistance());
+  //frc::SmartDashboard::PutNumber("Climber RB Actual Position", _io->liftrbenc->GetDistance());
   frc::SmartDashboard::PutBoolean("Fast Movement", moveFast);
   frc::SmartDashboard::PutNumber("Climber Desync Distance", liftDesyncDistanceThreshold);
   frc::SmartDashboard::PutNumber("Lift Front Retracted Set Point", liftPosRetractedFront);

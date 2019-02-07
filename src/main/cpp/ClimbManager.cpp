@@ -21,8 +21,12 @@ ClimbManager::ClimbManager(IO *io, RobotCommands *cmds) {
 void ClimbManager::ClimbManagerInit() {
     initialLiftDriveEncoderValue = _io->liftdriveenc->Get();
 }
+void ClimbManager::ClimbManagerRobotPeriodic() {
+    lift->liftPIDControlRobotPeriodic();
+}
 
-void ClimbManager::ClimbManagerPeriodic() {
+void ClimbManager::ClimbManagerTeleopPeriodic() {
+    lift->liftPIDControlTeleopPeriodic();
     //display current values on the Smart Dashboard
     frc::SmartDashboard::PutNumber("ClimbManager current State", static_cast<int>(climbState));
     frc::SmartDashboard::PutNumber("Desired FRONT lift position", static_cast<int>(lift->liftFrontPosDes));

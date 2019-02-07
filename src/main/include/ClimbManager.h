@@ -21,7 +21,8 @@ class ClimbManager {
     LiftPIDControl *lift;
 
     void ClimbManagerInit();
-    void ClimbManagerPeriodic();
+    void ClimbManagerTeleopPeriodic();
+    void ClimbManagerRobotPeriodic();
     private:
     //TODO: get actual encoder values; this is incorrect
     double moveForwardStage1EncoderValue = 1000;

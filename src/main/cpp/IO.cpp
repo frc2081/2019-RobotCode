@@ -18,14 +18,6 @@ IO::IO() {
 	turnrbmot = new frc::VictorSP(6);
 	turnlfmot = new frc::VictorSP(5);
 	turnrfmot = new frc::VictorSP(4);
-	
-	ballintakemot = new frc::VictorSP(17);
-	liftdrivemot = new frc::VictorSP(16);
-	liftlbmot = new frc::VictorSP(14);
-	liftrbmot = new frc::VictorSP(15);
-	liftlfmot = new frc::VictorSP(8);
-	liftrfmot = new frc::VictorSP(9);
-	elevatormot = new frc::VictorSP(); //fix port #
 
 	//Swerve Drive Encoders
 	encdrvlb = new frc::Encoder(14, 15, false, frc::Encoder::EncodingType::k4X);
@@ -45,13 +37,13 @@ IO::IO() {
 	swerveresettwo = new frc::DigitalInput(1);
 
 	//Other Motors
-	ballintakemot = new frc::VictorSP(15);
+	ballintakemot = new frc::VictorSP(17);
 	liftdrivemot = new frc::VictorSP(16);
-	liftlbmot = new frc::VictorSP(17);
-	liftrbmot = new frc::VictorSP(18);
-	liftlfmot = new frc::VictorSP(19);
-	liftrfmot = new frc::VictorSP(20);
-	elevatormot = new frc::VictorSP(21); //fix port #
+	liftlbmot = new frc::VictorSP(14);
+	liftrbmot = new frc::VictorSP(15);
+	liftlfmot = new frc::VictorSP(8);
+	liftrfmot = new frc::VictorSP(9);
+	elevatormot = new frc::VictorSP(12); //fix port #
 
 
 	//Other Encoders
@@ -77,7 +69,8 @@ IO::IO() {
 	//Configure IO
   	liftrfenc->SetDistancePerPulse(liftDistPerCountInches);
   	liftlfenc->SetDistancePerPulse(liftDistPerCountInches);
-
+	liftrbenc->SetDistancePerPulse(liftDistPerCountInches);
+  	liftlbenc->SetDistancePerPulse(liftDistPerCountInches);
 
 	elevatorenc->SetDistancePerPulse(elevatorEncoderCountsToDistanceInches);
 	elevatorDesiredPos = 0;
