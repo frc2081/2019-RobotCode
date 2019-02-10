@@ -245,11 +245,11 @@ void GuidanceSystem::updateDashboard()
     finalApproachDuration = frc::SmartDashboard::GetNumber("Guide Final Approach Time", finalApproachDuration);
     placementDuration = frc::SmartDashboard::GetNumber("Guide Final Approach Time", placementDuration);
     backAwayDuration = frc::SmartDashboard::GetNumber("Guide Final Approach Time", backAwayDuration);
-    finalApproachDuration = frc::SmartDashboard::GetNumber("Guide Final DrvMag", finalApproachDrvMag);
+    finalApproachDrvMag = frc::SmartDashboard::GetNumber("Guide Final DrvMag tune", finalApproachDrvMag);
     homingInStages = frc::SmartDashboard::GetBoolean("Guide Homing In Stages", homingInStages);
     homingErrorTolerance = frc::SmartDashboard::GetNumber("Guide Homing Stages Err Tol", homingErrorTolerance);
 
-    frc::SmartDashboard::PutNumber("Guide Final Drv Mag", finalApproachDrvMag);
+    frc::SmartDashboard::PutNumber("Guide Final Drv Mag", drvMagFinal);
     frc::SmartDashboard::PutNumber("Guide error Center", errorCenter);
     frc::SmartDashboard::PutNumber("Guide error Angle", errorAngle);
     frc::SmartDashboard::PutNumber("Guide error Range", errorHeight);

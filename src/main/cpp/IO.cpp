@@ -73,28 +73,53 @@ IO::IO() {
 	elevatorenc->SetDistancePerPulse(elevatorEncoderCountsToDistanceInches);
 	elevatorDesiredPos = 0;
 	elevatorActualPos = 0;
+
+	frc::SmartDashboard::PutNumber("Elevator Move Power", elevatorMovePower);
+	frc::SmartDashboard::PutNumber("Elevator Pos Tolerance", elevatorPosTolerance);
+	frc::SmartDashboard::PutNumber("econtrolMode", 0
+	);
 }
 
 void IO::ioPeriodic(){
 	elevatorActualPos = elevatorenc->GetDistance();
 
-	//Stop elevator if above or below position limits
-	//Otherwise move up or down until desired position is met
-	if(elevatorActualPos < elevatorMinPosition){
-		elevatormot->Set(0);
-	}else if(elevatorActualPos > elevatorMaxPosition){
-		elevatormot->Set(0);
-	}else if(elevatorActualPos < elevatorDesiredPos - elevatorPosTolerance){
-		elevatormot->Set(elevatorMovePower);
+
+	//Move elevator up and down until desired position is reached
+	double elevatorMotorPower = 0;
+	if(elevatorActualPos < elevatorDesiredPos - elevatorPosTolerance){
+		elevatorMotorPower = elevatorMovePower;
+		frc::SmartDashboard::PutNumber("econtrolMode", 2);
 	} else if (elevatorActualPos > elevatorDesiredPos + elevatorPosTolerance){
-		elevatormot->Set(-elevatorMovePower);
-	} else elevatormot->Set(0);
+		elevatorMotorPower = -elevatorMovePower;
+		frc::SmartDashboard::PutNumber("econtrolMode", 3);
+	} else { 
+		elevatorMotorPower = 0;
+		frc::SmartDashboard::PutNumber("econtrolMode", 4);
+	}	
+	
+	//Stop elevator if above or below position limits and trying to move even further past them
+	if(elevatorActualPos < elevatorMinPosition && elevatorMotorPower < 0){
+		elevatorMotorPower = 0;
+		frc::SmartDashboard::PutNumber("econtrolMode", 0);
+	}else if(elevatorActualPos > elevatorMaxPosition && elevatorMotorPower > 0){
+		elevatorMotorPower = 0;
+		frc::SmartDashboard::PutNumber("econtrolMode", 1);
+	}
+
+	//Soft landing code - slow down the elevator just before it hits the bottom hard stop
+	if(elevatorMotorPower < 0 && elevatorActualPos < elevatorSoftLandingPosition) {elevatorMotorPower = elevatorLandingPower;}
+
+	elevatormot->Set(elevatorMotorPower);
 }
 
 void IO::ioRobotPeriodic(){
+	double emotpower = elevatormot->Get();
 	frc::SmartDashboard::PutNumber("Elevator Des Pos", elevatorDesiredPos);
 	frc::SmartDashboard::PutNumber("Elevator Act Pos", elevatorenc->GetDistance());
-	frc::SmartDashboard::PutNumber("Elevator Motor Power", elevatormot->Get());
+	frc::SmartDashboard::PutNumber("Elevator Motor Power", emotpower);
+	elevatorMovePower = frc::SmartDashboard::GetNumber("Elevator Move Power", elevatorMovePower);
+	elevatorPosTolerance = frc::SmartDashboard::GetNumber("Elevator Pos Tolerance", elevatorPosTolerance);
+
 }
 
 /*void IO::robotMechanismPeriodic(ElevatorManager test_12){

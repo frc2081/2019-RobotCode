@@ -587,6 +587,39 @@
               "_source0": "network_table:///SmartDashboard/Elevator test",
               "_title": "Elevator test"
             }
+          },
+          "8,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Elevator Move Power",
+              "_title": "SmartDashboard/Elevator Move Power"
+            }
+          },
+          "8,4": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/econtrol",
+              "_title": "SmartDashboard/econtrol"
+            }
+          },
+          "5,4": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Elevator Pos Tolerance",
+              "_title": "/SmartDashboard/Elevator Pos Tolerance"
+            }
           }
         }
       }
@@ -785,37 +818,37 @@
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Target Vision Heartbeat",
-                  "_title": "Target Vision Heartbeat"
+                  "_title": "SmartDashboard/Target Vision Heartbeat"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Target Width Left",
-                  "_title": "Target Width Left"
+                  "_title": "SmartDashboard/Target Width Left"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Target Width Right",
-                  "_title": "Target Width Right"
+                  "_title": "SmartDashboard/Target Width Right"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Target Distance Left",
-                  "_title": "Target Distance Left"
+                  "_title": "SmartDashboard/Target Distance Left"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Target Distance Right",
-                  "_title": "Target Distance Right"
+                  "_title": "SmartDashboard/Target Distance Right"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Target Left Height",
-                  "_title": "Target Left Height"
+                  "_title": "SmartDashboard/Target Left Height"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Target Right Height",
-                  "_title": "Target Right Height"
+                  "_title": "SmartDashboard/Target Right Height"
                 }
               ]
             }
@@ -833,21 +866,21 @@
                 {
                   "_type": "Boolean Box",
                   "_source0": "network_table:///SmartDashboard/Guide System Active",
-                  "_title": "Guide System Active",
+                  "_title": "SmartDashboard/Guide System Active",
                   "Colors/Color when true": "#7CFC00FF",
                   "Colors/Color when false": "#8B0000FF"
                 },
                 {
                   "_type": "Boolean Box",
                   "_source0": "network_table:///SmartDashboard/Target Acquired",
-                  "_title": "Target Acquired         ",
+                  "_title": "SmartDashboard/Target Acquired",
                   "Colors/Color when true": "#7CFC00FF",
                   "Colors/Color when false": "#8B0000FF"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Guide System State",
-                  "_title": "Guide System State"
+                  "_title": "SmartDashboard/Guide System State"
                 }
               ]
             }
@@ -860,7 +893,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Guide Homing Stages Err Tol",
-              "_title": "Guide Homing Stages Err Tol"
+              "_title": "SmartDashboard/Guide Homing Stages Err Tol"
             }
           },
           "4,0": {
@@ -871,10 +904,10 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Target Target Height",
-              "_title": "Guidance Target Height"
+              "_title": "SmartDashboard/Target Target Height"
             }
           },
-          "4,2": {
+          "2,2": {
             "size": [
               2,
               2
@@ -887,22 +920,22 @@
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Guide kp Range",
-                  "_title": "Guide kp Range"
+                  "_title": "SmartDashboard/Guide kp Range"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Guide kp Center Mag",
-                  "_title": "Guide kp Center Mag"
+                  "_title": "SmartDashboard/Guide kp Center Mag"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Guide kp Center Angle",
-                  "_title": "Guide kp Center Angle"
+                  "_title": "SmartDashboard/Guide kp Center Angle"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Guide kp Angle",
-                  "_title": "Guide kp Angle"
+                  "_title": "SmartDashboard/Guide kp Angle"
                 }
               ]
             }
@@ -920,32 +953,27 @@
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Guide Drv Angle",
-                  "_title": "Guide Drv Angle"
+                  "_title": "SmartDashboard/Guide Drv Angle"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Guide Drv Mag Range",
-                  "_title": "Guide Drv Mag Range"
+                  "_title": "SmartDashboard/Guide Drv Mag Range"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Guide Drv Mag Center",
-                  "_title": "Guide Drv Mag Center"
-                },
-                {
-                  "_type": "Text View",
-                  "_source0": "network_table:///SmartDashboard/Guide Final Drv Mag",
-                  "_title": "Guide Final Drv Mag"
+                  "_title": "SmartDashboard/Guide Drv Mag Center"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Guide Drv Rotation",
-                  "_title": "Guide Drv Rotation"
+                  "_title": "SmartDashboard/Guide Drv Rotation"
                 }
               ]
             }
           },
-          "2,2": {
+          "4,2": {
             "size": [
               2,
               2
@@ -958,17 +986,17 @@
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Guide error Angle",
-                  "_title": "Guide error Angle"
+                  "_title": "SmartDashboard/Guide error Angle"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Guide error Center",
-                  "_title": "Guide error Center"
+                  "_title": "SmartDashboard/Guide error Center"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Guide error Range",
-                  "_title": "Guide error Range"
+                  "_title": "SmartDashboard/Guide error Range"
                 }
               ]
             }
@@ -986,19 +1014,30 @@
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Guide Placement Time",
-                  "_title": "Guide Placement Time"
+                  "_title": "SmartDashboard/Guide Placement Time"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Guide Final Approach Time",
-                  "_title": "Guide Final Approach Time"
+                  "_title": "SmartDashboard/Guide Final Approach Time"
                 },
                 {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Guide Back Away Time",
-                  "_title": "Guide Back Away Time"
+                  "_title": "SmartDashboard/Guide Back Away Time"
                 }
               ]
+            }
+          },
+          "4,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Guide Final Drv Mag",
+              "_title": "SmartDashboard/Guide Final Drv Mag"
             }
           }
         }
