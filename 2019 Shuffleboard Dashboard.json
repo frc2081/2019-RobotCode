@@ -2,7 +2,7 @@
   "tabPane": [
     {
       "title": "Drivetrain",
-      "autoPopulate": true,
+      "autoPopulate": false,
       "autoPopulatePrefix": "SmartDashboard/",
       "widgetPane": {
         "gridSize": 128.0,
@@ -208,33 +208,6 @@
               ]
             }
           },
-          "0,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "List Layout",
-              "_title": "List Layout",
-              "Layout/Label position": "BOTTOM",
-              "_children": [
-                {
-                  "_type": "Boolean Box",
-                  "_source0": "network_table:///SmartDashboard/Swerve Reset Command 1",
-                  "_title": "Swerve Reset Command 1",
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                },
-                {
-                  "_type": "Boolean Box",
-                  "_source0": "network_table:///SmartDashboard/Swerve Reset Command 2",
-                  "_title": "Swerve Reset Command 2",
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                }
-              ]
-            }
-          },
           "8,0": {
             "size": [
               2,
@@ -296,48 +269,15 @@
               ]
             }
           },
-          "2,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/LF drv PID Error",
-              "_title": "LF drv PID Error"
-            }
-          },
-          "3,1": {
+          "4,1": {
             "size": [
               2,
               1
             ],
             "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Swerve LF Get",
-              "_title": "SmartDashboard/Swerve LF Get"
-            }
-          },
-          "1,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/LF drv PID Setpoint",
-              "_title": "LF drv PID Setpoint"
-            }
-          },
-          "5,1": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Right Front Drive Encoder Pos",
-              "_title": "Right Front Drive Encoder Pos"
+              "_type": "Toggle Button",
+              "_source0": "network_table:///SmartDashboard/Swerve Reset",
+              "_title": "Swerve Reset"
             }
           }
         }
@@ -386,7 +326,7 @@
               ]
             }
           },
-          "1,3": {
+          "2,3": {
             "size": [
               2,
               1
@@ -397,7 +337,7 @@
               "_title": "SmartDashboard/Climber LF Actual Position"
             }
           },
-          "3,3": {
+          "4,3": {
             "size": [
               2,
               1
@@ -417,17 +357,6 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Climber Desync Distance",
               "_title": "SmartDashboard/Climber Desync Distance"
-            }
-          },
-          "3,2": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Climber RF PID Actual SetPoint",
-              "_title": "SmartDashboard/Climber RF PID Actual SetPoint"
             }
           },
           "8,3": {
@@ -469,9 +398,9 @@
               ]
             }
           },
-          "3,1": {
+          "7,2": {
             "size": [
-              2,
+              1,
               1
             ],
             "content": {
@@ -480,18 +409,7 @@
               "_title": "SmartDashboard/Climb Front Set Point"
             }
           },
-          "3,0": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Lift Drive Speed",
-              "_title": "SmartDashboard/Lift Drive Speed"
-            }
-          },
-          "1,4": {
+          "2,4": {
             "size": [
               2,
               1
@@ -502,7 +420,7 @@
               "_title": "SmartDashboard/Climber LB Actual Position"
             }
           },
-          "3,4": {
+          "4,4": {
             "size": [
               2,
               1
@@ -513,7 +431,7 @@
               "_title": "SmartDashboard/Climber RB Actual Position"
             }
           },
-          "5,3": {
+          "6,3": {
             "size": [
               2,
               1
@@ -524,7 +442,7 @@
               "_title": "SmartDashboard/Lift Front Separation"
             }
           },
-          "5,4": {
+          "6,4": {
             "size": [
               2,
               1
@@ -533,6 +451,143 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Lift Rear Separation",
               "_title": "SmartDashboard/Lift Rear Separation"
+            }
+          },
+          "6,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Climb Rear Set Point",
+              "_title": "SmartDashboard/Climb Rear Set Point"
+            }
+          },
+          "0,0": {
+            "size": [
+              6,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/Climber LF Motor Power",
+              "_source1": "network_table:///SmartDashboard/Climber RF Motor Power",
+              "_source2": "network_table:///SmartDashboard/Climber LB Motor Power",
+              "_source3": "network_table:///SmartDashboard/Climber RB Motor Power",
+              "_title": "SmartDashboard/Climber RF Motor Power",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/Climber LB Motor Power": true,
+              "Visible data/SmartDashboard/Climber LF Motor Power": true,
+              "Visible data/SmartDashboard/Climber RB Motor Power": true,
+              "Visible data/SmartDashboard/Climber RF Motor Power": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Elevator",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "tiles": {
+          "6,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/elevatorHome",
+              "_title": "SmartDashboard/elevatorHome",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "2,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Elevator Act Pos",
+              "_title": "SmartDashboard/Elevator Act Pos"
+            }
+          },
+          "4,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Elevator Current State: ",
+              "_title": "/SmartDashboard/Elevator Current State: "
+            }
+          },
+          "2,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Elevator Des Pos",
+              "_title": "SmartDashboard/Elevator Des Pos"
+            }
+          },
+          "6,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Elevator Hatch Arm Position",
+              "_title": "/SmartDashboard/Elevator Hatch Arm Position",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "6,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Elevator Hatch Claw Position",
+              "_title": "/SmartDashboard/Elevator Hatch Claw Position",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "2,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Elevator Motor Power",
+              "_title": "SmartDashboard/Elevator Motor Power"
+            }
+          },
+          "4,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Elevator test",
+              "_title": "SmartDashboard/Elevator test"
             }
           }
         }

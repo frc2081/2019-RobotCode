@@ -44,6 +44,8 @@ DriveManager::DriveManager(IO *io, RobotCommands *com, ControllerManager *cntls)
 	_lbwhlangoffset = 0;
 	_rbwhlangoffset = 0;
 
+	swerveReset = false;
+
 	//Set up swerve drive motor PID controllers
 	_lfdrvpid = new frc::PIDController(_drvpidp, _drvpidi, _drvpidd, _drvpidf, io->encdrvlf, io->drvlfmot, _pidpollrate);
 	_rfdrvpid = new frc::PIDController(_drvpidp, _drvpidi, _drvpidp, _drvpidf, io->encdrvrf, io->drvrfmot, _pidpollrate);
@@ -94,6 +96,8 @@ void DriveManager::DriveManagerInit() {
 	frc::SmartDashboard::PutNumber("Swerve Drive I", drvI);
 	frc::SmartDashboard::PutNumber("Swerve Drive D", drvD);
 	frc::SmartDashboard::PutNumber("Swerve Drive F", drvF);
+
+	frc::SmartDashboard::PutBoolean("Swerve Reset", swerveReset);
 }
 
 void DriveManager::DriveManagerPeriodic() {
@@ -110,7 +114,7 @@ void DriveManager::DriveManagerAutoPeriodic() {
 }
 
 void DriveManager::DriveManagerDisabled(){
-	if (!_io->swerveresetone->Get() && !_io->swerveresettwo->Get())  {
+	if (swerveReset)  {
 	ZeroEncoders();
   	}
 }
@@ -281,12 +285,7 @@ void DriveManager::UpdateDashboard(){
 	frc::SmartDashboard::PutNumber("Swerve Left Back Encoder Offset", _lbwhlangoffset);
 	frc::SmartDashboard::PutNumber("Swerve Right Back Encoder Offset", _rbwhlangoffset);
 
-	frc::SmartDashboard::PutBoolean("Swerve Reset Command 1", !_io->swerveresetone->Get());
-	frc::SmartDashboard::PutBoolean("Swerve Reset Command 2", !_io->swerveresettwo->Get());
-
-	frc::SmartDashboard::PutNumber("LF drv PID Setpoint", _lfdrvpid->GetSetpoint());
-	frc::SmartDashboard::PutNumber("LF drv PID Error", _lfdrvpid->GetError());
-	frc::SmartDashboard::PutNumber("Swerve LF Get", !_io->encdrvlf->PIDGet());
+	swerveReset = frc::SmartDashboard::GetBoolean("Swerve Reset", swerveReset);
 }
 
 void DriveManager::UpdatePIDTunes(){

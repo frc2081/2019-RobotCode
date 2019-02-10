@@ -29,8 +29,8 @@
 		double drivebaseYDimension = 17;
 
 		//Default PID calibrations for swerve drive
-		double turnP = .04; 
-		double turnI = .001;
+		double turnP = -.03; 
+		double turnI = 0;
 		double turnD = 0;
 
 		double drvP = 0;
@@ -54,6 +54,8 @@
 
 		double _lfwhlangoffset, _rfwhlangoffset, _lbwhlangoffset, _rbwhlangoffset;
 		double _drvang, _drvmag, _drvrot;
+
+		bool swerveReset;
 
 		double WhlAngCalcOffset(double, double);
 		void ZeroEncoders();

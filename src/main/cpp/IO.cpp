@@ -10,47 +10,46 @@
 
 IO::IO() {
 	//Swerve Drive Motors
-	drvrfmot = new frc::VictorSP(0);		
-	drvlfmot = new frc::VictorSP(1);
-	drvrbmot = new frc::VictorSP(2);
-	drvlbmot = new frc::VictorSP(3);
-	turnrfmot = new frc::VictorSP(4);
-	turnlfmot = new frc::VictorSP(5);
-	turnrbmot = new frc::VictorSP(6);
-	turnlbmot = new frc::VictorSP(7);
+	drvrfmot = new WPI_VictorSPX(0);		
+	drvlfmot = new WPI_VictorSPX(1);
+	drvrbmot = new WPI_VictorSPX(2);
+	drvlbmot = new WPI_VictorSPX(3);
+	turnrfmot = new WPI_VictorSPX(4);
+	turnlfmot = new WPI_VictorSPX(5);
+	turnrbmot = new WPI_VictorSPX(6);
+	turnlbmot = new WPI_VictorSPX(7);
 	//Other Motors
-	liftdrivemot = new frc::VictorSP(8);	
-	elevatormot = new frc::VictorSP(9);
+	liftdrivemot = new WPI_VictorSPX(12);	
+	elevatormot = new WPI_VictorSPX(13);
 
-	liftrfmot = new frc::VictorSP(10);	
-	liftlfmot = new frc::VictorSP(11);
-	liftrbmot = new frc::VictorSP(12);
-	liftlbmot = new frc::VictorSP(13);
+	liftrfmot = new WPI_VictorSPX(8);	
+	liftlfmot = new WPI_VictorSPX(9);
+	liftrbmot = new WPI_VictorSPX(10);
+	liftlbmot = new WPI_VictorSPX(11);
 	//PWM 14-18 used as DIO inputs
-	ballintakemot = new frc::VictorSP(19);
+	ballintakemot = new WPI_VictorSPX(14);
 
 	//Swerve Drive Encoders
-	encdrvrf= new frc::Encoder(0, 1, false, frc::Encoder::EncodingType::k4X);
+	encdrvrf = new frc::Encoder(0, 1, false, frc::Encoder::EncodingType::k4X);
 	encdrvlf = new frc::Encoder(2, 3, false, frc::Encoder::EncodingType::k4X);
 	encdrvrb = new frc::Encoder(4, 5, false, frc::Encoder::EncodingType::k4X);
 	encdrvlb = new frc::Encoder(6, 7, false, frc::Encoder::EncodingType::k4X);	
-	swerveresetone = new frc::DigitalInput(8);
-	swerveresettwo = new frc::DigitalInput(9);
 	//DIO 10-13 are used as PWM outputs for climb motors		
-	steerencdrvrf = new frc::AnalogPotentiometer(2,360,0);	
-	steerencdrvlf = new frc::AnalogPotentiometer(0,360,0);	
-	steerencdrvrb = new frc::AnalogPotentiometer(3,360,0);	
-	steerencdrvlb = new frc::AnalogPotentiometer(1,360,0);
+	steerencdrvrf = new frc::AnalogPotentiometer(0,360,0);	
+	steerencdrvlf = new frc::AnalogPotentiometer(1,360,0);	
+	steerencdrvrb = new frc::AnalogPotentiometer(2,360,0);	
+	steerencdrvlb = new frc::AnalogPotentiometer(3,360,0);
 	//Other Encoders and DIO
-	liftrfenc = new frc::Encoder(14 ,15, false, frc::Encoder::EncodingType::k4X);
-	liftlfenc = new frc::Encoder(16, 17, false, frc::Encoder::EncodingType::k4X);
-	liftrbenc = new frc::Encoder(18, 19, false, frc::Encoder::EncodingType::k4X);
-	liftlbenc = new frc::Encoder(20, 21, false, frc::Encoder::EncodingType::k4X);	
+	elevatorenc = new frc::Encoder(10, 11);	
+	liftrfenc = new frc::Encoder(14 ,15);
+	liftlfenc = new frc::Encoder(16, 17);
+	liftrbenc = new frc::Encoder(18, 19);
+	liftlbenc = new frc::Encoder(20, 21);	
 	liftdriveenc = new frc::Counter(22);
-	elevatorenc = new frc::Encoder(24, 25, false, frc::Encoder::EncodingType::k4X);
+
 		
 	//Solenoids
-	compressor = new frc::Compressor();
+	//compressor = new frc::Compressor();
 	ballarmsolenoidin = new frc::Solenoid(0);
 	hatcharmsolenoidin = new frc::Solenoid(1);
 	ballshootersolenoidin = new frc::Solenoid(2);
@@ -85,8 +84,14 @@ void IO::ioPeriodic(){
 		elevatormot->Set(-1.0);
 	} else elevatormot->Set(0.0);
 
+	elevatormot->Set(.2);
+
+
+}
+
+void IO::ioRobotPeriodic(){
 	frc::SmartDashboard::PutNumber("Elevator Des Pos", elevatorDesiredPos);
-	frc::SmartDashboard::PutNumber("Elevator Act Pos", elevatorActualPos);
+	frc::SmartDashboard::PutNumber("Elevator Act Pos", elevatorenc->GetDistance());
 	frc::SmartDashboard::PutNumber("Elevator Motor Power", elevatormot->Get());
 }
 

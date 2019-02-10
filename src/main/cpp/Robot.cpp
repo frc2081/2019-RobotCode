@@ -27,8 +27,9 @@ void Robot::RobotPeriodic() {
   DriverControls->pollControllers(Commands);
   Drivetrain->UpdateDashboard();
   Climber->ClimbManagerRobotPeriodic();
+  RioIO->ioRobotPeriodic();
 
-    frc::SmartDashboard::PutNumber("Climber RF Actual Position", RioIO->liftrfenc->GetDistance());
+  frc::SmartDashboard::PutNumber("Climber RF Actual Position", RioIO->liftrfenc->GetDistance());
   frc::SmartDashboard::PutNumber("Climber LF Actual Position", RioIO->liftlfenc->GetDistance());
   frc::SmartDashboard::PutNumber("Climber LB Actual Position", RioIO->liftlbenc->GetDistance());
   frc::SmartDashboard::PutNumber("Climber RB Actual Position", RioIO->liftrbenc->GetDistance());

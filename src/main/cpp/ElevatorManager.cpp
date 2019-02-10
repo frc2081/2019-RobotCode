@@ -231,40 +231,40 @@ switch(ElevatorManagerCurrentState){
 }
 
 void ElevatorManager::ElevatorManagerMechanism(IO *io){
-    	if(HatchArmPos){
-		io->hatcharmsolenoidin->Set(true);
-		io->hatcharmsolenoidout->Set(false);
-	    }
-	    else{
-		io->hatcharmsolenoidin->Set(false);
-		io->hatcharmsolenoidout->Set(true);
-	    }
+    if(HatchArmPos){
+    io->hatcharmsolenoidin->Set(true);
+    io->hatcharmsolenoidout->Set(false);
+    }
+    else{
+    io->hatcharmsolenoidin->Set(false);
+    io->hatcharmsolenoidout->Set(true);
+    }
 
-        if(HatchClawPos){
-        io->hatchclawsolenoidout->Set(true);
-        io->hatchclawsolenoidin->Set(false);
-        }
-        else{
-        io->hatchclawsolenoidout->Set(false);
-        io->hatchclawsolenoidin->Set(true);
-        }
+    if(HatchClawPos){
+    io->hatchclawsolenoidout->Set(true);
+    io->hatchclawsolenoidin->Set(false);
+    }
+    else{
+    io->hatchclawsolenoidout->Set(false);
+    io->hatchclawsolenoidin->Set(true);
+    }
 
-        if(BallShooterPos){
-        io->ballshootersolenoidout->Set(true);
-        io->ballshootersolenoidin->Set(false);
-        }
-        else{
-        io->ballshootersolenoidout->Set(false);
-        io->ballshootersolenoidin->Set(true);
-        }
+    if(BallShooterPos){
+    io->ballshootersolenoidout->Set(true);
+    io->ballshootersolenoidin->Set(false);
+    }
+    else{
+    io->ballshootersolenoidout->Set(false);
+    io->ballshootersolenoidin->Set(true);
+    }
 
-        if(BallArmPos){
-        io->ballarmsolenoidout->Set(true);
-        io->ballarmsolenoidin->Set(false);
-        }
-        else{
-        io->ballarmsolenoidout->Set(false);
-        io->ballarmsolenoidin->Set(true);
-        }
+    if(BallArmPos){
+    io->ballarmsolenoidout->Set(true);
+    io->ballarmsolenoidin->Set(false);
+    }
+    else{
+    io->ballarmsolenoidout->Set(false);
+    io->ballarmsolenoidin->Set(true);
+    }
 }
 

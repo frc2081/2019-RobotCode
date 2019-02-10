@@ -15,7 +15,7 @@ LiftPIDControl::LiftPIDControl(IO *io) {
 
   //Init lift PID control parameters
   //PID tunes are the same for all four lifts
-  liftPIDp = .6;
+  liftPIDp = 1;
   liftPIDi = 0;
   liftPIDd = 0;
   liftPIDf = 0;
@@ -24,12 +24,12 @@ LiftPIDControl::LiftPIDControl(IO *io) {
 
   //Lift position constants
   liftPosRetractedFront = 0; //Lift front leg position in cm to fully retract the legs
-  liftPosExtendedLevelOneFront = 11; //Lift front leg position in inches to raise the robot to Hab level 1
+  liftPosExtendedLevelOneFront = 9; //Lift front leg position in inches to raise the robot to Hab level 1
   liftPosExtendedLevelTwoFront = 22; //Lift front leg position in inches to raise the robot to Hab level 2
   liftPosRetractedRear = 0; //Lift rear leg position in cm to fully retract the legs
-  liftPosExtendedLevelOneRear = 11; //Lift rear leg position in inches to raise the robot to Hab level 1
+  liftPosExtendedLevelOneRear = 9; //Lift rear leg position in inches to raise the robot to Hab level 1
   liftPosExtendedLevelTwoRear = 22; //Lift rear leg position in inches to raise the robot to Hab level 2
-  liftMovementRate = .05; //Speed in inches per loop that the lift should move at when raising or lowering the robot
+  liftMovementRate = .15; //Speed in inches per loop that the lift should move at when raising or lowering the robot
 
   liftrfPID = new frc::PIDController(liftPIDp, liftPIDi, liftPIDd, liftPIDf, _io->liftrfenc, _io->liftrfmot, liftPIDPeriod);
   liftlfPID = new frc::PIDController(liftPIDp, liftPIDi, liftPIDd, liftPIDf, _io->liftlfenc, _io->liftlfmot, liftPIDPeriod);
@@ -87,10 +87,10 @@ void LiftPIDControl::liftPIDControlRobotPeriodic(){
   frc::SmartDashboard::PutNumber("Climber LF PID Actual SetPoint", liftlfPID->GetSetpoint());
   frc::SmartDashboard::PutNumber("Climber LB PID Actual SetPoint", liftlbPID->GetSetpoint());
   frc::SmartDashboard::PutNumber("Climber RB PID Actual SetPoint", liftrbPID->GetSetpoint());
-  //frc::SmartDashboard::PutNumber("Climber RF Actual Position", _io->liftrfenc->GetDistance());
-  //frc::SmartDashboard::PutNumber("Climber LF Actual Position", _io->liftlfenc->GetDistance());
-  //frc::SmartDashboard::PutNumber("Climber LB Actual Position", _io->liftlbenc->GetDistance());
-  //frc::SmartDashboard::PutNumber("Climber RB Actual Position", _io->liftrbenc->GetDistance());
+  frc::SmartDashboard::PutNumber("Climber RF Actual Position", _io->liftrfenc->GetDistance());
+  frc::SmartDashboard::PutNumber("Climber LF Actual Position", _io->liftlfenc->GetDistance());
+  frc::SmartDashboard::PutNumber("Climber LB Actual Position", _io->liftlbenc->GetDistance());
+  frc::SmartDashboard::PutNumber("Climber RB Actual Position", _io->liftrbenc->GetDistance());
   frc::SmartDashboard::PutBoolean("Fast Movement", moveFast);
   frc::SmartDashboard::PutNumber("Climber Desync Distance", liftDesyncDistanceThreshold);
   frc::SmartDashboard::PutNumber("Lift Front Retracted Set Point", liftPosRetractedFront);

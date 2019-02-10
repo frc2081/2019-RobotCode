@@ -22,26 +22,27 @@ public:
 	IO();
 	void ioPeriodic();
 	void robotMechanismPeriodic();
+	void ioRobotPeriodic();
 
 	int elevatorDesiredPos, elevatorActualPos;
 	int elevatorPosTolerance = 0.5;
 	double elevatorMovePower = 1;
 
-	// The scaling to multiply the voltage by to get a meaningful unit 360 degrees / 5 volts = 72
-	const int sweerveanglogvoltagetodegrees = 72;
-	const double swerveencodercountstodistancecentimeters = .238;
-	
-	const double elevatorEncoderCountsToDistanceInches = .00097;
+	//Scaling factors to convert encoder counts to physical distances
+	const int sweerveanglogvoltagetodegrees = 72; //360 degrees travel per rev / 5 volts rev = 72 degrees per volt
+	const double swerveencodercountstodistancecentimeters = .238; //Might be wrong or in inches instead of CM
+	const double elevatorEncoderCountsToDistanceInches = .00048; //1024 counts/rev, 0.5 inch travel/rev; 0.5/1024 = .00048 inches per count
+ 	const double liftDistPerCountInches = .00306; //1024 counts/rev, 3.14 inches travel/rev; 3.14/1024 = .00306 inches per count
 
 	//Swerve Drive Motors
-	frc::VictorSP *drvlbmot;
-	frc::VictorSP *drvrbmot;
-	frc::VictorSP *drvlfmot;
-	frc::VictorSP *drvrfmot;
-	frc::VictorSP *turnlbmot;
-	frc::VictorSP *turnrbmot;
-	frc::VictorSP *turnlfmot;
-	frc::VictorSP *turnrfmot;
+	WPI_VictorSPX *drvlbmot;
+	WPI_VictorSPX *drvrbmot;
+	WPI_VictorSPX *drvlfmot;
+	WPI_VictorSPX *drvrfmot;
+	WPI_VictorSPX *turnlbmot;
+	WPI_VictorSPX *turnrbmot;
+	WPI_VictorSPX *turnlfmot;
+	WPI_VictorSPX *turnrfmot;
 
 	//Swerve Drive Encoders
 	frc::Encoder *encdrvlb;
@@ -53,17 +54,14 @@ public:
 	frc::AnalogPotentiometer *steerencdrvrb;
 	frc::AnalogPotentiometer *steerencdrvrf;
 
-	frc::DigitalInput *swerveresetone;
-	frc::DigitalInput *swerveresettwo;
-
 	//Other Motors
-	frc::VictorSP *ballintakemot;
-	frc::VictorSP *liftdrivemot;
-	frc::VictorSP *liftlbmot;
-	frc::VictorSP *liftrbmot;
-	frc::VictorSP *liftlfmot;
-	frc::VictorSP *liftrfmot;
-	frc::VictorSP *elevatormot;
+	WPI_VictorSPX *ballintakemot;
+	WPI_VictorSPX *liftdrivemot;
+	WPI_VictorSPX *liftlbmot;
+	WPI_VictorSPX *liftrbmot;
+	WPI_VictorSPX *liftlfmot;
+	WPI_VictorSPX *liftrfmot;
+	WPI_VictorSPX *elevatormot;
 
 	//Other Encoders
 	frc::Encoder *liftlbenc;
@@ -72,8 +70,6 @@ public:
 	frc::Encoder *liftrfenc;
 	frc::Encoder *elevatorenc;
 	frc::Counter *liftdriveenc;
-
-	frc::Compressor *compressor;
 
 	//Solenoids
 	frc::Solenoid *ballarmsolenoidin;
@@ -88,7 +84,6 @@ public:
 	double armP = .7;
 	double armI = 0;
 	double armD = 0;
- 	double liftDistPerCountInches;
 
 private:
 
