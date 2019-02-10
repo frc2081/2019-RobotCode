@@ -46,12 +46,12 @@
           "8,2": {
             "size": [
               2,
-              3
+              2
             ],
             "content": {
               "_type": "Subsystem Layout",
               "_title": "Swerve Offsets",
-              "Layout/Label position": "BOTTOM",
+              "Layout/Label position": "RIGHT",
               "_children": [
                 {
                   "_type": "Text View",
@@ -79,12 +79,12 @@
           "6,2": {
             "size": [
               2,
-              3
+              2
             ],
             "content": {
               "_type": "Subsystem Layout",
               "_title": "Steering Encoders",
-              "Layout/Label position": "BOTTOM",
+              "Layout/Label position": "RIGHT",
               "_children": [
                 {
                   "_type": "Text View",
@@ -112,12 +112,12 @@
           "4,2": {
             "size": [
               2,
-              3
+              2
             ],
             "content": {
               "_type": "Subsystem Layout",
               "_title": "Desired Angles",
-              "Layout/Label position": "BOTTOM",
+              "Layout/Label position": "RIGHT",
               "_children": [
                 {
                   "_type": "Text View",
@@ -145,12 +145,12 @@
           "2,2": {
             "size": [
               2,
-              3
+              2
             ],
             "content": {
               "_type": "List Layout",
               "_title": "Actual Speeds",
-              "Layout/Label position": "BOTTOM",
+              "Layout/Label position": "RIGHT",
               "_children": [
                 {
                   "_type": "Text View",
@@ -178,12 +178,12 @@
           "0,2": {
             "size": [
               2,
-              3
+              2
             ],
             "content": {
               "_type": "Subsystem Layout",
               "_title": "Desired Speeds",
-              "Layout/Label position": "BOTTOM",
+              "Layout/Label position": "RIGHT",
               "_children": [
                 {
                   "_type": "Text View",
@@ -216,7 +216,7 @@
             "content": {
               "_type": "Subsystem Layout",
               "_title": "Swerve Drive PID Values",
-              "Layout/Label position": "BOTTOM",
+              "Layout/Label position": "RIGHT",
               "_children": [
                 {
                   "_type": "Text View",
@@ -249,7 +249,7 @@
             "content": {
               "_type": "Subsystem Layout",
               "_title": "Swerve Turn PID Values",
-              "Layout/Label position": "BOTTOM",
+              "Layout/Label position": "RIGHT",
               "_children": [
                 {
                   "_type": "Text View",
@@ -476,11 +476,7 @@
               "_source2": "network_table:///SmartDashboard/Climber LF Motor Power",
               "_source3": "network_table:///SmartDashboard/Climber RB Motor Power",
               "_title": "Climber Motor Power",
-              "Graph/Visible time": 30.0,
-              "Visible data/SmartDashboard/Climber LB Motor Power": false,
-              "Visible data/SmartDashboard/Climber LF Motor Power": false,
-              "Visible data/SmartDashboard/Climber RB Motor Power": false,
-              "Visible data/SmartDashboard/Climber RF Motor Power": false
+              "Graph/Visible time": 30.0
             }
           }
         }
@@ -596,7 +592,7 @@
       }
     },
     {
-      "title": "Vision \u0026 Guidance",
+      "title": "Vision",
       "autoPopulate": false,
       "autoPopulatePrefix": "",
       "widgetPane": {
@@ -613,7 +609,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///datatable/LeftTargetDistFromCenter",
-              "_title": "datatable/LeftTargetDistFromCenter"
+              "_title": "/datatable/LeftTargetDistFromCenter"
             }
           },
           "4,2": {
@@ -624,7 +620,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///datatable/LeftTargetHeight",
-              "_title": "LeftTargetHeight"
+              "_title": "/datatable/LeftTargetHeight"
             }
           },
           "2,2": {
@@ -635,7 +631,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///datatable/LeftTargetWidth",
-              "_title": "datatable/LeftTargetWidth"
+              "_title": "/datatable/LeftTargetWidth"
             }
           },
           "4,3": {
@@ -646,29 +642,29 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///datatable/RightTagetHeight",
-              "_title": "RightTagetHeight"
+              "_title": "/datatable/RightTagetHeight"
             }
           },
-          "8,2": {
+          "6,2": {
             "size": [
-              1,
+              2,
               1
             ],
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///datatable/RightTargetDistFromCenter",
-              "_title": "datatable/RightTargetDistFromCenter"
+              "_title": "/datatable/RightTargetDistFromCenter"
             }
           },
-          "1,3": {
+          "2,3": {
             "size": [
-              1,
+              2,
               1
             ],
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///datatable/RightTargetWidth",
-              "_title": "datatable/RightTargetWidth"
+              "_title": "/datatable/RightTargetWidth"
             }
           },
           "8,0": {
@@ -679,20 +675,330 @@
             "content": {
               "_type": "Boolean Box",
               "_source0": "network_table:///datatable/TargetDataValid",
-              "_title": "datatable/TargetDataValid",
+              "_title": "/datatable/TargetDataValid",
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "9,2": {
+          "8,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///datatable/VisionHeartbeat",
+              "_title": "/datatable/VisionHeartbeat"
+            }
+          },
+          "5,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Target Acquired",
+              "_title": "SmartDashboard/Target Acquired",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "2,1": {
             "size": [
               1,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///datatable/VisionHeartbeat",
-              "_title": "datatable/VisionHeartbeat"
+              "_source0": "network_table:///SmartDashboard/Target Distance Left",
+              "_title": "SmartDashboard/Target Distance Left"
+            }
+          },
+          "3,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Target Distance Right",
+              "_title": "SmartDashboard/Target Distance Right"
+            }
+          },
+          "4,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Target Width Left",
+              "_title": "SmartDashboard/Target Width Left"
+            }
+          },
+          "5,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Target Width Right",
+              "_title": "SmartDashboard/Target Width Right"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Guidance",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "tiles": {
+          "8,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Toggle Button",
+              "_source0": "network_table:///SmartDashboard/Guide Homing In Stages",
+              "_title": "Guide Homing In Stages"
+            }
+          },
+          "0,2": {
+            "size": [
+              2,
+              3
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Target Data",
+              "Layout/Label position": "RIGHT",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Target Vision Heartbeat",
+                  "_title": "Target Vision Heartbeat"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Target Width Left",
+                  "_title": "Target Width Left"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Target Width Right",
+                  "_title": "Target Width Right"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Target Distance Left",
+                  "_title": "Target Distance Left"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Target Distance Right",
+                  "_title": "Target Distance Right"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Target Left Height",
+                  "_title": "Target Left Height"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Target Right Height",
+                  "_title": "Target Right Height"
+                }
+              ]
+            }
+          },
+          "0,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Guidance System Status",
+              "Layout/Label position": "RIGHT",
+              "_children": [
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///SmartDashboard/Guide System Active",
+                  "_title": "Guide System Active",
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                },
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///SmartDashboard/Target Acquired",
+                  "_title": "Target Acquired         ",
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Guide System State",
+                  "_title": "Guide System State"
+                }
+              ]
+            }
+          },
+          "8,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Guide Homing Stages Err Tol",
+              "_title": "Guide Homing Stages Err Tol"
+            }
+          },
+          "4,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Target Target Height",
+              "_title": "Guidance Target Height"
+            }
+          },
+          "4,2": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Guidance Error Tunes",
+              "Layout/Label position": "RIGHT",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Guide kp Range",
+                  "_title": "Guide kp Range"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Guide kp Center Mag",
+                  "_title": "Guide kp Center Mag"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Guide kp Center Angle",
+                  "_title": "Guide kp Center Angle"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Guide kp Angle",
+                  "_title": "Guide kp Angle"
+                }
+              ]
+            }
+          },
+          "6,2": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Drivetrain Commands",
+              "Layout/Label position": "RIGHT",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Guide Drv Angle",
+                  "_title": "Guide Drv Angle"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Guide Drv Mag Range",
+                  "_title": "Guide Drv Mag Range"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Guide Drv Mag Center",
+                  "_title": "Guide Drv Mag Center"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Guide Final Drv Mag",
+                  "_title": "Guide Final Drv Mag"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Guide Drv Rotation",
+                  "_title": "Guide Drv Rotation"
+                }
+              ]
+            }
+          },
+          "2,2": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Guidance Errors",
+              "Layout/Label position": "RIGHT",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Guide error Angle",
+                  "_title": "Guide error Angle"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Guide error Center",
+                  "_title": "Guide error Center"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Guide error Range",
+                  "_title": "Guide error Range"
+                }
+              ]
+            }
+          },
+          "2,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_title": "Guidance Duration Tunes",
+              "Layout/Label position": "RIGHT",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Guide Placement Time",
+                  "_title": "Guide Placement Time"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Guide Final Approach Time",
+                  "_title": "Guide Final Approach Time"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Guide Back Away Time",
+                  "_title": "Guide Back Away Time"
+                }
+              ]
             }
           }
         }
@@ -700,9 +1006,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -5.599999904632568,
-    "y": 0.800000011920929,
-    "width": 1546.4000244140625,
-    "height": 828.7999877929688
+    "x": -6.400000095367432,
+    "y": -6.400000095367432,
+    "width": 1548.800048828125,
+    "height": 836.7999877929688
   }
 }

@@ -13,11 +13,22 @@ GuidanceSystem::GuidanceSystem(RobotCommands *cmds){
     timer = 0;
 
     GuidanceState = GuidanceSysState::NOTACTIVE;
-}
+
+    table = nt::NetworkTableInstance::GetDefault().GetTable("datatable");
+
+    //Init Smartdashboard cal values
+    frc::SmartDashboard::PutNumber("Guide Homing Stages Err Tol", homingErrorTolerance);
+    frc::SmartDashboard::PutBoolean("Guide Homing In Stages", homingInStages);
+    frc::SmartDashboard::PutNumber("Guide Back Away Time", placementDuration);
+    frc::SmartDashboard::PutNumber("Guide Placement Time", placementDuration);
+    frc::SmartDashboard::PutNumber("Guide Final Approach Time", finalApproachDuration);
+    frc::SmartDashboard::PutNumber("Guide kp Range", kpRange);
+    frc::SmartDashboard::PutNumber("Guide kp Angle", kpAngle);
+    frc::SmartDashboard::PutNumber("Guide kp Center Angle", kpCenterAng);
+    frc::SmartDashboard::PutNumber("Guide kp Center Mag", kpCenterMag);
+    }
 
 void GuidanceSystem::GuidanceSystemPeriodic(){
-
-    targetAcquired = frc::SmartDashboard::GetBoolean("TargetDataValid", targetAcquired);
 
     //Set the guidance system active if any auto command is active
     if(_cmds->autoHatchPickup || _cmds->autoPlaceHatchOne ||
@@ -153,10 +164,6 @@ void GuidanceSystem::GuidanceSystemPeriodic(){
         _cmds->autodrvmag = drvMagFinal;
         _cmds->autodrvrot = drvRot;
     } else { _cmds->guidanceSysActive = false; }
-
-    updateDashboard();
-
-    //TODO:Add capability to execute each stage of homing independently
 }
 
 void GuidanceSystem::calcHomingVectors() {
@@ -205,43 +212,44 @@ void GuidanceSystem::calcHomingVectors() {
     }
 }
 
+void GuidanceSystem::GuidanceSystemRobotPeriodic(){
+    updateDashboard();
+}
+
 void GuidanceSystem::updateDashboard()
 {
-    frc::SmartDashboard::PutBoolean("Target Acquired", targetAcquired);
-    targetAcquired = frc::SmartDashboard::PutBoolean("Target Acquired", targetAcquired);
-    frc::SmartDashboard::PutNumber("Target Distance Left", distanceLeftTarget);
-    distanceLeftTarget = frc::SmartDashboard::GetNumber("Target Distance Left", distanceLeftTarget);
-    frc::SmartDashboard::PutNumber("Target Distance Right", distanceRightTarget);
-    distanceRightTarget = frc::SmartDashboard::GetNumber("Target Distance Right", distanceRightTarget);
-    frc::SmartDashboard::PutNumber("Target Width Left", widthLeftTarget);
-    widthLeftTarget = frc::SmartDashboard::GetNumber("Target Width Left", widthLeftTarget);
-    frc::SmartDashboard::PutNumber("Target Width Right", widthRightTarget);
-    widthRightTarget = frc::SmartDashboard::GetNumber("Target Width Right", widthRightTarget);
-    frc::SmartDashboard::PutNumber("Guide Actual Height", heightRightTarget);
-    heightRightTarget = frc::SmartDashboard::GetNumber("Guidance Actual Height", heightRightTarget);
-    frc::SmartDashboard::PutNumber("Guide Target Height", targetDesiredHeight);
-    targetDesiredHeight = frc::SmartDashboard::GetNumber("Guidance Target Height", targetDesiredHeight);
-    frc::SmartDashboard::PutNumber("Guide kp Center Mag", kpCenterMag);
-    kpCenterMag = frc::SmartDashboard::GetNumber("Guidance kp Center Mag", kpCenterMag);
-    frc::SmartDashboard::PutNumber("Guide kp Center Angle", kpCenterAng);
-    kpCenterAng = frc::SmartDashboard::GetNumber("Guidance kp Center Angle", kpCenterAng);
-    frc::SmartDashboard::PutNumber("Guide kp Angle", kpAngle);
-    kpAngle = frc::SmartDashboard::GetNumber("Guidance kp Angle", kpAngle);
-    frc::SmartDashboard::PutNumber("Guide kp Range", kpRange);
-    kpRange = frc::SmartDashboard::GetNumber("Guidance kp Range", kpRange);
-    frc::SmartDashboard::PutNumber("Guide Final Approach Time", finalApproachDuration);
-    finalApproachDuration = frc::SmartDashboard::GetNumber("Guide Final Approach Time", finalApproachDuration);
-    frc::SmartDashboard::PutNumber("Guide Placement Time", placementDuration);
-    placementDuration = frc::SmartDashboard::GetNumber("Guide Final Approach Time", placementDuration);
-    frc::SmartDashboard::PutNumber("Guide Back Away Time", placementDuration);
-    backAwayDuration = frc::SmartDashboard::GetNumber("Guide Final Approach Time", backAwayDuration);
-    frc::SmartDashboard::PutNumber("Guide Final Drv Mag", finalApproachDrvMag);
-    finalApproachDuration = frc::SmartDashboard::GetNumber("Guide Final DrvMag", finalApproachDrvMag);
-    frc::SmartDashboard::PutBoolean("Guide Homing In Stages", homingInStages);
-    homingInStages = frc::SmartDashboard::GetBoolean("Guide Homing In Stages", homingInStages);
-    frc::SmartDashboard::PutNumber("Guide Homing Stages Err Tol", homingErrorTolerance);
-    homingErrorTolerance = frc::SmartDashboard::GetNumber("Guide Homing Stages Err Tol", homingErrorTolerance);
+    targetAcquired = table->GetBoolean("TargetDataValid", false);
+    visionHeartbeat = table->GetNumber("VisionHeartbeat", -2);
+    distanceLeftTarget = table->GetNumber("LeftTargetDistFromCenter", -2);
+    distanceRightTarget = table->GetNumber("RightTargetDistFromCenter", -2);
+    widthLeftTarget = table->GetNumber("LeftTargetWidth", -2);
+    widthRightTarget = table->GetNumber("RightTargetWidth", -2);
+    heightLeftTarget = table->GetNumber("LeftTargetHeight", -2);
+    heightRightTarget = table->GetNumber("RightTagetHeight", -2);
     
+    frc::SmartDashboard::PutBoolean("Target Acquired", targetAcquired);
+    frc::SmartDashboard::PutNumber("Target Vision Heartbeat", visionHeartbeat);
+    frc::SmartDashboard::PutNumber("Target Width Left", widthLeftTarget);
+    frc::SmartDashboard::PutNumber("Target Width Right", widthRightTarget);
+    frc::SmartDashboard::PutNumber("Target Right Height", heightRightTarget);
+    frc::SmartDashboard::PutNumber("Target Left Height", heightLeftTarget);
+    frc::SmartDashboard::PutNumber("Target Target Height", targetDesiredHeight);
+    frc::SmartDashboard::PutNumber("Target Distance Left", distanceLeftTarget);
+    frc::SmartDashboard::PutNumber("Target Distance Right", distanceRightTarget);
+
+    targetDesiredHeight = frc::SmartDashboard::GetNumber("Guide Desired Height", targetDesiredHeight);
+    kpCenterMag = frc::SmartDashboard::GetNumber("Guidance kp Center Mag", kpCenterMag);
+    kpCenterAng = frc::SmartDashboard::GetNumber("Guidance kp Center Angle", kpCenterAng);
+    kpAngle = frc::SmartDashboard::GetNumber("Guidance kp Angle", kpAngle);
+    kpRange = frc::SmartDashboard::GetNumber("Guidance kp Range", kpRange);
+    finalApproachDuration = frc::SmartDashboard::GetNumber("Guide Final Approach Time", finalApproachDuration);
+    placementDuration = frc::SmartDashboard::GetNumber("Guide Final Approach Time", placementDuration);
+    backAwayDuration = frc::SmartDashboard::GetNumber("Guide Final Approach Time", backAwayDuration);
+    finalApproachDuration = frc::SmartDashboard::GetNumber("Guide Final DrvMag", finalApproachDrvMag);
+    homingInStages = frc::SmartDashboard::GetBoolean("Guide Homing In Stages", homingInStages);
+    homingErrorTolerance = frc::SmartDashboard::GetNumber("Guide Homing Stages Err Tol", homingErrorTolerance);
+
+    frc::SmartDashboard::PutNumber("Guide Final Drv Mag", finalApproachDrvMag);
     frc::SmartDashboard::PutNumber("Guide error Center", errorCenter);
     frc::SmartDashboard::PutNumber("Guide error Angle", errorAngle);
     frc::SmartDashboard::PutNumber("Guide error Range", errorHeight);

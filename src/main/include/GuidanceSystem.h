@@ -3,16 +3,22 @@
 #include "IO.h"
 #include "RobotCommands.h"
 #include "frc/WPILib.h"
+#include "frc/smartdashboard/Smartdashboard.h"
+#include "networktables/NetworkTable.h"
+#include "networktables/NetworkTableInstance.h"
 
 class GuidanceSystem{
     public:
         GuidanceSystem(RobotCommands *cmds);
         void GuidanceSystemPeriodic();
+        void GuidanceSystemRobotPeriodic();
 
     private:
         RobotCommands *_cmds;
         void calcHomingVectors();
         void updateDashboard();
+
+        std::shared_ptr<NetworkTable> table; 
 
         enum class GuidanceSysState {
             NOTACTIVE,
@@ -37,10 +43,12 @@ class GuidanceSystem{
         //Placeholder target data from vision system
         //All values in image pixels
         bool targetAcquired = false;
+        int visionHeartbeat = -1;
         int distanceLeftTarget = -80;
         int distanceRightTarget = 50;
         int widthLeftTarget = 10;
         int widthRightTarget = 55;
+        int heightLeftTarget = 55;
         int heightRightTarget = 110;
         
         //Height of the targets in pixels when the robot has moved to the hatch placement final approach position
