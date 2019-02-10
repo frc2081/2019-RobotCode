@@ -78,15 +78,17 @@ IO::IO() {
 void IO::ioPeriodic(){
 	elevatorActualPos = elevatorenc->GetDistance();
 
-	if(elevatorActualPos < elevatorDesiredPos - elevatorPosTolerance){
-		elevatormot->Set(1.0);
+	//Stop elevator if above or below position limits
+	//Otherwise move up or down until desired position is met
+	if(elevatorActualPos < elevatorMinPosition){
+		elevatormot->Set(0);
+	}else if(elevatorActualPos > elevatorMaxPosition){
+		elevatormot->Set(0);
+	}else if(elevatorActualPos < elevatorDesiredPos - elevatorPosTolerance){
+		elevatormot->Set(elevatorMovePower);
 	} else if (elevatorActualPos > elevatorDesiredPos + elevatorPosTolerance){
-		elevatormot->Set(-1.0);
-	} else elevatormot->Set(0.0);
-
-	elevatormot->Set(.2);
-
-
+		elevatormot->Set(-elevatorMovePower);
+	} else elevatormot->Set(0);
 }
 
 void IO::ioRobotPeriodic(){

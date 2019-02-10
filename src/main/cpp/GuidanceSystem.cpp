@@ -17,6 +17,8 @@ GuidanceSystem::GuidanceSystem(RobotCommands *cmds){
 
 void GuidanceSystem::GuidanceSystemPeriodic(){
 
+    targetAcquired = frc::SmartDashboard::GetBoolean("TargetDataValid", targetAcquired);
+
     //Set the guidance system active if any auto command is active
     if(_cmds->autoHatchPickup || _cmds->autoPlaceHatchOne ||
         _cmds->autoPlaceHatchTwo ||  _cmds->autoPlaceCargoInShip ||
@@ -249,6 +251,4 @@ void GuidanceSystem::updateDashboard()
     frc::SmartDashboard::PutNumber("Guide Drv Rotation", drvRot);
     frc::SmartDashboard::PutNumber("Guide System State", static_cast<int>(GuidanceState));
     frc::SmartDashboard::PutBoolean("Guide System Active", guidanceSysActive);
-
-
 }

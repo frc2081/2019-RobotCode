@@ -25,8 +25,10 @@ public:
 	void ioRobotPeriodic();
 
 	int elevatorDesiredPos, elevatorActualPos;
-	int elevatorPosTolerance = 0.5;
-	double elevatorMovePower = 1;
+	int elevatorPosTolerance = 0.25; //Distance from desired position to actual position for elevator to be considered at desired
+	double elevatorMovePower = 1; //Motor power for elevator moves
+	double elevatorMaxPosition = 33.75; //Max height elevator can move to, should be same as length of track
+	double elevatorMinPosition = 0; //Min height elevator can move to
 
 	//Scaling factors to convert encoder counts to physical distances
 	const int sweerveanglogvoltagetodegrees = 72; //360 degrees travel per rev / 5 volts rev = 72 degrees per volt
