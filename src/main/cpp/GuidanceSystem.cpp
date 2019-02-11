@@ -225,7 +225,7 @@ void GuidanceSystem::updateDashboard()
     widthLeftTarget = table->GetNumber("LeftTargetWidth", -2);
     widthRightTarget = table->GetNumber("RightTargetWidth", -2);
     heightLeftTarget = table->GetNumber("LeftTargetHeight", -2);
-    heightRightTarget = table->GetNumber("RightTagetHeight", -2);
+    heightRightTarget = table->GetNumber("RightTargetHeight", -2);
     
     frc::SmartDashboard::PutBoolean("Target Acquired", targetAcquired);
     frc::SmartDashboard::PutNumber("Target Vision Heartbeat", visionHeartbeat);
