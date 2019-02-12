@@ -85,6 +85,10 @@ public:
 	frc::Solenoid *ballshootersolenoidout;
 	frc::Solenoid *hatchclawsolenoidout;
 
+	//Other Inputs
+	frc::DigitalInput *hatchDetectorOne;
+	frc::DigitalInput *hatchDetectorTwo;
+
 	double armP = .7;
 	double armI = 0;
 	double armD = 0;

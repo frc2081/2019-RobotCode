@@ -58,6 +58,9 @@ IO::IO() {
 	hatcharmsolenoidout = new frc::Solenoid(5);
 	ballshootersolenoidout = new frc::Solenoid(6);
 	hatchclawsolenoidout = new frc::Solenoid(7);
+
+	hatchDetectorOne = new frc::DigitalInput(8);
+	hatchDetectorTwo = new frc::DigitalInput(9);
   
 	//Configure IO
   	liftrfenc->SetDistancePerPulse(liftDistPerCountInches);

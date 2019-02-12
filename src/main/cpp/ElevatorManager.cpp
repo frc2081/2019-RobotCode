@@ -40,8 +40,6 @@ ElevatorManager::ElevatorManager(IO *io, RobotCommands *cmds) {
     
 void ElevatorManager::ElevatorManagerPeriodic(){
 
-
-
 switch(ElevatorManagerCurrentState){
     case ElevatorManagerState::Transit:
         ElevatorPosCmd = ElevHomePos;
@@ -66,6 +64,7 @@ switch(ElevatorManagerCurrentState){
 
         if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
         if(_cmds->hatchPickup){ElevatorManagerCurrentState = ElevatorManagerState::HatchPickup;}
+        if(_io->hatchDetectorOne->Get() && _io->hatchDetectorTwo()) {ElevatorManagerCurrentState = ElevatorManagerState::HatchPickup;}
 
         break;
     case ElevatorManagerState::HatchPickup:
@@ -223,6 +222,12 @@ switch(ElevatorManagerCurrentState){
     }
 
     if(_cmds->ejectCargo){ElevatorManagerCurrentState = ElevatorManagerState::BallEject;}
+
+    if(_cmds->hatchArmToggleManual) {HatchArmPos = !HatchArmPos;}
+    if(_cmds->hatchClawManual) {HatchClawPos = !HatchClawPos;}
+    if(_cmds->ballArmToggleManual) {BallArmPos = !BallArmPos;}
+    if(_cmds->ballEjectorManual) {BallShooterPos = !BallShooterPos;}
+    //TODO: Add Robot CG shifter pnuematics
 
     frc::SmartDashboard::PutNumber("Elevator Current State: ", static_cast<double>(ElevatorManagerCurrentState));
     frc::SmartDashboard::PutBoolean("Elevator Hatch Arm Position", HatchArmPos);

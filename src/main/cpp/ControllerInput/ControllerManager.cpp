@@ -154,32 +154,32 @@ void ControllerManager::pollControllers(RobotCommands *Commands){
 
 	if(mechanismcontroller->LTrig > .5 && mechanismcontroller->RTrig > .5){
 		//hatch arm toggle manual
-		if (mechanismcontroller->bA->State()) Commands->hatchArmToggleManual = true;
+		if (mechanismcontroller->bA->RE()) Commands->hatchArmToggleManual = true;
 		else Commands->hatchArmToggleManual = false;
 		frc::SmartDashboard::PutBoolean("hatchArmToggleManual", Commands->hatchArmToggleManual);
 
 		//ball arm motor intake manual
-		if (mechanismcontroller->bX->State()) Commands->ballArmMotorIntakeManual = true;
+		if (mechanismcontroller->bX->RE()) Commands->ballArmMotorIntakeManual = true;
 		else Commands->ballArmMotorIntakeManual = false;
 		frc::SmartDashboard::PutBoolean("ballArmMotorIntakeManual", Commands->ballArmMotorIntakeManual);
 
 		//ball arm eject manual
-		if (mechanismcontroller->bY->State()) Commands->ballArmMotorEjectManual = true;
+		if (mechanismcontroller->bY->RE()) Commands->ballArmMotorEjectManual = true;
 		else Commands->ballArmMotorEjectManual = false;
 		frc::SmartDashboard::PutBoolean("ballArmMotorEjectManual", Commands->ballArmMotorEjectManual);
 
 		//open/close hatch claw manual
-		if (mechanismcontroller->bBack->State()) Commands->hatchClawManual = true;
+		if (mechanismcontroller->bBack->RE()) Commands->hatchClawManual = true;
 		else Commands->hatchClawManual = false;
 		frc::SmartDashboard::PutBoolean("hatchClawManual", Commands->hatchClawManual);
 
 		//eject ball manual
-		if (mechanismcontroller->bStart->State()) Commands->ballEjectorManual = true;
+		if (mechanismcontroller->bStart->RE()) Commands->ballEjectorManual = true;
 		else Commands->ballEjectorManual = false;
 		frc::SmartDashboard::PutBoolean("ballEjectorManual", Commands->ballEjectorManual);
 
 		//toggle ball arm as up or down manual
-		if (mechanismcontroller->bB->State()) Commands->ballArmToggleManual = true;
+		if (mechanismcontroller->bB->RE()) Commands->ballArmToggleManual = true;
 		else Commands->ballArmToggleManual = false;
 		frc::SmartDashboard::PutBoolean("ballArmToggleManual", Commands->ballArmToggleManual);
 
