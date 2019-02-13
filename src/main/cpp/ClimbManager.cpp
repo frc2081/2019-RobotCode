@@ -13,6 +13,7 @@ ClimbManager::ClimbManager(IO *io, RobotCommands *cmds) {
     _io = io;
     _cmds = cmds;
     lift = new LiftPIDControl(io);
+    timer = 0;
 
     climbState = ClimbSTATE::robotOnFirstLevel;
 
@@ -49,6 +50,8 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
             back extension motor: stopped
             drivetrain: stopped
             */
+
+           timer = 0;
            lift->liftFrontPosDes = lift->liftPos::RETRACTED;
            lift->liftRearPosDes = lift->liftPos::RETRACTED;
 
@@ -104,13 +107,20 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
            //liftdrivemot needs to be turned on
            _io->liftdrivemot->Set(liftMotorPower);
 
+           //Add 20ms to climb timer
+           timer += 20;
+
            if (_cmds->climbAbort) {
                climbState = ClimbSTATE::robotClimbComplete;
                break;
-           } else if (_io->liftdriveenc->Get() - initialLiftDriveEncoderValue >=
+           }  else if (timer >= moveForwardStage1Duration) {
+              climbState = ClimbSTATE::robotStoppedHalfway;
+              timer = 0;
+              break;
+           /*else if (_io->liftdriveenc->Get() - initialLiftDriveEncoderValue >=
             moveForwardStage1EncoderValue) {
                climbState = ClimbSTATE::robotStoppedHalfway;
-               break;
+               break;*/
            }
            break;
         case ClimbSTATE::robotStoppedHalfway:
@@ -151,14 +161,21 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
             _cmds->autodrvang = 0;
             _cmds->autodrvmag = drivetrainPower;
             _cmds->autodrvrot = 0;
+            
+            //Add 20ms to climb timer
+            timer += 20;
 
            if (_cmds->climbAbort) {
                 climbState = ClimbSTATE::robotClimbComplete;
                 break;
-           } else if (_io->liftdriveenc->Get() - initialLiftDriveEncoderValue >=
+           } else if (timer >= moveForwardStage2Duration) {
+              climbState = ClimbSTATE::robotStoppedHalfway;
+              timer = 0;
+              break;
+               /*else if (_io->liftdriveenc->Get() - initialLiftDriveEncoderValue >=
             moveForwardStage2EncoderValue) {
                 climbState = ClimbSTATE::robotStoppedOnPlatform;
-                break;
+                break; */
            }
             break;
         case ClimbSTATE::robotStoppedOnPlatform:
@@ -198,13 +215,16 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
            lift->syncFrontRearLifts = true;     
            lift->moveFast = false;
 
-           //Don't give the drive control back while the robot is on the platform...
-            _cmds->guidanceSysActive = true;
+           timer = 0;
+
+            //Return drivetrain control to the driver
+            _cmds->guidanceSysActive = false;
             _cmds->autodrvang = 0;
             _cmds->autodrvmag = 0;
             _cmds->autodrvrot = 0;
            _io->liftdrivemot->Set(0);
-           //swerve motors need to be off
+           //swerve motors need to be off'
+            climbState = ClimbSTATE::robotOnFirstLevel;
            break;
     }
 }

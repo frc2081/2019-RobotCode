@@ -179,8 +179,7 @@ void LiftPIDControl::liftPIDControlTeleopPeriodic() {
   double liftRearSeparation = fabs(rbPos - lbPos);
   frc::SmartDashboard::PutNumber("Lift Front Separation", liftFrontSeparation);
   frc::SmartDashboard::PutNumber("Lift Rear Separation", liftRearSeparation);
-  if(liftFrontSeparation > liftDesyncDistanceThreshold) {disableLiftPID();}
-  if(liftRearSeparation > liftDesyncDistanceThreshold) {disableLiftPID();}
+  if(liftFrontSeparation > liftDesyncDistanceThreshold || liftRearSeparation > liftDesyncDistanceThreshold) {disableLiftPID();}
 }
 
 double LiftPIDControl::rampToValue(double currVal, double desVal, double rampRate){

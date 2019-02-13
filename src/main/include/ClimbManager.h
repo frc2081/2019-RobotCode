@@ -27,6 +27,9 @@ class ClimbManager {
     //TODO: get actual encoder values; this is incorrect
     double moveForwardStage1EncoderValue = 1000;
     double moveForwardStage2EncoderValue = 1000;
+    int moveForwardStage1Duration = 3000; //timer in ms to move forward to move robot front wheels over platform
+    int moveForwardStage2Duration = 3000;
+    int timer;
 
     double initialLiftDriveEncoderValue = 0;
     //TODO: get actual drive values; this is incorrect
