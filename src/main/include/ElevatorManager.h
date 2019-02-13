@@ -38,9 +38,9 @@ class ElevatorManager {
     double BallIntakePowerCmd;
     bool HatchClawPos;
     bool HatchArmPos;
-    bool BallShooterPos;
     bool BallArmPos;
     bool ManualMode;
+    bool frameStandPos;
 
     //temp values
     double ElevHomePos;

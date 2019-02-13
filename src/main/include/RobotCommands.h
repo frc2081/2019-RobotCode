@@ -45,7 +45,7 @@ public:
 	bool ballArmMotorIntakeManual;
 	bool ballArmMotorEjectManual;
 	bool hatchClawManual;
-	bool ballEjectorManual;
+	bool frameStandManual;
 	bool ballArmToggleManual;
 	double elevatorDrivePowerManual;
 };

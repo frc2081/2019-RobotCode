@@ -41,7 +41,7 @@ RobotCommands::RobotCommands() {
 	ballArmMotorIntakeManual = false;
 	ballArmMotorEjectManual = false;
 	hatchClawManual = false;
-	ballEjectorManual = false;
+	frameStandManual = false;
 	ballArmToggleManual = false;
 	elevatorDrivePowerManual = 0;
 

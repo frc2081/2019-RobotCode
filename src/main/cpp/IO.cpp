@@ -58,8 +58,8 @@ IO::IO() {
 	hatchclawsolenoidout = new frc::Solenoid(3);	
 	ballarmsolenoidin = new frc::Solenoid(4);
 	ballarmsolenoidout = new frc::Solenoid(5);
-	ballshootersolenoidin = new frc::Solenoid(6);
-	ballshootersolenoidout = new frc::Solenoid(7);
+	framestandsolenoidin = new frc::Solenoid(6);
+	framestandsolenoidout = new frc::Solenoid(7);
 
 	//Configure IO
   	liftrfenc->SetDistancePerPulse(liftDistPerCountInches);
@@ -123,31 +123,3 @@ void IO::ioRobotPeriodic(){
 	elevatorPosTolerance = frc::SmartDashboard::GetNumber("Elevator Pos Tolerance", elevatorPosTolerance);
 
 }
-
-/*void IO::robotMechanismPeriodic(ElevatorManager test_12){
-	if(test_12.HatchArmPos){
-		hatcharmsolenoidin->Set(true);
-		hatcharmsolenoidout->Set(false);
-	}
-	else{
-		hatcharmsolenoidin->Set(false);
-		hatcharmsolenoidout->Set(true);
-	}
-	
-}
-*/
-
-
-/*
-void IO::robotMechanismPeriodic(){
-	if(HatchArmPos == HatchArmExtended){
-		hatcharmsolenoidin.set(true);
-		hatcharmsolenoidout.set(false);
-	}
-	else{
-		hatcharmsolenoidin.set(false);
-		hatcharmsolenoidout.set(true);
-	}
-	
-}
-*/

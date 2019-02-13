@@ -34,9 +34,8 @@ ElevatorManager::ElevatorManager(IO *io, RobotCommands *cmds) {
     BallIntakePowerCmd = BallArmIdle;
     HatchClawPos = retracted;
     HatchArmPos = extended;
-    BallShooterPos = retracted;
     BallArmPos = extended;
-
+    frameStandPos = retracted;
     }
     
 void ElevatorManager::ElevatorManagerPeriodic(){
@@ -81,7 +80,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
             ElevatorPosCmd = ElevHatchL1Pos;
             HatchArmPos = retracted;
             HatchClawPos = extended;
-            BallShooterPos = retracted;
+
             BallIntakePowerCmd = BallArmIdle;
             BallArmPos = extended;
 
@@ -93,7 +92,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
             ElevatorPosCmd = ElevHatchL1Pos;
             HatchArmPos = retracted;
             HatchClawPos = retracted;
-            BallShooterPos = retracted;
+
             BallIntakePowerCmd = BallArmIdle;
             BallArmPos = extended;
 
@@ -104,7 +103,6 @@ void ElevatorManager::ElevatorManagerPeriodic(){
             ElevatorPosCmd = ElevHatchL2Pos;
             HatchArmPos = retracted;
             HatchClawPos = extended;
-            BallShooterPos = retracted;
             BallIntakePowerCmd = BallArmIdle;
             BallArmPos = extended;
 
@@ -116,7 +114,6 @@ void ElevatorManager::ElevatorManagerPeriodic(){
             ElevatorPosCmd = ElevHatchL2Pos;
             HatchArmPos = retracted;
             HatchClawPos = retracted;
-            BallShooterPos = retracted;
             BallIntakePowerCmd = BallArmIdle;
             BallArmPos = extended;
 
@@ -126,7 +123,6 @@ void ElevatorManager::ElevatorManagerPeriodic(){
         case ElevatorManagerState::BallPickup:
             ElevatorPosCmd = ElevBallPickupPos;
             HatchArmPos = extended;
-            BallShooterPos = retracted;
             BallIntakePowerCmd = BallArmIntake;
             BallArmPos = retracted;
 
@@ -137,7 +133,6 @@ void ElevatorManager::ElevatorManagerPeriodic(){
         case ElevatorManagerState::BallGrabbed:
             ElevatorPosCmd = ElevBallPickupPos;
             HatchArmPos = extended;
-            BallShooterPos = retracted;
             BallIntakePowerCmd = BallArmIdle; //??
             BallArmPos = extended;
 
@@ -147,7 +142,6 @@ void ElevatorManager::ElevatorManagerPeriodic(){
         case ElevatorManagerState::BallPlaceCargoWait:
             ElevatorPosCmd = ElevBallCargoPos;
             HatchArmPos = extended;
-            BallShooterPos = retracted;
             BallIntakePowerCmd = BallArmIdle;
             BallArmPos = retracted;
 
@@ -158,7 +152,6 @@ void ElevatorManager::ElevatorManagerPeriodic(){
         case ElevatorManagerState::BallPlaceCargo:
             ElevatorPosCmd = ElevBallCargoPos;
             HatchArmPos = extended;
-            BallShooterPos = extended;
             BallIntakePowerCmd = BallArmIdle;
             BallArmPos = retracted;
 
@@ -168,7 +161,6 @@ void ElevatorManager::ElevatorManagerPeriodic(){
         case ElevatorManagerState::BallPlaceL1Wait:
             ElevatorPosCmd = ElevBallL1Pos;
             HatchArmPos = extended;
-            BallShooterPos = retracted;
             BallIntakePowerCmd = BallArmIdle;
             BallArmPos = extended;
 
@@ -179,7 +171,6 @@ void ElevatorManager::ElevatorManagerPeriodic(){
         case ElevatorManagerState::BallPlaceL1:
             ElevatorPosCmd = ElevBallL1Pos;
             HatchArmPos = extended;
-            BallShooterPos = extended;
             BallIntakePowerCmd = BallArmEject;
             BallArmPos = extended;
 
@@ -189,7 +180,6 @@ void ElevatorManager::ElevatorManagerPeriodic(){
         case ElevatorManagerState::BallPlaceL2Wait:
             ElevatorPosCmd = ElevBallL2Pos;
             HatchArmPos = extended;
-            BallShooterPos = retracted;
             BallIntakePowerCmd = BallArmIdle;
             BallArmPos = retracted;
 
@@ -200,7 +190,6 @@ void ElevatorManager::ElevatorManagerPeriodic(){
         case ElevatorManagerState::BallPlaceL2:
             ElevatorPosCmd = ElevBallL2Pos;
             HatchArmPos = extended;
-            BallShooterPos = extended;
             BallIntakePowerCmd = BallArmIdle;
             BallArmPos = retracted;
 
@@ -208,8 +197,6 @@ void ElevatorManager::ElevatorManagerPeriodic(){
 
             break;
         case ElevatorManagerState::BallEject:
-            //if statement?
-            BallShooterPos = extended;
             BallIntakePowerCmd = BallArmEject;
 
             BallEjectTimer++;
@@ -226,7 +213,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
     if(_cmds->hatchArmToggleManual) {HatchArmPos = !HatchArmPos;}
     if(_cmds->hatchClawManual) {HatchClawPos = !HatchClawPos;}
     if(_cmds->ballArmToggleManual) {BallArmPos = !BallArmPos;}
-    if(_cmds->ballEjectorManual) {BallShooterPos = !BallShooterPos;}
+    if(_cmds->frameStandManual) {frameStandPos = !frameStandPos;}
     //TODO: Add Robot CG shifter pnuematics
 
     frc::SmartDashboard::PutNumber("Elevator Current State: ", static_cast<double>(ElevatorManagerCurrentState));
@@ -254,13 +241,13 @@ void ElevatorManager::ElevatorManagerMechanism(IO *io){
     io->hatchclawsolenoidin->Set(true);
     }
 
-    if(BallShooterPos){
-    io->ballshootersolenoidout->Set(true);
-    io->ballshootersolenoidin->Set(false);
+    if(frameStandPos){
+    io->framestandsolenoidout->Set(true);
+    io->framestandsolenoidin->Set(false);
     }
     else{
-    io->ballshootersolenoidout->Set(false);
-    io->ballshootersolenoidin->Set(true);
+    io->framestandsolenoidout->Set(false);
+    io->framestandsolenoidin->Set(true);
     }
 
     if(BallArmPos){

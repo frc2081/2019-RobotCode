@@ -66,7 +66,7 @@ void ControllerManager::pollControllers(RobotCommands *Commands){
 	Commands->ballArmMotorIntakeManual = false;
 	Commands->ballArmMotorEjectManual = false;
 	Commands->hatchClawManual = false;
-	Commands->ballEjectorManual = false;
+	Commands->frameStandManual = false;
 	Commands->ballArmToggleManual = false;
 	Commands->elevatorDrivePowerManual = 0;
 
@@ -174,9 +174,9 @@ void ControllerManager::pollControllers(RobotCommands *Commands){
 		frc::SmartDashboard::PutBoolean("hatchClawManual", Commands->hatchClawManual);
 
 		//eject ball manual
-		if (mechanismcontroller->bStart->RE()) Commands->ballEjectorManual = true;
-		else Commands->ballEjectorManual = false;
-		frc::SmartDashboard::PutBoolean("ballEjectorManual", Commands->ballEjectorManual);
+		if (mechanismcontroller->bStart->RE()) Commands->frameStandManual = true;
+		else Commands->frameStandManual = false;
+		frc::SmartDashboard::PutBoolean("ballEjectorManual", Commands->frameStandManual);
 
 		//toggle ball arm as up or down manual
 		if (mechanismcontroller->bB->RE()) Commands->ballArmToggleManual = true;

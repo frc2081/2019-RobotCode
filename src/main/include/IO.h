@@ -77,13 +77,14 @@ public:
 
 	//Solenoids
 	frc::Solenoid *ballarmsolenoidin;
+	frc::Solenoid *ballarmsolenoidout;	
 	frc::Solenoid *hatcharmsolenoidin;
-	frc::Solenoid *ballshootersolenoidin;
-	frc::Solenoid *hatchclawsolenoidin;
-	frc::Solenoid *ballarmsolenoidout;
 	frc::Solenoid *hatcharmsolenoidout;
-	frc::Solenoid *ballshootersolenoidout;
+	frc::Solenoid *hatchclawsolenoidin;
 	frc::Solenoid *hatchclawsolenoidout;
+	frc::Solenoid *framestandsolenoidin;	
+	frc::Solenoid *framestandsolenoidout;
+
 
 	//Other Inputs
 	frc::DigitalInput *hatchDetectorOne;
