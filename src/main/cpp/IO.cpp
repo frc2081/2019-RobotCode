@@ -46,22 +46,21 @@ IO::IO() {
 	liftrbenc = new frc::Encoder(18, 19);
 	liftlbenc = new frc::Encoder(20, 21);	
 	liftdriveenc = new frc::Counter(22);
+	hatchDetectorOne = new frc::DigitalInput(8);
+	hatchDetectorTwo = new frc::DigitalInput(9);
 
 		
 	//Solenoids
 	//compressor = new frc::Compressor();
-	ballarmsolenoidin = new frc::Solenoid(0);
-	hatcharmsolenoidin = new frc::Solenoid(1);
-	ballshootersolenoidin = new frc::Solenoid(2);
-	hatchclawsolenoidin = new frc::Solenoid(3);
-	ballarmsolenoidout = new frc::Solenoid(4);
-	hatcharmsolenoidout = new frc::Solenoid(5);
-	ballshootersolenoidout = new frc::Solenoid(6);
-	hatchclawsolenoidout = new frc::Solenoid(7);
+	hatcharmsolenoidout = new frc::Solenoid(0);	
+	hatcharmsolenoidin = new frc::Solenoid(1);	
+	hatchclawsolenoidin = new frc::Solenoid(2);	
+	hatchclawsolenoidout = new frc::Solenoid(3);	
+	ballarmsolenoidin = new frc::Solenoid(4);
+	ballarmsolenoidout = new frc::Solenoid(5);
+	ballshootersolenoidin = new frc::Solenoid(6);
+	ballshootersolenoidout = new frc::Solenoid(7);
 
-	hatchDetectorOne = new frc::DigitalInput(8);
-	hatchDetectorTwo = new frc::DigitalInput(9);
-  
 	//Configure IO
   	liftrfenc->SetDistancePerPulse(liftDistPerCountInches);
   	liftlfenc->SetDistancePerPulse(liftDistPerCountInches);

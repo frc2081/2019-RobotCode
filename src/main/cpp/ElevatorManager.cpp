@@ -28,6 +28,7 @@ ElevatorManager::ElevatorManager(IO *io, RobotCommands *cmds) {
     retracted = false;
     BallEjectTimer = 0;
     BallEjectTimerLimit = 25;
+    ManualMode = false;
 
     ElevatorPosCmd = ElevHomePos;
     BallIntakePowerCmd = BallArmIdle;
@@ -40,185 +41,184 @@ ElevatorManager::ElevatorManager(IO *io, RobotCommands *cmds) {
     
 void ElevatorManager::ElevatorManagerPeriodic(){
 
-switch(ElevatorManagerCurrentState){
-    case ElevatorManagerState::Transit:
-        ElevatorPosCmd = ElevHomePos;
-        HatchArmPos = extended;
-        BallIntakePowerCmd = BallArmIdle;
-        BallArmPos = extended;
+    switch(ElevatorManagerCurrentState){
+        case ElevatorManagerState::Transit:
+            ElevatorPosCmd = ElevHomePos;
+            HatchArmPos = extended;
+            BallIntakePowerCmd = BallArmIdle;
+            BallArmPos = extended;
 
-        if(_cmds->hatchPickup){ElevatorManagerCurrentState = ElevatorManagerState::HatchPickupWait;}
-        if(_cmds->cargoPickup){ElevatorManagerCurrentState = ElevatorManagerState::BallPickup;}
-        if(_cmds->placeHatchOne){ElevatorManagerCurrentState = ElevatorManagerState::HatchPlaceL1Wait;}
-        if(_cmds->placeHatchTwo){ElevatorManagerCurrentState = ElevatorManagerState::HatchPlaceL2Wait;}
-        if(_cmds->placeCargoInShip){ElevatorManagerCurrentState = ElevatorManagerState::BallPlaceCargoWait;}
-        if(_cmds->placeCargoRocketOne){ElevatorManagerCurrentState = ElevatorManagerState::BallPlaceL1Wait;}
-        if(_cmds->placeCargoRocketTwo){ElevatorManagerCurrentState = ElevatorManagerState::BallPlaceL2Wait;}
+            if(_cmds->hatchPickup){ElevatorManagerCurrentState = ElevatorManagerState::HatchPickupWait;}
+            if(_cmds->cargoPickup){ElevatorManagerCurrentState = ElevatorManagerState::BallPickup;}
+            if(_cmds->placeHatchOne){ElevatorManagerCurrentState = ElevatorManagerState::HatchPlaceL1Wait;}
+            if(_cmds->placeHatchTwo){ElevatorManagerCurrentState = ElevatorManagerState::HatchPlaceL2Wait;}
+            if(_cmds->placeCargoInShip){ElevatorManagerCurrentState = ElevatorManagerState::BallPlaceCargoWait;}
+            if(_cmds->placeCargoRocketOne){ElevatorManagerCurrentState = ElevatorManagerState::BallPlaceL1Wait;}
+            if(_cmds->placeCargoRocketTwo){ElevatorManagerCurrentState = ElevatorManagerState::BallPlaceL2Wait;}
 
-        break;
-    case ElevatorManagerState::HatchPickupWait:
-        ElevatorPosCmd = ElevHatchL1Pos;
-        HatchArmPos = retracted;
-        HatchClawPos = retracted;
-        BallIntakePowerCmd = BallArmIdle;
+            break;
+        case ElevatorManagerState::HatchPickupWait:
+            ElevatorPosCmd = ElevHatchL1Pos;
+            HatchArmPos = retracted;
+            HatchClawPos = retracted;
+            BallIntakePowerCmd = BallArmIdle;
 
-        if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
-        if(_cmds->hatchPickup){ElevatorManagerCurrentState = ElevatorManagerState::HatchPickup;}
-        if(_io->hatchDetectorOne->Get() && _io->hatchDetectorTwo()) {ElevatorManagerCurrentState = ElevatorManagerState::HatchPickup;}
+            if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
+            if(_cmds->hatchPickup){ElevatorManagerCurrentState = ElevatorManagerState::HatchPickup;}
+            if(_io->hatchDetectorOne->Get() && _io->hatchDetectorTwo->Get()) {ElevatorManagerCurrentState = ElevatorManagerState::HatchPickup;}
 
-        break;
-    case ElevatorManagerState::HatchPickup:
-        ElevatorPosCmd = ElevHatchL1Pos;
-        HatchArmPos = retracted;
-        HatchClawPos = extended;
-        BallIntakePowerCmd = BallArmIdle;
+            break;
+        case ElevatorManagerState::HatchPickup:
+            ElevatorPosCmd = ElevHatchL1Pos;
+            HatchArmPos = retracted;
+            HatchClawPos = extended;
+            BallIntakePowerCmd = BallArmIdle;
 
-        if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
+            if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
 
-        break;
-    case ElevatorManagerState::HatchPlaceL1Wait:
-        ElevatorPosCmd = ElevHatchL1Pos;
-        HatchArmPos = retracted;
-        HatchClawPos = extended;
-        BallShooterPos = retracted;
-        BallIntakePowerCmd = BallArmIdle;
-        BallArmPos = extended;
+            break;
+        case ElevatorManagerState::HatchPlaceL1Wait:
+            ElevatorPosCmd = ElevHatchL1Pos;
+            HatchArmPos = retracted;
+            HatchClawPos = extended;
+            BallShooterPos = retracted;
+            BallIntakePowerCmd = BallArmIdle;
+            BallArmPos = extended;
 
-        if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
-        if(_cmds->placeHatchOne){ElevatorManagerCurrentState = ElevatorManagerState::HatchPlaceL1;}
+            if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
+            if(_cmds->placeHatchOne){ElevatorManagerCurrentState = ElevatorManagerState::HatchPlaceL1;}
 
-        break;
-    case ElevatorManagerState::HatchPlaceL1:
-        ElevatorPosCmd = ElevHatchL1Pos;
-        HatchArmPos = retracted;
-        HatchClawPos = retracted;
-        BallShooterPos = retracted;
-        BallIntakePowerCmd = BallArmIdle;
-        BallArmPos = extended;
+            break;
+        case ElevatorManagerState::HatchPlaceL1:
+            ElevatorPosCmd = ElevHatchL1Pos;
+            HatchArmPos = retracted;
+            HatchClawPos = retracted;
+            BallShooterPos = retracted;
+            BallIntakePowerCmd = BallArmIdle;
+            BallArmPos = extended;
 
-        if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
+            if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
 
-        break;
-    case ElevatorManagerState::HatchPlaceL2Wait:
-        ElevatorPosCmd = ElevHatchL2Pos;
-        HatchArmPos = retracted;
-        HatchClawPos = extended;
-        BallShooterPos = retracted;
-        BallIntakePowerCmd = BallArmIdle;
-        BallArmPos = extended;
+            break;
+        case ElevatorManagerState::HatchPlaceL2Wait:
+            ElevatorPosCmd = ElevHatchL2Pos;
+            HatchArmPos = retracted;
+            HatchClawPos = extended;
+            BallShooterPos = retracted;
+            BallIntakePowerCmd = BallArmIdle;
+            BallArmPos = extended;
 
-        if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
-        if(_cmds->placeHatchTwo){ElevatorManagerCurrentState = ElevatorManagerState::HatchPlaceL2;}
+            if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
+            if(_cmds->placeHatchTwo){ElevatorManagerCurrentState = ElevatorManagerState::HatchPlaceL2;}
 
-        break;
-    case ElevatorManagerState::HatchPlaceL2:
-        ElevatorPosCmd = ElevHatchL2Pos;
-        HatchArmPos = retracted;
-        HatchClawPos = retracted;
-        BallShooterPos = retracted;
-        BallIntakePowerCmd = BallArmIdle;
-        BallArmPos = extended;
+            break;
+        case ElevatorManagerState::HatchPlaceL2:
+            ElevatorPosCmd = ElevHatchL2Pos;
+            HatchArmPos = retracted;
+            HatchClawPos = retracted;
+            BallShooterPos = retracted;
+            BallIntakePowerCmd = BallArmIdle;
+            BallArmPos = extended;
 
-        if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
+            if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
 
-        break;
-    case ElevatorManagerState::BallPickup:
-        ElevatorPosCmd = ElevBallPickupPos;
-        HatchArmPos = extended;
-        BallShooterPos = retracted;
-        BallIntakePowerCmd = BallArmIntake;
-        BallArmPos = retracted;
+            break;
+        case ElevatorManagerState::BallPickup:
+            ElevatorPosCmd = ElevBallPickupPos;
+            HatchArmPos = extended;
+            BallShooterPos = retracted;
+            BallIntakePowerCmd = BallArmIntake;
+            BallArmPos = retracted;
 
-        if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
-        if(_cmds->cargoPickup){ElevatorManagerCurrentState = ElevatorManagerState::BallGrabbed;}
+            if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
+            if(_cmds->cargoPickup){ElevatorManagerCurrentState = ElevatorManagerState::BallGrabbed;}
 
-        break;
-    case ElevatorManagerState::BallGrabbed:
-        ElevatorPosCmd = ElevBallPickupPos;
-        HatchArmPos = extended;
-        BallShooterPos = retracted;
-        BallIntakePowerCmd = BallArmIdle; //??
-        BallArmPos = extended;
+            break;
+        case ElevatorManagerState::BallGrabbed:
+            ElevatorPosCmd = ElevBallPickupPos;
+            HatchArmPos = extended;
+            BallShooterPos = retracted;
+            BallIntakePowerCmd = BallArmIdle; //??
+            BallArmPos = extended;
 
-        if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
+            if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
 
-        break;
-    case ElevatorManagerState::BallPlaceCargoWait:
-        ElevatorPosCmd = ElevBallCargoPos;
-        HatchArmPos = extended;
-        BallShooterPos = retracted;
-        BallIntakePowerCmd = BallArmIdle;
-        BallArmPos = retracted;
+            break;
+        case ElevatorManagerState::BallPlaceCargoWait:
+            ElevatorPosCmd = ElevBallCargoPos;
+            HatchArmPos = extended;
+            BallShooterPos = retracted;
+            BallIntakePowerCmd = BallArmIdle;
+            BallArmPos = retracted;
 
-        if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
-        if(_cmds->placeCargoInShip){ElevatorManagerCurrentState = ElevatorManagerState::BallPlaceCargo;}
+            if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
+            if(_cmds->placeCargoInShip){ElevatorManagerCurrentState = ElevatorManagerState::BallPlaceCargo;}
 
-        break;
-    case ElevatorManagerState::BallPlaceCargo:
-        ElevatorPosCmd = ElevBallCargoPos;
-        HatchArmPos = extended;
-        BallShooterPos = extended;
-        BallIntakePowerCmd = BallArmIdle;
-        BallArmPos = retracted;
+            break;
+        case ElevatorManagerState::BallPlaceCargo:
+            ElevatorPosCmd = ElevBallCargoPos;
+            HatchArmPos = extended;
+            BallShooterPos = extended;
+            BallIntakePowerCmd = BallArmIdle;
+            BallArmPos = retracted;
 
-        if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
+            if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
 
-        break;
-    case ElevatorManagerState::BallPlaceL1Wait:
-        ElevatorPosCmd = ElevBallL1Pos;
-        HatchArmPos = extended;
-        BallShooterPos = retracted;
-        BallIntakePowerCmd = BallArmIdle;
-        BallArmPos = extended;
+            break;
+        case ElevatorManagerState::BallPlaceL1Wait:
+            ElevatorPosCmd = ElevBallL1Pos;
+            HatchArmPos = extended;
+            BallShooterPos = retracted;
+            BallIntakePowerCmd = BallArmIdle;
+            BallArmPos = extended;
 
-        if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
-        if(_cmds->placeCargoRocketOne){ElevatorManagerCurrentState = ElevatorManagerState::BallPlaceL1;}
+            if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
+            if(_cmds->placeCargoRocketOne){ElevatorManagerCurrentState = ElevatorManagerState::BallPlaceL1;}
 
-        break;
-    case ElevatorManagerState::BallPlaceL1:
-        ElevatorPosCmd = ElevBallL1Pos;
-        HatchArmPos = extended;
-        BallShooterPos = extended;
-        BallIntakePowerCmd = BallArmEject;
-        BallArmPos = extended;
+            break;
+        case ElevatorManagerState::BallPlaceL1:
+            ElevatorPosCmd = ElevBallL1Pos;
+            HatchArmPos = extended;
+            BallShooterPos = extended;
+            BallIntakePowerCmd = BallArmEject;
+            BallArmPos = extended;
 
-        if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
+            if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
 
-        break;
-    case ElevatorManagerState::BallPlaceL2Wait:
-        ElevatorPosCmd = ElevBallL2Pos;
-        HatchArmPos = extended;
-        BallShooterPos = retracted;
-        BallIntakePowerCmd = BallArmIdle;
-        BallArmPos = retracted;
+            break;
+        case ElevatorManagerState::BallPlaceL2Wait:
+            ElevatorPosCmd = ElevBallL2Pos;
+            HatchArmPos = extended;
+            BallShooterPos = retracted;
+            BallIntakePowerCmd = BallArmIdle;
+            BallArmPos = retracted;
 
-        if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
-        if(_cmds->placeCargoRocketTwo){ElevatorManagerCurrentState = ElevatorManagerState::BallPlaceL2;}
+            if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
+            if(_cmds->placeCargoRocketTwo){ElevatorManagerCurrentState = ElevatorManagerState::BallPlaceL2;}
 
-        break;
-    case ElevatorManagerState::BallPlaceL2:
-        ElevatorPosCmd = ElevBallL2Pos;
-        HatchArmPos = extended;
-        BallShooterPos = extended;
-        BallIntakePowerCmd = BallArmIdle;
-        BallArmPos = retracted;
+            break;
+        case ElevatorManagerState::BallPlaceL2:
+            ElevatorPosCmd = ElevBallL2Pos;
+            HatchArmPos = extended;
+            BallShooterPos = extended;
+            BallIntakePowerCmd = BallArmIdle;
+            BallArmPos = retracted;
 
-        if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
+            if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
 
-        break;
-    case ElevatorManagerState::BallEject:
-        //if statement?
-        BallShooterPos = extended;
-        BallIntakePowerCmd = BallArmEject;
+            break;
+        case ElevatorManagerState::BallEject:
+            //if statement?
+            BallShooterPos = extended;
+            BallIntakePowerCmd = BallArmEject;
 
-        BallEjectTimer++;
-        if(BallEjectTimer == BallEjectTimerLimit){
-            ElevatorManagerCurrentState = ElevatorManagerState::Transit;
-            BallEjectTimerLimit = 0;
-            }
-        if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
-        break;
-
+            BallEjectTimer++;
+            if(BallEjectTimer == BallEjectTimerLimit){
+                ElevatorManagerCurrentState = ElevatorManagerState::Transit;
+                BallEjectTimerLimit = 0;
+                }
+            if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
+            break;
     }
 
     if(_cmds->ejectCargo){ElevatorManagerCurrentState = ElevatorManagerState::BallEject;}
