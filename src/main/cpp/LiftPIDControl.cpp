@@ -12,6 +12,8 @@ LiftPIDControl::LiftPIDControl(IO *io) {
   syncFrontRearLifts = false; //Commands the front and rear lifts to move in sync.
   liftFrontSetPoint = 0;//Increasing value = extending the lift legs
   liftRearSetPoint = 0;
+  liftDestinationRear = 0;
+  liftDestinationFront = 0;
 
   //Init lift PID control parameters
   //PID tunes are the same for all four lifts
@@ -21,6 +23,7 @@ LiftPIDControl::LiftPIDControl(IO *io) {
   liftPIDf = 0;
   liftPIDPeriod = 0.05;
   liftDesyncDistanceThreshold = 1; //Limit of how differnt the lift leg heights are allowed to be before the lifts are shut down
+  liftPosTolerance = .5; //How close lift will attempt to get to the desired position
 
   //Lift position constants
   liftPosRetractedFront = 0; //Lift front leg position in cm to fully retract the legs
@@ -123,21 +126,6 @@ void LiftPIDControl::liftPIDControlTeleopPeriodic() {
   liftrbPID->SetI(liftPIDi);
   liftrbPID->SetD(liftPIDd);
   liftrbPID->SetF(liftPIDf);
-
-   //liftDrive->Set(-stick->GetY());
-  
-  //Basic tuning code
- // liftFrontSetPoint += stick->GetY(frc::GenericHID::JoystickHand::kLeftHand) * 50;
-  //if(liftFrontSetPoint < 0) liftFrontSetPoint = 0;
-
-  //Position Testing Code
-  
-  /*if(stick->GetAButton()) { liftFrontPosDes = liftPos::RETRACTED; moveFast = false; }
-  else if(stick->GetBButton()) { liftFrontPosDes = liftPos::EXTENDEDLEVELONE; moveFast = false; }
-  else if(stick->GetXButton()) { liftFrontPosDes = liftPos::EXTENDEDLEVELTWO; moveFast = false;}
-  else if(stick->GetYButton()) { liftFrontPosDes = liftPos::RETRACTED; moveFast = true; }
-  else if(stick->GetStartButton()) { liftFrontPosDes = liftPos::EXTENDEDLEVELONE; moveFast = true;}
-  else if(stick->GetBackButton()) { liftFrontPosDes = liftPos::EXTENDEDLEVELTWO; moveFast = true;}*/
   
   /*Convert Commands into position setpoint commands for the lift PID controls
   Need to allow fast movement of the racks when they are simply traveling to new positions and slow careful movement when they are
@@ -145,7 +133,7 @@ void LiftPIDControl::liftPIDControlTeleopPeriodic() {
   So if fast movement is desired, set the setpoint directly to the destination position and let the PID move as fast as it can
   else if fast movement is not wanted, slowly ramp the PID setpoint to the destination position to slowly move the racks
   */
-  if(liftFrontPosDes == liftPos::RETRACTED && moveFast == true) liftFrontSetPoint = liftPosRetractedFront;
+  /* if(liftFrontPosDes == liftPos::RETRACTED && moveFast == true) liftFrontSetPoint = liftPosRetractedFront;
   else if(liftFrontPosDes == liftPos::EXTENDEDLEVELONE && moveFast == true) liftFrontSetPoint = liftPosExtendedLevelOneFront;
   else if(liftFrontPosDes == liftPos::EXTENDEDLEVELTWO && moveFast == true) liftFrontSetPoint = liftPosExtendedLevelTwoFront;
   else if(liftFrontPosDes == liftPos::RETRACTED) liftFrontSetPoint = rampToValue(liftFrontSetPoint, liftPosRetractedFront, liftMovementRate);
@@ -153,26 +141,40 @@ void LiftPIDControl::liftPIDControlTeleopPeriodic() {
   else if(liftFrontPosDes == liftPos::EXTENDEDLEVELTWO) liftFrontSetPoint = rampToValue(liftFrontSetPoint, liftPosExtendedLevelTwoFront, liftMovementRate);
   else liftFrontSetPoint = liftPosRetractedFront; //Default Case
 
-  if(liftRearPosDes == liftPos::RETRACTED && moveFast == true) liftRearSetPoint = liftPosRetractedFront;
-  else if(liftRearPosDes == liftPos::EXTENDEDLEVELONE && moveFast == true) liftRearSetPoint = liftPosExtendedLevelOneFront;
-  else if(liftRearPosDes == liftPos::EXTENDEDLEVELTWO && moveFast == true) liftRearSetPoint = liftPosExtendedLevelTwoFront;
-  else if(liftRearPosDes == liftPos::RETRACTED) liftRearSetPoint = rampToValue(liftFrontSetPoint, liftPosRetractedFront, liftMovementRate);
-  else if(liftRearPosDes == liftPos::EXTENDEDLEVELONE) liftRearSetPoint = rampToValue(liftFrontSetPoint, liftPosExtendedLevelOneFront, liftMovementRate);
-  else if(liftRearPosDes == liftPos::EXTENDEDLEVELTWO) liftRearSetPoint = rampToValue(liftFrontSetPoint, liftPosExtendedLevelTwoFront, liftMovementRate);
-  else liftRearSetPoint = liftPosRetractedFront; //Default Case
+  if(liftRearPosDes == liftPos::RETRACTED && moveFast == true) liftRearSetPoint = liftPosRetractedRear;
+  else if(liftRearPosDes == liftPos::EXTENDEDLEVELONE && moveFast == true) liftRearSetPoint = liftPosExtendedLevelOneRear;
+  else if(liftRearPosDes == liftPos::EXTENDEDLEVELTWO && moveFast == true) liftRearSetPoint = liftPosExtendedLevelTwoRear;
+  else if(liftRearPosDes == liftPos::RETRACTED) liftRearSetPoint = rampToValue(liftRearSetPoint, liftPosRetractedRear, liftMovementRate);
+  else if(liftRearPosDes == liftPos::EXTENDEDLEVELONE) liftRearSetPoint = rampToValue(liftRearSetPoint, liftPosExtendedLevelOneRear, liftMovementRate);
+  else if(liftRearPosDes == liftPos::EXTENDEDLEVELTWO) liftRearSetPoint = rampToValue(liftRearSetPoint, liftPosExtendedLevelTwoRear, liftMovementRate);
+  else liftRearSetPoint = liftPosRetractedRear; //Default Case*/
+
+  liftDestinationFront = setLiftDestination(liftFrontPosDes);
+  liftDestinationRear = setLiftDestination(liftRearPosDes);
+
+  if(moveFast == false){
+    liftFrontSetPoint = rampToValue(liftFrontSetPoint, liftDestinationFront, liftMovementRate);
+    liftRearSetPoint = rampToValue(liftRearSetPoint, liftDestinationRear, liftMovementRate);
+  } else {
+    liftFrontSetPoint = liftDestinationFront;
+    liftRearSetPoint = liftDestinationRear;
+  }
 
   liftrfPID->SetSetpoint(liftFrontSetPoint);
   liftlfPID->SetSetpoint(liftFrontSetPoint);
   liftlbPID->SetSetpoint(liftRearSetPoint);
   liftrbPID->SetSetpoint(liftRearSetPoint);
 
-  //Safety code to stop the lifts if they get out of sync with each other
-  //Might improve this in the future to keep them running and limit command so they stay in sync
   double rfPos = _io->liftrfenc->GetDistance();
   double lfPos = _io->liftlfenc->GetDistance();
   double rbPos = _io->liftrbenc->GetDistance();
   double lbPos = _io->liftlbenc->GetDistance();
 
+  if(liftOnTarget(liftDestinationFront, rfPos, liftPosTolerance) && liftOnTarget(liftDestinationFront, lfPos, liftPosTolerance)) liftFrontPosAct = liftFrontPosDes;
+  if(liftOnTarget(liftDestinationRear, rbPos, liftPosTolerance) && liftOnTarget(liftDestinationRear, lbPos, liftPosTolerance)) liftRearPosAct = liftRearPosDes;
+
+  //Safety code to stop the lifts if they get out of sync with each other
+  //Might improve this in the future to keep them running and limit command so they stay in sync
   double liftFrontSeparation = fabs(rfPos - lfPos);
   double liftRearSeparation = fabs(rbPos - lbPos);
   frc::SmartDashboard::PutNumber("Lift Front Separation", liftFrontSeparation);
@@ -195,4 +197,19 @@ void LiftPIDControl::disableLiftPID() {
   liftrfPID->SetSetpoint(_io->liftrfenc->GetDistance());
   liftlbPID->SetSetpoint(_io->liftlbenc->GetDistance());
   liftrbPID->SetSetpoint(_io->liftrbenc->GetDistance());
+}
+
+double LiftPIDControl::setLiftDestination(liftPos liftDest) {
+  double liftDesPos = 0;
+  if(liftDest == liftPos::RETRACTED) liftDesPos = liftPosRetractedFront;
+  else if(liftDest == liftPos::EXTENDEDLEVELONE) liftDesPos = liftPosExtendedLevelOneFront;
+  else if(liftDest == liftPos::EXTENDEDLEVELTWO) liftDesPos = liftPosExtendedLevelTwoFront;
+  else liftDesPos = liftPosRetractedFront;
+
+  return liftDesPos;
+}
+
+bool LiftPIDControl::liftOnTarget(double targetPos, double actualPos, double tolerance) {
+  if(actualPos < targetPos + tolerance && actualPos > targetPos - tolerance) return true;
+  else return false;
 }
