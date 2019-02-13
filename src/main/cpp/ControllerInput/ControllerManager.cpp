@@ -32,16 +32,20 @@ void ControllerManager::pollControllers(RobotCommands *Commands){
 	frc::SmartDashboard::PutNumber("Swerve Rotation Command", Commands->drvrot);
 
 	//extend climbing stilts/send climb command
-	if (drivecontroller->bBack->State() && drivecontroller->bX) Commands->climbCommandLevelOne = true;
-	else Commands->climbCommandLevelOne = false;
+	if (drivecontroller->bBack->RE() && drivecontroller->bX) Commands->climbCommandLevelOne = true;
+	//else Commands->climbCommandLevelOne = false;
 	frc::SmartDashboard::PutBoolean("climbCommandL1", Commands->climbCommandLevelOne);
 	
-	if (drivecontroller->bBack->State() && drivecontroller->bY) Commands->climbCommandLevelTwo = true;
-	else Commands->climbCommandLevelTwo = false;
+	if (drivecontroller->bBack->RE() && drivecontroller->bY) Commands->climbCommandLevelTwo = true;
+	//else Commands->climbCommandLevelTwo = false;
 	frc::SmartDashboard::PutBoolean("climbCommandL2", Commands->climbCommandLevelTwo);	
 	
 	//stop climbing/abort climb command
-	if (drivecontroller->bB->State()) Commands->climbAbort = true;
+	if (drivecontroller->bB->State()) { 
+		Commands->climbAbort = true; 
+		Commands->climbCommandLevelOne = false;
+		Commands->climbCommandLevelTwo = false;
+	}
 	else Commands->climbAbort = false;
 	frc::SmartDashboard::PutBoolean("climbAbort", Commands->climbAbort);	
 
