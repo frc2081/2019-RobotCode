@@ -153,6 +153,14 @@ void LiftPIDControl::liftPIDControlTeleopPeriodic() {
   else if(liftFrontPosDes == liftPos::EXTENDEDLEVELTWO) liftFrontSetPoint = rampToValue(liftFrontSetPoint, liftPosExtendedLevelTwoFront, liftMovementRate);
   else liftFrontSetPoint = liftPosRetractedFront; //Default Case
 
+  if(liftRearPosDes == liftPos::RETRACTED && moveFast == true) liftRearSetPoint = liftPosRetractedFront;
+  else if(liftRearPosDes == liftPos::EXTENDEDLEVELONE && moveFast == true) liftRearSetPoint = liftPosExtendedLevelOneFront;
+  else if(liftRearPosDes == liftPos::EXTENDEDLEVELTWO && moveFast == true) liftRearSetPoint = liftPosExtendedLevelTwoFront;
+  else if(liftRearPosDes == liftPos::RETRACTED) liftRearSetPoint = rampToValue(liftFrontSetPoint, liftPosRetractedFront, liftMovementRate);
+  else if(liftRearPosDes == liftPos::EXTENDEDLEVELONE) liftRearSetPoint = rampToValue(liftFrontSetPoint, liftPosExtendedLevelOneFront, liftMovementRate);
+  else if(liftRearPosDes == liftPos::EXTENDEDLEVELTWO) liftRearSetPoint = rampToValue(liftFrontSetPoint, liftPosExtendedLevelTwoFront, liftMovementRate);
+  else liftRearSetPoint = liftPosRetractedFront; //Default Case
+
   liftrfPID->SetSetpoint(liftFrontSetPoint);
   liftlfPID->SetSetpoint(liftFrontSetPoint);
   liftlbPID->SetSetpoint(liftRearSetPoint);
@@ -164,8 +172,13 @@ void LiftPIDControl::liftPIDControlTeleopPeriodic() {
   double lfPos = _io->liftlfenc->GetDistance();
   double rbPos = _io->liftrbenc->GetDistance();
   double lbPos = _io->liftlbenc->GetDistance();
-  if(abs(rfPos - lfPos) > liftDesyncDistanceThreshold) {disableLiftPID();}
-  if(abs(rbPos - lbPos) > liftDesyncDistanceThreshold) {disableLiftPID();}
+
+  double liftFrontSeparation = fabs(rfPos - lfPos);
+  double liftRearSeparation = fabs(rbPos - lbPos);
+  frc::SmartDashboard::PutNumber("Lift Front Separation", liftFrontSeparation);
+  frc::SmartDashboard::PutNumber("Lift Rear Separation", liftRearSeparation);
+  if(liftFrontSeparation > liftDesyncDistanceThreshold) {disableLiftPID();}
+  if(liftRearSeparation > liftDesyncDistanceThreshold) {disableLiftPID();}
 }
 
 double LiftPIDControl::rampToValue(double currVal, double desVal, double rampRate){
