@@ -37,6 +37,7 @@ public:
 	const double swerveencodercountstodistancecentimeters = .238; //Might be wrong or in inches instead of CM
 	const double elevatorEncoderCountsToDistanceInches = .00048; //1024 counts/rev, 0.5 inch travel/rev; 0.5/1024 = .00048 inches per count
  	const double liftDistPerCountInches = .00306; //1024 counts/rev, 3.14 inches travel/rev; 3.14/1024 = .00306 inches per count
+	const double ballIntakeCountsPerRevolution = .000976; //1024 counts/rev, 1 rev / 1024 = .000976
 
 	frc::PowerDistributionPanel *PDP;
 	frc::Compressor *PCM;
@@ -77,6 +78,7 @@ public:
 	frc::Encoder *liftrfenc;
 	frc::Encoder *elevatorenc;
 	frc::Counter *liftdriveenc;
+	frc::Encoder *ballintakeenc;
 
 	//Solenoids
 	frc::Solenoid *ballarmsolenoidin;
