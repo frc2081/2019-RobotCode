@@ -132,22 +132,7 @@ void LiftPIDControl::liftPIDControlTeleopPeriodic() {
   actually lifting the robot
   So if fast movement is desired, set the setpoint directly to the destination position and let the PID move as fast as it can
   else if fast movement is not wanted, slowly ramp the PID setpoint to the destination position to slowly move the racks
-  */
-  /* if(liftFrontPosDes == liftPos::RETRACTED && moveFast == true) liftFrontSetPoint = liftPosRetractedFront;
-  else if(liftFrontPosDes == liftPos::EXTENDEDLEVELONE && moveFast == true) liftFrontSetPoint = liftPosExtendedLevelOneFront;
-  else if(liftFrontPosDes == liftPos::EXTENDEDLEVELTWO && moveFast == true) liftFrontSetPoint = liftPosExtendedLevelTwoFront;
-  else if(liftFrontPosDes == liftPos::RETRACTED) liftFrontSetPoint = rampToValue(liftFrontSetPoint, liftPosRetractedFront, liftMovementRate);
-  else if(liftFrontPosDes == liftPos::EXTENDEDLEVELONE) liftFrontSetPoint = rampToValue(liftFrontSetPoint, liftPosExtendedLevelOneFront, liftMovementRate);
-  else if(liftFrontPosDes == liftPos::EXTENDEDLEVELTWO) liftFrontSetPoint = rampToValue(liftFrontSetPoint, liftPosExtendedLevelTwoFront, liftMovementRate);
-  else liftFrontSetPoint = liftPosRetractedFront; //Default Case
-
-  if(liftRearPosDes == liftPos::RETRACTED && moveFast == true) liftRearSetPoint = liftPosRetractedRear;
-  else if(liftRearPosDes == liftPos::EXTENDEDLEVELONE && moveFast == true) liftRearSetPoint = liftPosExtendedLevelOneRear;
-  else if(liftRearPosDes == liftPos::EXTENDEDLEVELTWO && moveFast == true) liftRearSetPoint = liftPosExtendedLevelTwoRear;
-  else if(liftRearPosDes == liftPos::RETRACTED) liftRearSetPoint = rampToValue(liftRearSetPoint, liftPosRetractedRear, liftMovementRate);
-  else if(liftRearPosDes == liftPos::EXTENDEDLEVELONE) liftRearSetPoint = rampToValue(liftRearSetPoint, liftPosExtendedLevelOneRear, liftMovementRate);
-  else if(liftRearPosDes == liftPos::EXTENDEDLEVELTWO) liftRearSetPoint = rampToValue(liftRearSetPoint, liftPosExtendedLevelTwoRear, liftMovementRate);
-  else liftRearSetPoint = liftPosRetractedRear; //Default Case*/
+*/
 
   liftDestinationFront = setLiftDestination(liftFrontPosDes);
   liftDestinationRear = setLiftDestination(liftRearPosDes);
@@ -169,7 +154,8 @@ void LiftPIDControl::liftPIDControlTeleopPeriodic() {
   double lfPos = _io->liftlfenc->GetDistance();
   double rbPos = _io->liftrbenc->GetDistance();
   double lbPos = _io->liftlbenc->GetDistance();
-
+  
+  //Determine if the lifts have reached their current destination
   if(liftOnTarget(liftDestinationFront, rfPos, liftPosTolerance) && liftOnTarget(liftDestinationFront, lfPos, liftPosTolerance)) liftFrontPosAct = liftFrontPosDes;
   if(liftOnTarget(liftDestinationRear, rbPos, liftPosTolerance) && liftOnTarget(liftDestinationRear, lbPos, liftPosTolerance)) liftRearPosAct = liftRearPosDes;
 
@@ -180,7 +166,14 @@ void LiftPIDControl::liftPIDControlTeleopPeriodic() {
   frc::SmartDashboard::PutNumber("Lift Front Separation", liftFrontSeparation);
   frc::SmartDashboard::PutNumber("Lift Rear Separation", liftRearSeparation);
   if(liftFrontSeparation > liftDesyncDistanceThreshold || liftRearSeparation > liftDesyncDistanceThreshold) {disableLiftPID();}
+
+
+  //To use this code, desync distance must be very low
+ /* if(liftDestinationFront > liftFrontSetPoint && liftFrontSeparation > liftDesyncDistanceThreshold){ //if robot going up and lifts are out of sync
+    if(rfPos > lfPos){ liftrfPID->SetSetpoint(lfPos);} //if the right lift if ahead, set it to match the position of the left
+  }*/
 }
+
 
 double LiftPIDControl::rampToValue(double currVal, double desVal, double rampRate){
   double _rampRate = fabs(rampRate); //Following code does not work if rampRate is set to a negative value
