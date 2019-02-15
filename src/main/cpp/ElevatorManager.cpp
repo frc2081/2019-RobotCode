@@ -21,27 +21,46 @@ ElevatorManager::ElevatorManager(IO *io, RobotCommands *cmds) {
     ElevBallCargoPos = 24;
     ElevBallL1Pos = 6;
     ElevBallL2Pos = 27;
-    BallArmIntake = -.4;
-    BallArmIdle = 0;
-    BallArmEject = 0.8;
     extended = true;
     retracted = false;
     BallEjectTimer = 0;
     BallEjectTimerLimit = 25;
     ManualMode = false;
     BallIntakeTimer = 0;
-    BallArmHold = -.1;
-    
+
+    //Ball intake motor speeds in RPM
+    BallArmIntakeSpeed = -300;
+    BallArmIdleSpeed = 0;
+    BallArmEjectSpeed = 600;
+    BallArmHoldSpeed = -120;
 
     ElevatorPosCmd = ElevHomePos;
-    BallIntakePowerCmd = BallArmIdle;
+    BallIntakeSpeedCmd = BallArmIdle;
     HatchClawPos = retracted;
     HatchArmPos = extended;
     BallArmPos = extended;
     frameStandPos = retracted;
+
+    ballIntakePID = new frc::PIDController(intakeP, intakeI, intakeD, intakeF, _io->ballintakeenc, _io->ballintakemot, 0.05);
+    ballIntakePID->Enable();
+
+    frc::SmartDashboard::PutNumber("Intake Motor PID P", intakeP);
+    frc::SmartDashboard::PutNumber("Intake Motor PID I", intakeI);
+    frc::SmartDashboard::PutNumber("Intake Motor PID D", intakeD);
+    frc::SmartDashboard::PutNumber("Intake Motor PID F", intakeF);
     }
     
 void ElevatorManager::ElevatorManagerPeriodic(){
+
+    intakeP = frc::SmartDashboard::GetNumber("Intake Motor PID P", intakeP);
+    intakeI = frc::SmartDashboard::GetNumber("Intake Motor PID P", intakeI);
+    intakeD = frc::SmartDashboard::GetNumber("Intake Motor PID P", intakeD);
+    intakeF = frc::SmartDashboard::GetNumber("Intake Motor PID P", intakeF);
+
+    ballIntakePID->SetP(intakeP);
+    ballIntakePID->SetI(intakeI);
+    ballIntakePID->SetD(intakeD);
+    ballIntakePID->SetF(intakeF);
 
     if(_cmds->manualModeActive){
 
@@ -49,15 +68,15 @@ void ElevatorManager::ElevatorManagerPeriodic(){
         if(_cmds->hatchClawManual) {HatchClawPos = !HatchClawPos;}
         if(_cmds->ballArmToggleManual) {BallArmPos = !BallArmPos;}
         if(_cmds->frameStandManual) {frameStandPos = !frameStandPos;}
-        if(_cmds->ballArmMotorIntakeManual) {BallIntakePowerCmd = BallArmIntake;}
-        else {BallIntakePowerCmd = BallArmIdle;}
+        if(_cmds->ballArmMotorIntakeManual) {BallIntakeSpeedCmd = BallArmIntakeSpeed;}
+        else {BallIntakeSpeedCmd = BallArmIdleSpeed;}
 
     } else {
         switch(ElevatorManagerCurrentState){
             case ElevatorManagerState::Transit: //0
                 ElevatorPosCmd = ElevHomePos;
                 HatchArmPos = extended;
-                BallIntakePowerCmd = BallArmIdle;
+                BallIntakeSpeedCmd = BallArmIdleSpeed;
                 BallArmPos = extended;
 
                 if(_cmds->hatchPickup){ElevatorManagerCurrentState = ElevatorManagerState::HatchPickupWait;}
@@ -73,7 +92,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
                 ElevatorPosCmd = ElevHatchL1Pos;
                 HatchArmPos = retracted;
                 HatchClawPos = retracted;
-                BallIntakePowerCmd = BallArmIdle;
+                BallIntakeSpeedCmd = BallArmIdleSpeed;
 
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
                 if(_cmds->hatchPickup){ElevatorManagerCurrentState = ElevatorManagerState::HatchPickup;}
@@ -84,7 +103,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
                 ElevatorPosCmd = ElevHatchL1Pos;
                 HatchArmPos = retracted;
                 HatchClawPos = extended;
-                BallIntakePowerCmd = BallArmIdle;
+                BallIntakeSpeedCmd = BallArmIdleSpeed;
 
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
 
@@ -94,7 +113,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
                 HatchArmPos = retracted;
                 HatchClawPos = extended;
 
-                BallIntakePowerCmd = BallArmIdle;
+                BallIntakeSpeedCmd = BallArmIdleSpeed;
                 BallArmPos = extended;
 
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
@@ -106,7 +125,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
                 HatchArmPos = retracted;
                 HatchClawPos = retracted;
 
-                BallIntakePowerCmd = BallArmIdle;
+                BallIntakeSpeedCmd = BallArmIdleSpeed;
                 BallArmPos = extended;
 
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
@@ -116,7 +135,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
                 ElevatorPosCmd = ElevHatchL2Pos;
                 HatchArmPos = retracted;
                 HatchClawPos = extended;
-                BallIntakePowerCmd = BallArmIdle;
+                BallIntakeSpeedCmd = BallArmIdleSpeed;
                 BallArmPos = extended;
 
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
@@ -127,7 +146,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
                 ElevatorPosCmd = ElevHatchL2Pos;
                 HatchArmPos = retracted;
                 HatchClawPos = retracted;
-                BallIntakePowerCmd = BallArmIdle;
+                BallIntakeSpeedCmd = BallArmIdleSpeed;
                 BallArmPos = extended;
 
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
@@ -136,7 +155,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
             case ElevatorManagerState::BallPickup: //7
                 ElevatorPosCmd = ElevBallPickupPos;
                 HatchArmPos = extended;
-                BallIntakePowerCmd = BallArmIntake;
+                BallIntakeSpeedCmd = BallArmIntakeSpeed;
                 BallArmPos = retracted;
 
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
@@ -146,7 +165,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
             case ElevatorManagerState::BallGrabbed: //8
                 ElevatorPosCmd = ElevBallPickupPos;
                 HatchArmPos = extended;
-                BallIntakePowerCmd = BallArmHold; //??
+                BallIntakeSpeedCmd = BallArmHoldSpeed; //??
                 BallArmPos = extended;
 
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
@@ -155,7 +174,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
             case ElevatorManagerState::BallPlaceCargoWait: //9
                 ElevatorPosCmd = ElevBallCargoPos;
                 HatchArmPos = extended;
-                BallIntakePowerCmd = BallArmIdle;
+                BallIntakeSpeedCmd = BallArmIdleSpeed;
                 BallArmPos = extended;
 
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
@@ -165,7 +184,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
             case ElevatorManagerState::BallPlaceCargo: //10
                 ElevatorPosCmd = ElevBallCargoPos;
                 HatchArmPos = extended;
-                BallIntakePowerCmd = BallArmEject;
+                BallIntakeSpeedCmd = BallArmEjectSpeed;
                 BallArmPos = extended;
 
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
@@ -174,7 +193,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
             case ElevatorManagerState::BallPlaceL1Wait: //11
                 ElevatorPosCmd = ElevBallL1Pos;
                 HatchArmPos = extended;
-                BallIntakePowerCmd = BallArmIdle;
+                BallIntakeSpeedCmd = BallArmIdleSpeed;
                 BallArmPos = extended;
 
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
@@ -184,7 +203,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
             case ElevatorManagerState::BallPlaceL1: //12
                 ElevatorPosCmd = ElevBallL1Pos;
                 HatchArmPos = extended;
-                BallIntakePowerCmd = BallArmEject;
+                BallIntakeSpeedCmd = BallArmEjectSpeed;
                 BallArmPos = extended;
 
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
@@ -193,7 +212,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
             case ElevatorManagerState::BallPlaceL2Wait: //13
                 ElevatorPosCmd = ElevBallL2Pos;
                 HatchArmPos = extended;
-                BallIntakePowerCmd = BallArmIdle;
+                BallIntakeSpeedCmd = BallArmIdleSpeed;
                 BallArmPos = extended;
 
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
@@ -203,14 +222,14 @@ void ElevatorManager::ElevatorManagerPeriodic(){
             case ElevatorManagerState::BallPlaceL2: //14
                 ElevatorPosCmd = ElevBallL2Pos;
                 HatchArmPos = extended;
-                BallIntakePowerCmd = BallArmEject;
+                BallIntakeSpeedCmd = BallArmEjectSpeed;
                 BallArmPos = extended;
 
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
 
                 break;
             case ElevatorManagerState::BallEject: //15
-                BallIntakePowerCmd = BallArmEject;
+                BallIntakeSpeedCmd = BallArmEjectSpeed;
 
                 BallEjectTimer++;
                 if(BallEjectTimer == BallEjectTimerLimit){
@@ -274,6 +293,6 @@ void ElevatorManager::ElevatorManagerMechanism(IO *io){
     io->ballarmsolenoidin->Set(true);
     }
 
-    _io->ballintakemot->Set(BallIntakePowerCmd);
+    ballIntakePID->SetSetpoint(BallIntakeSpeedCmd);
 }
 
