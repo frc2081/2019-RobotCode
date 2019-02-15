@@ -42,20 +42,13 @@ void Robot::RobotPeriodic() {
 void Robot::AutonomousInit() {}
 
 void Robot::AutonomousPeriodic() {
-  Drivetrain->DriveManagerPeriodic();
-  Elevator->ElevatorManagerPeriodic();
-  RioIO->ioPeriodic();
+  enabledPeriodic();
 }
 
 void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic() {
-  Drivetrain->DriveManagerPeriodic();
-  Elevator->ElevatorManagerPeriodic();
-  Elevator->ElevatorManagerMechanism(RioIO);
-  RioIO->ioPeriodic();
-  Climber->ClimbManagerTeleopPeriodic();
-  Guidance->GuidanceSystemPeriodic();
+  enabledPeriodic();
 }
 
 void Robot::DisabledPeriodic(){
@@ -63,6 +56,15 @@ void Robot::DisabledPeriodic(){
 }
 
 void Robot::TestPeriodic() {}
+
+void Robot::enabledPeriodic() {
+  Drivetrain->DriveManagerPeriodic();
+  Elevator->ElevatorManagerPeriodic();
+  Elevator->ElevatorManagerMechanism(RioIO);
+  RioIO->ioPeriodic();
+  Climber->ClimbManagerTeleopPeriodic();
+  Guidance->GuidanceSystemPeriodic();
+}
 
 #ifndef RUNNING_FRC_TESTS
 int main() { return frc::StartRobot<Robot>(); }

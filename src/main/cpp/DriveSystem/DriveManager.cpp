@@ -108,6 +108,7 @@ void DriveManager::DriveManagerPeriodic() {
 }
 
 void DriveManager::DriveManagerAutoPeriodic() {
+	UpdatePIDTunes();
 	CalculateVectors();
 	ApplyIntellegintSwerve();
 	AutoApplyPIDControl();

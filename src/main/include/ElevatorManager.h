@@ -35,7 +35,6 @@ class ElevatorManager {
     ElevatorManagerState ElevatorManagerCurrentState;
 
     double ElevatorPosCmd;
-    double BallIntakePowerCmd;
     double BallIntakeSpeedCmd;
     bool HatchClawPos;
     bool HatchArmPos;
@@ -51,10 +50,10 @@ class ElevatorManager {
     double ElevBallCargoPos;
     double ElevBallL1Pos;
     double ElevBallL2Pos;
-    double BallArmIntake;
-    double BallArmIdle;
-    double BallArmEject;
-    double BallArmHold;
+    double BallArmIntakeSpeed;
+    double BallArmIdleSpeed;
+    double BallArmEjectSpeed;
+    double BallArmHoldSpeed;
     bool extended;
     bool retracted;
     int BallEjectTimer;
@@ -66,7 +65,7 @@ class ElevatorManager {
     double intakeD = 0;
     double intakeF = .00833; //Motor slowest speed is 120 RPM, 1/120 = .008333
 
-    PIDController *ballIntakePID;
+    frc::PIDController *ballIntakePID;
 
     ElevatorManager(IO *io, RobotCommands *cmds);
     void ElevatorManagerPeriodic();

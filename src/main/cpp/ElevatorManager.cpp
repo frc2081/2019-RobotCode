@@ -35,7 +35,7 @@ ElevatorManager::ElevatorManager(IO *io, RobotCommands *cmds) {
     BallArmHoldSpeed = -120;
 
     ElevatorPosCmd = ElevHomePos;
-    BallIntakeSpeedCmd = BallArmIdle;
+    BallIntakeSpeedCmd = BallArmIdleSpeed;
     HatchClawPos = retracted;
     HatchArmPos = extended;
     BallArmPos = extended;
@@ -62,6 +62,9 @@ void ElevatorManager::ElevatorManagerPeriodic(){
     ballIntakePID->SetD(intakeD);
     ballIntakePID->SetF(intakeF);
 
+    //*********Main State Machine**********
+    //If manual mode is active, bypass the state machine and control outputs directly
+    //Otherwise let the state machine set the output values
     if(_cmds->manualModeActive){
 
         if(_cmds->hatchArmToggleManual) {HatchArmPos = !HatchArmPos;}
@@ -242,14 +245,13 @@ void ElevatorManager::ElevatorManagerPeriodic(){
     }
 
     if(_cmds->ejectCargo){ElevatorManagerCurrentState = ElevatorManagerState::BallEject;}
-    _io->elevatorDesiredPos = ElevatorPosCmd;
-    //TODO: Add Robot CG shifter pnuematics
 
     frc::SmartDashboard::PutNumber("Elevator Current State: ", static_cast<double>(ElevatorManagerCurrentState));
     frc::SmartDashboard::PutBoolean("Elevator Hatch Arm Position", HatchArmPos);
     frc::SmartDashboard::PutBoolean("Elevator Hatch Claw Position", HatchClawPos);
     frc::SmartDashboard::PutBoolean("Elevator Ball Arm State:", BallArmPos);
     frc::SmartDashboard::PutNumber("Elevator Ball Intake Power", _io->ballintakemot->Get());
+    frc::SmartDashboard::PutNumber("Elevator Ball Intake Setpoint", BallIntakeSpeedCmd);
     frc::SmartDashboard::PutBoolean("Elevator Hatch Detect 1", _io->hatchDetectorOne->Get());
     frc::SmartDashboard::PutBoolean("Elevator Hatch Detect 2", _io->hatchDetectorTwo->Get());
     frc::SmartDashboard::PutNumber("Elevator Motor Current", _io->PDP->GetCurrent(13));
@@ -294,5 +296,6 @@ void ElevatorManager::ElevatorManagerMechanism(IO *io){
     }
 
     ballIntakePID->SetSetpoint(BallIntakeSpeedCmd);
+    _io->elevatorDesiredPos = ElevatorPosCmd;
 }
 

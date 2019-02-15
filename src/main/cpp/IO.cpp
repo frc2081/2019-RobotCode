@@ -77,6 +77,7 @@ IO::IO() {
 
 	elevatorenc->SetDistancePerPulse(elevatorEncoderCountsToDistanceInches);
 	ballintakeenc->SetDistancePerPulse(ballIntakeCountsPerRevolution);
+	ballintakeenc->SetPIDSourceType(frc::PIDSourceType::kRate);
 
 	elevatorDesiredPos = 0;
 	elevatorActualPos = 0;

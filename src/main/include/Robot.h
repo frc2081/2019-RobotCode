@@ -36,4 +36,6 @@ class Robot : public frc::TimedRobot {
   ClimbManager *Climber;
   ElevatorManager *Elevator;
   GuidanceSystem *Guidance;
+
+  void enabledPeriodic();
 };
