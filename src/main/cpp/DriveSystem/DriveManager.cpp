@@ -49,7 +49,7 @@ DriveManager::DriveManager(IO *io, RobotCommands *com, ControllerManager *cntls)
 	//Set up swerve drive motor PID controllers
 	_lfdrvpid = new frc::PIDController(_drvpidp, _drvpidi, _drvpidd, _drvpidf, io->encdrvlf, io->drvlfmot, _pidpollrate);
 	_rfdrvpid = new frc::PIDController(_drvpidp, _drvpidi, _drvpidp, _drvpidf, io->encdrvrf, io->drvrfmot, _pidpollrate);
-	_lbdrvpid = new frc::PIDController(_drvpidp, _drvpidi, _drvpidp, _drvpidf, io->encdrvlb, io->drvlbmot, _pidpollrate);
+	//_lbdrvpid = new frc::PIDController(_drvpidp, _drvpidi, _drvpidp, _drvpidf, io->encdrvlb, io->drvlbmot, _pidpollrate);
 	_rbdrvpid = new frc::PIDController(_drvpidp, _drvpidi, _drvpidp, _drvpidf, io->encdrvrb, io->drvrbmot, _pidpollrate);
 	//_lfdrvpid->Enable();
 	//_rfdrvpid->Enable();
@@ -276,7 +276,7 @@ void DriveManager::UpdateDashboard(){
 
 	frc::SmartDashboard::PutNumber("Swerve Left Front Speed Actual", _io->encdrvlf->GetRate());
 	frc::SmartDashboard::PutNumber("Swerve Right Front Speed Actual", _io->encdrvrf->GetRate());
-	frc::SmartDashboard::PutNumber("Swerve Left Back Speed Actual", _io->encdrvlb->GetRate());
+	//frc::SmartDashboard::PutNumber("Swerve Left Back Speed Actual", _io->encdrvlb->GetRate());
 	frc::SmartDashboard::PutNumber("Swerve Right Back Speed Actual", _io->encdrvrb->GetRate());
 
 	//Swerve Encoder offset calibrations
@@ -325,10 +325,10 @@ void DriveManager::UpdatePIDTunes(){
 	_rfdrvpid->SetD(_drvpidd);
 	_rfdrvpid->SetF(_drvpidf);
 
-	_lbdrvpid->SetP(_drvpidp);
-	_lbdrvpid->SetI(_drvpidi);
-	_lbdrvpid->SetD(_drvpidd);
-	_lbdrvpid->SetF(_drvpidf);
+	//_lbdrvpid->SetP(_drvpidp);
+	//_lbdrvpid->SetI(_drvpidi);
+	//_lbdrvpid->SetD(_drvpidd);
+	//_lbdrvpid->SetF(_drvpidf);
 
 	_rbdrvpid->SetP(_drvpidp);
 	_rbdrvpid->SetI(_drvpidi);

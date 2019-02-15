@@ -39,17 +39,17 @@ public:
  	const double liftDistPerCountInches = .00306; //1024 counts/rev, 3.14 inches travel/rev; 3.14/1024 = .00306 inches per count
 
 	//Swerve Drive Motors
-	WPI_VictorSPX *drvlbmot;
-	WPI_VictorSPX *drvrbmot;
-	WPI_VictorSPX *drvlfmot;
-	WPI_VictorSPX *drvrfmot;
-	WPI_VictorSPX *turnlbmot;
-	WPI_VictorSPX *turnrbmot;
-	WPI_VictorSPX *turnlfmot;
-	WPI_VictorSPX *turnrfmot;
+	frc::VictorSP *drvlbmot;
+	frc::VictorSP *drvrbmot;
+	frc::VictorSP *drvlfmot;
+	frc::VictorSP *drvrfmot;
+	frc::VictorSP *turnlbmot;
+	frc::VictorSP *turnrbmot;
+	frc::VictorSP *turnlfmot;
+	frc::VictorSP *turnrfmot;
 
 	//Swerve Drive Encoders
-	frc::Encoder *encdrvlb;
+	//frc::Encoder *encdrvlb;
 	frc::Encoder *encdrvlf;
 	frc::Encoder *encdrvrb;
 	frc::Encoder *encdrvrf;
@@ -59,13 +59,13 @@ public:
 	frc::AnalogPotentiometer *steerencdrvrf;
 
 	//Other Motors
-	WPI_VictorSPX *ballintakemot;
-	WPI_VictorSPX *liftdrivemot;
-	WPI_VictorSPX *liftlbmot;
-	WPI_VictorSPX *liftrbmot;
-	WPI_VictorSPX *liftlfmot;
-	WPI_VictorSPX *liftrfmot;
-	WPI_VictorSPX *elevatormot;
+	frc::VictorSP *ballintakemot;
+	frc::VictorSP *liftdrivemot;
+	frc::VictorSP *liftlbmot;
+	frc::VictorSP *liftrbmot;
+	frc::VictorSP *liftlfmot;
+	frc::VictorSP *liftrfmot;
+	frc::VictorSP *elevatormot;
 
 	//Other Encoders
 	frc::Encoder *liftlbenc;

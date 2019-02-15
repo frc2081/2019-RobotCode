@@ -12,7 +12,7 @@ ClimbManager::ClimbManager(IO *io, RobotCommands *cmds) {
 
     _io = io;
     _cmds = cmds;
-    lift = new LiftPIDControl(io);
+    lift = new LiftPIDControl(io, cmds);
     timer = 0;
 
     climbState = ClimbSTATE::robotOnFirstLevel;
@@ -169,7 +169,7 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
                 climbState = ClimbSTATE::robotClimbComplete;
                 break;
            } else if (timer >= moveForwardStage2Duration) {
-              climbState = ClimbSTATE::robotStoppedHalfway;
+              climbState = ClimbSTATE::robotStoppedOnPlatform;
               timer = 0;
               break;
                /*else if (_io->liftdriveenc->Get() - initialLiftDriveEncoderValue >=

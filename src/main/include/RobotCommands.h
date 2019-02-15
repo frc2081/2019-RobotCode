@@ -24,6 +24,8 @@ public:
 	bool climbCommandLevelOne;
 	bool climbCommandLevelTwo;
 	bool climbAbort;
+	bool climbFreeze;
+
 	bool hatchPickup;
 	bool cargoPickup;
 	bool elevatorHome;
