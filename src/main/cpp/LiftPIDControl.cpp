@@ -1,7 +1,8 @@
 #include "LiftPIDControl.h"
 
-LiftPIDControl::LiftPIDControl(IO *io) {
+LiftPIDControl::LiftPIDControl(IO *io, RobotCommands *cmds) {
 
+  _cmds = cmds;
   _io = io;
    //Init lift movement commands and actual positions
   liftFrontPosDes = liftPos::RETRACTED;
@@ -14,6 +15,10 @@ LiftPIDControl::LiftPIDControl(IO *io) {
   liftRearSetPoint = 0;
   liftDestinationRear = 0;
   liftDestinationFront = 0;
+
+  freezeSetPointFront = 0;
+  freezeSetPointRear = 0;
+  frozen = false;
 
   //Init lift PID control parameters
   //PID tunes are the same for all four lifts
@@ -46,7 +51,7 @@ LiftPIDControl::LiftPIDControl(IO *io) {
   liftrfPID->Enable(); 
   liftlfPID->Enable();
   liftlbPID->Enable();
-  liftlfPID->Enable();
+  liftrbPID->Enable();
 
   frc::SmartDashboard::PutNumber("Climb P", liftPIDp);
   frc::SmartDashboard::PutNumber("Climb I", liftPIDi);
@@ -103,6 +108,10 @@ void LiftPIDControl::liftPIDControlRobotPeriodic(){
   frc::SmartDashboard::PutNumber("Lift Rear Hab Level 1 Set Point", liftPosExtendedLevelOneRear);
   frc::SmartDashboard::PutNumber("Lift Rear Hab Level 2 Set Point", liftPosExtendedLevelTwoRear);
   frc::SmartDashboard::PutNumber("Lift Movement Rate", liftMovementRate);
+  frc::SmartDashboard::PutNumber("Lift LF Motor Power", _io->liftlfmot->Get());
+  frc::SmartDashboard::PutNumber("Lift RF Motor Power", _io->liftrfmot->Get());
+  frc::SmartDashboard::PutNumber("Lift LB Motor Power", _io->liftlbmot->Get());
+  frc::SmartDashboard::PutNumber("Lift RB Motor Power", _io->liftrbmot->Get());
 }
 
 void LiftPIDControl::liftPIDControlTeleopPeriodic() {
@@ -145,11 +154,6 @@ void LiftPIDControl::liftPIDControlTeleopPeriodic() {
     liftRearSetPoint = liftDestinationRear;
   }
 
-  liftrfPID->SetSetpoint(liftFrontSetPoint);
-  liftlfPID->SetSetpoint(liftFrontSetPoint);
-  liftlbPID->SetSetpoint(liftRearSetPoint);
-  liftrbPID->SetSetpoint(liftRearSetPoint);
-
   double rfPos = _io->liftrfenc->GetDistance();
   double lfPos = _io->liftlfenc->GetDistance();
   double rbPos = _io->liftrbenc->GetDistance();
@@ -165,13 +169,24 @@ void LiftPIDControl::liftPIDControlTeleopPeriodic() {
   double liftRearSeparation = fabs(rbPos - lbPos);
   frc::SmartDashboard::PutNumber("Lift Front Separation", liftFrontSeparation);
   frc::SmartDashboard::PutNumber("Lift Rear Separation", liftRearSeparation);
-  if(liftFrontSeparation > liftDesyncDistanceThreshold || liftRearSeparation > liftDesyncDistanceThreshold) {disableLiftPID();}
+  if(liftFrontSeparation > liftDesyncDistanceThreshold || liftRearSeparation > liftDesyncDistanceThreshold) {_cmds->climbFreeze = true;}
 
+  //implement climb freeze command - freezes lift setpoints at the moment the command is issued
+  if(_cmds->climbFreeze == true && frozen == false){
+    freezeSetPointFront = liftFrontSetPoint;
+    freezeSetPointRear = liftRearSetPoint;
+    frozen = true;
+  }
 
-  //To use this code, desync distance must be very low
- /* if(liftDestinationFront > liftFrontSetPoint && liftFrontSeparation > liftDesyncDistanceThreshold){ //if robot going up and lifts are out of sync
-    if(rfPos > lfPos){ liftrfPID->SetSetpoint(lfPos);} //if the right lift if ahead, set it to match the position of the left
-  }*/
+  if(frozen){
+    liftFrontSetPoint = freezeSetPointFront;
+    liftRearSetPoint = freezeSetPointRear;
+  }
+
+  liftrfPID->SetSetpoint(liftFrontSetPoint);
+  liftlfPID->SetSetpoint(liftFrontSetPoint);
+  liftlbPID->SetSetpoint(liftRearSetPoint);
+  liftrbPID->SetSetpoint(liftRearSetPoint);
 }
 
 
@@ -182,13 +197,6 @@ double LiftPIDControl::rampToValue(double currVal, double desVal, double rampRat
   else if(desVal > currVal) return currVal + _rampRate;
   else if(desVal < currVal) return currVal - _rampRate;
   else return currVal; //Default case
-}
-
-void LiftPIDControl::disableLiftPID() {
-  liftlfPID->SetSetpoint(_io->liftlfenc->GetDistance());
-  liftrfPID->SetSetpoint(_io->liftrfenc->GetDistance());
-  liftlbPID->SetSetpoint(_io->liftlbenc->GetDistance());
-  liftrbPID->SetSetpoint(_io->liftrbenc->GetDistance());
 }
 
 double LiftPIDControl::setLiftDestination(liftPos liftDest) {

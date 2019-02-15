@@ -29,10 +29,11 @@ void Robot::RobotInit() {
 void Robot::RobotPeriodic() {
   DriverControls->pollControllers(Commands);
   Drivetrain->UpdateDashboard();
-  Climber->ClimbManagerRobotPeriodic();
-  RioIO->ioRobotPeriodic();
-  Guidance->GuidanceSystemRobotPeriodic();
 
+  RioIO->ioRobotPeriodic();
+  //Guidance must be called BEFORE climber
+  Guidance->GuidanceSystemRobotPeriodic();
+  Climber->ClimbManagerRobotPeriodic();
   frc::SmartDashboard::PutNumber("Climber RF Actual Position", RioIO->liftrfenc->GetDistance());
   frc::SmartDashboard::PutNumber("Climber LF Actual Position", RioIO->liftlfenc->GetDistance());
   frc::SmartDashboard::PutNumber("Climber LB Actual Position", RioIO->liftlbenc->GetDistance());
@@ -54,8 +55,9 @@ void Robot::TeleopPeriodic() {
   Elevator->ElevatorManagerPeriodic();
   Elevator->ElevatorManagerMechanism(RioIO);
   RioIO->ioPeriodic();
-  Climber->ClimbManagerTeleopPeriodic();
+  //Guidance must be called BEFORE climber
   Guidance->GuidanceSystemPeriodic();
+  Climber->ClimbManagerTeleopPeriodic();
 }
 
 void Robot::DisabledPeriodic(){

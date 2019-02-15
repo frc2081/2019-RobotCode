@@ -2,11 +2,12 @@
 
 #include "IO.h"
 #include "frc/WPILib.h"
+#include "RobotCommands.h"
 
 
 class LiftPIDControl {
     public:
-    LiftPIDControl(IO *io);
+    LiftPIDControl(IO *io, RobotCommands *cmds);
 
     enum class liftPos{
     RETRACTED,
@@ -23,6 +24,7 @@ class LiftPIDControl {
 private:
 
   IO *_io;
+  RobotCommands *_cmds;
   frc::PIDController *liftlfPID, *liftrfPID, *liftlbPID, *liftrbPID;
 
   double liftPIDp, liftPIDi, liftPIDd, liftPIDf, liftPIDPeriod;
@@ -33,6 +35,12 @@ private:
   double liftMovementRate;
   double liftDesyncDistanceThreshold;
   double liftPosTolerance;
+
+
+  //variables to store climb set point at moment of climb freeze command
+  double freezeSetPointFront;
+  double freezeSetPointRear;
+  bool frozen;
 
   double rampToValue(double currVal, double desVal, double _rampRate);
   void disableLiftPID();
