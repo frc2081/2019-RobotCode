@@ -1,7 +1,8 @@
 #include "LiftPIDControl.h"
 
-LiftPIDControl::LiftPIDControl(IO *io) {
+LiftPIDControl::LiftPIDControl(IO *io, RobotCommands *cmds) {
 
+  _cmds = cmds;
   _io = io;
    //Init lift movement commands and actual positions
   liftFrontPosDes = liftPos::RETRACTED;
@@ -14,6 +15,10 @@ LiftPIDControl::LiftPIDControl(IO *io) {
   liftRearSetPoint = 0;
   liftDestinationRear = 0;
   liftDestinationFront = 0;
+
+  freezeSetPointFront = 0;
+  freezeSetPointRear = 0;
+  frozen = false;
 
   //Init lift PID control parameters
   //PID tunes are the same for all four lifts
@@ -46,7 +51,7 @@ LiftPIDControl::LiftPIDControl(IO *io) {
   liftrfPID->Enable(); 
   liftlfPID->Enable();
   liftlbPID->Enable();
-  liftlfPID->Enable();
+  liftrbPID->Enable();
 
   frc::SmartDashboard::PutNumber("Climb P", liftPIDp);
   frc::SmartDashboard::PutNumber("Climb I", liftPIDi);
@@ -103,6 +108,10 @@ void LiftPIDControl::liftPIDControlRobotPeriodic(){
   frc::SmartDashboard::PutNumber("Lift Rear Hab Level 1 Set Point", liftPosExtendedLevelOneRear);
   frc::SmartDashboard::PutNumber("Lift Rear Hab Level 2 Set Point", liftPosExtendedLevelTwoRear);
   frc::SmartDashboard::PutNumber("Lift Movement Rate", liftMovementRate);
+  frc::SmartDashboard::PutNumber("Lift LF Motor Power", _io->liftlfmot->Get());
+  frc::SmartDashboard::PutNumber("Lift RF Motor Power", _io->liftrfmot->Get());
+  frc::SmartDashboard::PutNumber("Lift LB Motor Power", _io->liftlbmot->Get());
+  frc::SmartDashboard::PutNumber("Lift RB Motor Power", _io->liftrbmot->Get());
 }
 
 void LiftPIDControl::liftPIDControlTeleopPeriodic() {
@@ -132,22 +141,7 @@ void LiftPIDControl::liftPIDControlTeleopPeriodic() {
   actually lifting the robot
   So if fast movement is desired, set the setpoint directly to the destination position and let the PID move as fast as it can
   else if fast movement is not wanted, slowly ramp the PID setpoint to the destination position to slowly move the racks
-  */
-  /* if(liftFrontPosDes == liftPos::RETRACTED && moveFast == true) liftFrontSetPoint = liftPosRetractedFront;
-  else if(liftFrontPosDes == liftPos::EXTENDEDLEVELONE && moveFast == true) liftFrontSetPoint = liftPosExtendedLevelOneFront;
-  else if(liftFrontPosDes == liftPos::EXTENDEDLEVELTWO && moveFast == true) liftFrontSetPoint = liftPosExtendedLevelTwoFront;
-  else if(liftFrontPosDes == liftPos::RETRACTED) liftFrontSetPoint = rampToValue(liftFrontSetPoint, liftPosRetractedFront, liftMovementRate);
-  else if(liftFrontPosDes == liftPos::EXTENDEDLEVELONE) liftFrontSetPoint = rampToValue(liftFrontSetPoint, liftPosExtendedLevelOneFront, liftMovementRate);
-  else if(liftFrontPosDes == liftPos::EXTENDEDLEVELTWO) liftFrontSetPoint = rampToValue(liftFrontSetPoint, liftPosExtendedLevelTwoFront, liftMovementRate);
-  else liftFrontSetPoint = liftPosRetractedFront; //Default Case
-
-  if(liftRearPosDes == liftPos::RETRACTED && moveFast == true) liftRearSetPoint = liftPosRetractedRear;
-  else if(liftRearPosDes == liftPos::EXTENDEDLEVELONE && moveFast == true) liftRearSetPoint = liftPosExtendedLevelOneRear;
-  else if(liftRearPosDes == liftPos::EXTENDEDLEVELTWO && moveFast == true) liftRearSetPoint = liftPosExtendedLevelTwoRear;
-  else if(liftRearPosDes == liftPos::RETRACTED) liftRearSetPoint = rampToValue(liftRearSetPoint, liftPosRetractedRear, liftMovementRate);
-  else if(liftRearPosDes == liftPos::EXTENDEDLEVELONE) liftRearSetPoint = rampToValue(liftRearSetPoint, liftPosExtendedLevelOneRear, liftMovementRate);
-  else if(liftRearPosDes == liftPos::EXTENDEDLEVELTWO) liftRearSetPoint = rampToValue(liftRearSetPoint, liftPosExtendedLevelTwoRear, liftMovementRate);
-  else liftRearSetPoint = liftPosRetractedRear; //Default Case*/
+*/
 
   liftDestinationFront = setLiftDestination(liftFrontPosDes);
   liftDestinationRear = setLiftDestination(liftRearPosDes);
@@ -160,16 +154,12 @@ void LiftPIDControl::liftPIDControlTeleopPeriodic() {
     liftRearSetPoint = liftDestinationRear;
   }
 
-  liftrfPID->SetSetpoint(liftFrontSetPoint);
-  liftlfPID->SetSetpoint(liftFrontSetPoint);
-  liftlbPID->SetSetpoint(liftRearSetPoint);
-  liftrbPID->SetSetpoint(liftRearSetPoint);
-
   double rfPos = _io->liftrfenc->GetDistance();
   double lfPos = _io->liftlfenc->GetDistance();
   double rbPos = _io->liftrbenc->GetDistance();
   double lbPos = _io->liftlbenc->GetDistance();
-
+  
+  //Determine if the lifts have reached their current destination
   if(liftOnTarget(liftDestinationFront, rfPos, liftPosTolerance) && liftOnTarget(liftDestinationFront, lfPos, liftPosTolerance)) liftFrontPosAct = liftFrontPosDes;
   if(liftOnTarget(liftDestinationRear, rbPos, liftPosTolerance) && liftOnTarget(liftDestinationRear, lbPos, liftPosTolerance)) liftRearPosAct = liftRearPosDes;
 
@@ -179,8 +169,26 @@ void LiftPIDControl::liftPIDControlTeleopPeriodic() {
   double liftRearSeparation = fabs(rbPos - lbPos);
   frc::SmartDashboard::PutNumber("Lift Front Separation", liftFrontSeparation);
   frc::SmartDashboard::PutNumber("Lift Rear Separation", liftRearSeparation);
-  if(liftFrontSeparation > liftDesyncDistanceThreshold || liftRearSeparation > liftDesyncDistanceThreshold) {disableLiftPID();}
+  if(liftFrontSeparation > liftDesyncDistanceThreshold || liftRearSeparation > liftDesyncDistanceThreshold) {_cmds->climbFreeze = true;}
+
+  //implement climb freeze command - freezes lift setpoints at the moment the command is issued
+  if(_cmds->climbFreeze == true && frozen == false){
+    freezeSetPointFront = liftFrontSetPoint;
+    freezeSetPointRear = liftRearSetPoint;
+    frozen = true;
+  }
+
+  if(frozen){
+    liftFrontSetPoint = freezeSetPointFront;
+    liftRearSetPoint = freezeSetPointRear;
+  }
+
+  liftrfPID->SetSetpoint(liftFrontSetPoint);
+  liftlfPID->SetSetpoint(liftFrontSetPoint);
+  liftlbPID->SetSetpoint(liftRearSetPoint);
+  liftrbPID->SetSetpoint(liftRearSetPoint);
 }
+
 
 double LiftPIDControl::rampToValue(double currVal, double desVal, double rampRate){
   double _rampRate = fabs(rampRate); //Following code does not work if rampRate is set to a negative value
@@ -189,13 +197,6 @@ double LiftPIDControl::rampToValue(double currVal, double desVal, double rampRat
   else if(desVal > currVal) return currVal + _rampRate;
   else if(desVal < currVal) return currVal - _rampRate;
   else return currVal; //Default case
-}
-
-void LiftPIDControl::disableLiftPID() {
-  liftlfPID->SetSetpoint(_io->liftlfenc->GetDistance());
-  liftrfPID->SetSetpoint(_io->liftrfenc->GetDistance());
-  liftlbPID->SetSetpoint(_io->liftlbenc->GetDistance());
-  liftrbPID->SetSetpoint(_io->liftrbenc->GetDistance());
 }
 
 double LiftPIDControl::setLiftDestination(liftPos liftDest) {

@@ -27,14 +27,31 @@ class ClimbManager {
     //TODO: get actual encoder values; this is incorrect
     double moveForwardStage1EncoderValue = 1000;
     double moveForwardStage2EncoderValue = 1000;
-    int moveForwardStage1Duration = 3000; //timer in ms to move forward to move robot front wheels over platform
-    int moveForwardStage2Duration = 3000;
+
+    //Climber movement Cals
+    //Durations in milliseconds to move forward to get drivetrain front wheels over platform
+    //Calcuation:
+    //At full power, seat motor is 2.75 seconds per revolution
+    //2.375" diameter wheel, 3.14*2.375 = 7.45 inches / rev
+    //Full power motor speed = 7.45 inches per rev / 2.75 seconds per rev = 2.71 inches/sec
+    
+    //Desired first stage robot movement is 11.5 inches
+    //11.5 inches / 2.71 inches /sec = 4.24 seconds = 4240 millseconds
+    int moveForwardStage1Duration = 4400; 
+    //Desired second stage robot movement is 13.25 inches
+    //13.25 inches / 2.71 inches per sec = 4.89 seconds = 4890 milliseconds
+    //Tuned down based on experience
+    int moveForwardStage2Duration = 4600;
+    int moveForwardStage3Duration = 500;
     int timer;
 
     double initialLiftDriveEncoderValue = 0;
     //TODO: get actual drive values; this is incorrect
-    double drivetrainPower = 0.05;
-    double liftMotorPower = 0.05;
+    double drivetrainPowerLow = .1; //MUST BE KEPT AT A LOW VALUE! 0.2 MAX!
+    double liftMotorPower = 1.0;
+    double drivetrainPowerPullForward = .3;
+    double drivetrainPowerHold = 0.05;
+
     //state machine initialization
     enum class ClimbSTATE {
         robotOnFirstLevel,
@@ -43,10 +60,11 @@ class ClimbManager {
         robotStoppedHalfway,
         moveForwardStage2,
         robotStoppedOnPlatform,
+        moveForwardStage3,
         robotClimbComplete,
     };
 
     ClimbSTATE climbState;
-    //level manager variable
     int climbLevel = 0;
+
 };

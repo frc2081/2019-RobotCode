@@ -19,6 +19,7 @@ RobotCommands::RobotCommands() {
 	climbCommandLevelOne = false;
 	climbCommandLevelTwo = false;
 	climbAbort = false;
+	climbFreeze = false;
 
 	hatchPickup = false;
 	cargoPickup = false;

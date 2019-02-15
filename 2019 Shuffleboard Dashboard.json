@@ -359,7 +359,7 @@
               "_title": "Desync Dist"
             }
           },
-          "8,3": {
+          "5,1": {
             "size": [
               1,
               1
@@ -431,9 +431,9 @@
               "_title": "RB Act Position"
             }
           },
-          "4,3": {
+          "5,2": {
             "size": [
-              2,
+              1,
               1
             ],
             "content": {
@@ -442,7 +442,7 @@
               "_title": "Lift Front Separation"
             }
           },
-          "6,3": {
+          "4,0": {
             "size": [
               2,
               1
@@ -466,8 +466,8 @@
           },
           "0,0": {
             "size": [
-              6,
-              3
+              4,
+              2
             ],
             "content": {
               "_type": "Graph",
@@ -475,8 +475,75 @@
               "_source1": "network_table:///SmartDashboard/Climber LB Motor Power",
               "_source2": "network_table:///SmartDashboard/Climber LF Motor Power",
               "_source3": "network_table:///SmartDashboard/Climber RB Motor Power",
+              "_source4": "network_table:///SmartDashboard/Lift RB Motor Power",
+              "_source5": "network_table:///SmartDashboard/Lift RF Motor Power",
+              "_source6": "network_table:///SmartDashboard/Lift LB Motor Power",
+              "_source7": "network_table:///SmartDashboard/Lift LF Motor Power",
               "_title": "Climber Motor Power",
-              "Graph/Visible time": 30.0
+              "Graph/Visible time": 2.0,
+              "Visible data/SmartDashboard/Lift LB Motor Power": true,
+              "Visible data/SmartDashboard/Lift LF Motor Power": true,
+              "Visible data/SmartDashboard/Lift RB Motor Power": true,
+              "Visible data/SmartDashboard/Lift RF Motor Power": true
+            }
+          },
+          "4,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Abort Climb Command is Active",
+              "_title": "/SmartDashboard/Abort Climb Command is Active",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "5,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ClimbManager current State",
+              "_title": "/SmartDashboard/ClimbManager current State"
+            }
+          },
+          "7,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Climber RB PID Actual SetPoint",
+              "_title": "/SmartDashboard/Climber RB PID Actual SetPoint"
+            }
+          },
+          "8,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Climber LB PID Actual SetPoint",
+              "_title": "/SmartDashboard/Climber LB PID Actual SetPoint"
+            }
+          },
+          "4,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Fast Climber",
+              "_title": "/SmartDashboard/Fast Climber",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
             }
           }
         }
@@ -1045,9 +1112,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -6.400000095367432,
-    "y": -6.400000095367432,
-    "width": 1548.800048828125,
-    "height": 836.7999877929688
+    "x": 6.0,
+    "y": 32.66666793823242,
+    "width": 1271.3333740234375,
+    "height": 640.6666870117188
   }
 }

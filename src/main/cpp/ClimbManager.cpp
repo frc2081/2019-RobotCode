@@ -9,14 +9,12 @@
 #include "ClimbManager.h"
 
 ClimbManager::ClimbManager(IO *io, RobotCommands *cmds) {
-
     _io = io;
     _cmds = cmds;
-    lift = new LiftPIDControl(io);
+    lift = new LiftPIDControl(io, cmds);
     timer = 0;
 
     climbState = ClimbSTATE::robotOnFirstLevel;
-
 }
 
 void ClimbManager::ClimbManagerInit() {
@@ -159,7 +157,7 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
            //swerve drive motors need to be turned on
             _cmds->guidanceSysActive = true;
             _cmds->autodrvang = 0;
-            _cmds->autodrvmag = drivetrainPower;
+            _cmds->autodrvmag = drivetrainPowerLow;
             _cmds->autodrvrot = 0;
             
             //Add 20ms to climb timer
@@ -169,7 +167,7 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
                 climbState = ClimbSTATE::robotClimbComplete;
                 break;
            } else if (timer >= moveForwardStage2Duration) {
-              climbState = ClimbSTATE::robotStoppedHalfway;
+              climbState = ClimbSTATE::robotStoppedOnPlatform;
               timer = 0;
               break;
                /*else if (_io->liftdriveenc->Get() - initialLiftDriveEncoderValue >=
@@ -186,6 +184,7 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
             back extension motor: retracting
             drivetrain: stopped
             */
+           timer = 0;
            lift->liftRearPosDes = lift->liftPos::RETRACTED;
 
            //liftdrivemot needs to be turned off
@@ -193,13 +192,46 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
            //swerve motors need to be off
             _cmds->guidanceSysActive = true;
             _cmds->autodrvang = 0;
-            _cmds->autodrvmag = 0;
+            _cmds->autodrvmag = drivetrainPowerHold;
             _cmds->autodrvrot = 0;
 
            if (_cmds->climbAbort ||
-                lift->liftRearPosDes == lift->liftFrontPosAct) {
+                lift->liftRearPosDes == lift->liftRearPosAct) {
+                climbState = ClimbSTATE::moveForwardStage3;
+                break;
+           }
+            break;
+        case ClimbSTATE::moveForwardStage3:
+            /*
+            STATE FEATURES:
+            front extension motor: stopped
+            rack motor: moving forward
+            back extension motor: stopped
+            drivetrain: moving forward
+            */
+           //liftdrivemot stopped
+           _io->liftdrivemot->Set(0);
+
+           //swerve drive motors need to be turned on
+            _cmds->guidanceSysActive = true;
+            _cmds->autodrvang = 0;
+            _cmds->autodrvmag = drivetrainPowerPullForward;
+            _cmds->autodrvrot = 0;
+            
+            //Add 20ms to climb timer
+            timer += 20;
+
+           if (_cmds->climbAbort) {
                 climbState = ClimbSTATE::robotClimbComplete;
                 break;
+           } else if (timer >= moveForwardStage3Duration) {
+              climbState = ClimbSTATE::robotClimbComplete;
+              timer = 0;
+              break;
+               /*else if (_io->liftdriveenc->Get() - initialLiftDriveEncoderValue >=
+            moveForwardStage2EncoderValue) {
+                climbState = ClimbSTATE::robotStoppedOnPlatform;
+                break; */
            }
             break;
         case ClimbSTATE::robotClimbComplete:
