@@ -15,11 +15,11 @@ ElevatorManager::ElevatorManager(IO *io, RobotCommands *cmds) {
     ElevatorManagerCurrentState = ElevatorManagerState::Transit;
 
     ElevHomePos = 0;
-    ElevHatchL1Pos = 4;
+    ElevHatchL1Pos = 1;
     ElevHatchL2Pos = 27;
-    ElevBallPickupPos = 4;
-    ElevBallCargoPos = 24;
-    ElevBallL1Pos = 6;
+    ElevBallPickupPos = 2;
+    ElevBallCargoPos = 19;
+    ElevBallL1Pos = 1;
     ElevBallL2Pos = 27;
     BallArmIntake = -.4;
     BallArmIdle = 0;
