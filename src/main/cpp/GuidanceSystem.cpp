@@ -45,6 +45,10 @@ void GuidanceSystem::GuidanceSystemPeriodic(){
             command true for one loop to get the elevator system into placement position
             and then begin homing on the target*/
 
+            _cmds->guidanceSysActive = false; //release control of the drivetrain if guidance is aborted.
+
+            if(targetAcquired) { calcHomingVectors(); }
+
             if(targetAcquired == true && guidanceSysActive == true){
                 GuidanceState = GuidanceSysState::TRACKING;
                 //Must notify drivetrain control that guidance system is now in control of robot
@@ -62,6 +66,7 @@ void GuidanceSystem::GuidanceSystemPeriodic(){
         //Active homing on targets using vision system
         case GuidanceSysState::TRACKING:
             calcHomingVectors();
+            applyDriveCommands();
             //Set all elevator commands false to hold the elevator system in
             //place until the robot is ready to place the game piece.
             _cmds->hatchPickup = false;
@@ -73,7 +78,7 @@ void GuidanceSystem::GuidanceSystemPeriodic(){
 
             //Exit when robot has approached close enough to lose target tracking
             if(guidanceSysActive == false) {GuidanceState = GuidanceSysState::NOTACTIVE;}
-            else if (targetAcquired == false) {GuidanceState = GuidanceSysState::FINALAPPROACH;}
+            else if (targetAcquired == false || checkError()) {GuidanceState = GuidanceSysState::FINALAPPROACH;}
             break;
         
         //Timed drive forward to close the last distance with the target after the vision system has lost tracking
@@ -82,6 +87,7 @@ void GuidanceSystem::GuidanceSystemPeriodic(){
             drvAng = finalApproachDrvAng;
             drvMagFinal = finalApproachDrvMag;
             drvRot = finalApproachDrvRot;
+            applyDriveCommands();
             
             if(guidanceSysActive == false) {GuidanceState = GuidanceSysState::NOTACTIVE;}
             else if (timer >= finalApproachDuration) {
@@ -98,6 +104,7 @@ void GuidanceSystem::GuidanceSystemPeriodic(){
             drvAng = 0;
             drvMagFinal = 0;
             drvRot = 0;
+            applyDriveCommands();
 
             //Issue command to the elevator system to place the game piece
             if(_cmds->autoHatchPickup == true) {_cmds->hatchPickup = true;}
@@ -121,6 +128,7 @@ void GuidanceSystem::GuidanceSystemPeriodic(){
             drvAng = finalApproachDrvAng;
             drvMagFinal = finalApproachDrvMag;
             drvRot = finalApproachDrvRot;
+            applyDriveCommands();
 
             _cmds->hatchPickup = false;
             _cmds->placeHatchOne = false;
@@ -156,14 +164,6 @@ void GuidanceSystem::GuidanceSystemPeriodic(){
             guidanceSysActive = false;
             break;  
    }
-
-    //If guidance is active, tell the drivetrain and set the auto drive commands
-    if(guidanceSysActive == true){
-        _cmds->guidanceSysActive = true;
-        _cmds->autodrvang = drvAng;
-        _cmds->autodrvmag = drvMagFinal;
-        _cmds->autodrvrot = drvRot;
-    } else { _cmds->guidanceSysActive = false; }
 }
 
 void GuidanceSystem::calcHomingVectors() {
@@ -188,28 +188,27 @@ void GuidanceSystem::calcHomingVectors() {
         //the targets are the same width (0 parallax means we are square
         //to the target)
         //Note: kp is negative for correct rotation direction
-        if(homingInStages && fabs(errorCenter < homingErrorTolerance)) {
+        /*if(homingInStages && fabs(errorCenter < homingErrorTolerance)) {
             errorAngle = (widthLeftTarget - widthRightTarget);
             drvRot = errorAngle * kpAngle;
-        }
+        }*/
 
         //Drive the robot forward until the targets match a
         //predetermined desires height that puts the robot at the
         //correct distance from the target
-        if(homingInStages && fabs(errorCenter < homingErrorTolerance) && fabs(errorAngle < homingErrorTolerance)){
             errorHeight = (targetDesiredHeight - heightRightTarget);
             drvMagRange = errorHeight * kpRange;
-        }
+        
 
         //Select final drive mag to be larger of the two requested values
         //This ensures that the drv mag will always be non-zero until both
         //errors have reached 0
-        if(drvMagRange >= drvMagCenter) drvMagFinal = drvMagRange;
-        else if(drvMagCenter >= drvMagRange) drvMagFinal = drvMagCenter;
+        if(fabs(drvMagRange) >= fabs(drvMagCenter)) drvMagFinal = drvMagRange;
+        else if(fabs(drvMagCenter) >= fabs(drvMagRange)) drvMagFinal = drvMagCenter;
 
         //Convert drive angle from "-180 to 180" degrees to "0 to 360" degrees 
         if(drvAng < 0) { drvAng += 360;}
-    }
+    } 
 }
 
 void GuidanceSystem::GuidanceSystemRobotPeriodic(){
@@ -259,4 +258,19 @@ void GuidanceSystem::updateDashboard()
     frc::SmartDashboard::PutNumber("Guide Drv Rotation", drvRot);
     frc::SmartDashboard::PutNumber("Guide System State", static_cast<int>(GuidanceState));
     frc::SmartDashboard::PutBoolean("Guide System Active", guidanceSysActive);
+}
+
+void GuidanceSystem::applyDriveCommands(){
+    _cmds->guidanceSysActive = true;
+
+    if(drvMagFinal > maxDriveCommand) drvMagFinal = maxDriveCommand;
+    else if(drvMagFinal < -maxDriveCommand) drvMagFinal = -maxDriveCommand;
+    _cmds->autodrvang = drvAng;
+    _cmds->autodrvmag = drvMagFinal;
+    _cmds->autodrvrot = drvRot;
+}
+
+bool GuidanceSystem::checkError(){
+    if(fabs(errorCenter) < desiredErrorCenter && fabs(errorHeight) < desiredErrorHeight) return true;
+    else return false;
 }
