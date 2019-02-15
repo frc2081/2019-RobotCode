@@ -48,6 +48,8 @@ public:
 	bool frameStandManual;
 	bool ballArmToggleManual;
 	double elevatorDrivePowerManual;
+
+	bool manualModeActive;
 };
 
 #endif /* SRC_ROBOTCOMMANDS_H_ */

@@ -9,6 +9,9 @@
 #include "ctre/Phoenix.h"
 
 IO::IO() {
+	PDP = new frc::PowerDistributionPanel(20);
+	PCM = new frc::Compressor(0);
+
 	//Swerve Drive Motors
 	drvrfmot = new WPI_VictorSPX(0);		
 	drvlfmot = new WPI_VictorSPX(1);

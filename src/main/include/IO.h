@@ -38,6 +38,9 @@ public:
 	const double elevatorEncoderCountsToDistanceInches = .00048; //1024 counts/rev, 0.5 inch travel/rev; 0.5/1024 = .00048 inches per count
  	const double liftDistPerCountInches = .00306; //1024 counts/rev, 3.14 inches travel/rev; 3.14/1024 = .00306 inches per count
 
+	frc::PowerDistributionPanel *PDP;
+	frc::Compressor *PCM;
+
 	//Swerve Drive Motors
 	WPI_VictorSPX *drvlbmot;
 	WPI_VictorSPX *drvrbmot;
