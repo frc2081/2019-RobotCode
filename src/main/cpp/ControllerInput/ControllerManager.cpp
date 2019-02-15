@@ -84,7 +84,7 @@ void ControllerManager::pollControllers(RobotCommands *Commands){
 		frc::SmartDashboard::PutBoolean("autoHatchPickup", Commands->autoHatchPickup);
 
 		//grab cargo from ground
-		if (mechanismcontroller->bLB->State()) Commands->cargoPickup = true;
+		if (mechanismcontroller->bLB->RE()) Commands->cargoPickup = true;
 		else Commands->cargoPickup = false;
 		frc::SmartDashboard::PutBoolean("cargoPickup", Commands->cargoPickup);
 
@@ -157,13 +157,15 @@ void ControllerManager::pollControllers(RobotCommands *Commands){
 	}
 
 	if(mechanismcontroller->LTrig > .5 && mechanismcontroller->RTrig > .5){
+
+		Commands->manualModeActive = true;
 		//hatch arm toggle manual
 		if (mechanismcontroller->bA->RE()) Commands->hatchArmToggleManual = true;
 		else Commands->hatchArmToggleManual = false;
 		frc::SmartDashboard::PutBoolean("hatchArmToggleManual", Commands->hatchArmToggleManual);
 
 		//ball arm motor intake manual
-		if (mechanismcontroller->bX->RE()) Commands->ballArmMotorIntakeManual = true;
+		if (mechanismcontroller->bX->State()) Commands->ballArmMotorIntakeManual = true;
 		else Commands->ballArmMotorIntakeManual = false;
 		frc::SmartDashboard::PutBoolean("ballArmMotorIntakeManual", Commands->ballArmMotorIntakeManual);
 
@@ -190,5 +192,5 @@ void ControllerManager::pollControllers(RobotCommands *Commands){
 		//move elevator up or down manual
 		Commands->elevatorDrivePowerManual = mechanismcontroller->LY;
 		frc::SmartDashboard::PutNumber("elevator", Commands->elevatorDrivePowerManual);
-	}
+	} else {Commands->manualModeActive = false;}
 }

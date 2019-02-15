@@ -9,6 +9,9 @@
 #include "ctre/Phoenix.h"
 
 IO::IO() {
+	PDP = new frc::PowerDistributionPanel(20);
+	PCM = new frc::Compressor(0);
+
 	//Swerve Drive Motors
 	drvrfmot = new WPI_VictorSPX(0);		
 	drvlfmot = new WPI_VictorSPX(1);
@@ -40,16 +43,16 @@ IO::IO() {
 	steerencdrvrb = new frc::AnalogPotentiometer(2,360,0);	
 	steerencdrvlb = new frc::AnalogPotentiometer(3,360,0);
 	//Other Encoders and DIO
+	hatchDetectorOne = new frc::DigitalInput(8);
+	hatchDetectorTwo = new frc::DigitalInput(9);	
 	elevatorenc = new frc::Encoder(10, 11);	
 	liftrfenc = new frc::Encoder(14 ,15);
 	liftlfenc = new frc::Encoder(16, 17);
 	liftrbenc = new frc::Encoder(18, 19);
 	liftlbenc = new frc::Encoder(20, 21);	
 	liftdriveenc = new frc::Counter(22);
-	hatchDetectorOne = new frc::DigitalInput(8);
-	hatchDetectorTwo = new frc::DigitalInput(9);
+	ballintakeenc = new frc::Encoder(23, 24);
 
-		
 	//Solenoids
 	//compressor = new frc::Compressor();
 	hatcharmsolenoidout = new frc::Solenoid(0);	
@@ -73,6 +76,8 @@ IO::IO() {
 	//encdrvrf->SetDistancePerPulse(swerveencodercountstodistancecentimeters);
 
 	elevatorenc->SetDistancePerPulse(elevatorEncoderCountsToDistanceInches);
+	ballintakeenc->SetDistancePerPulse(ballIntakeCountsPerRevolution);
+
 	elevatorDesiredPos = 0;
 	elevatorActualPos = 0;
 

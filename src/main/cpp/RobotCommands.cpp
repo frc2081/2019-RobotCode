@@ -46,5 +46,7 @@ RobotCommands::RobotCommands() {
 	ballArmToggleManual = false;
 	elevatorDrivePowerManual = 0;
 
+	manualModeActive = false;
+
 }
 
