@@ -45,7 +45,7 @@ void ControllerManager::pollControllers(RobotCommands *Commands){
 	else Commands->climbAbort = false;
 	frc::SmartDashboard::PutBoolean("climbAbort", Commands->climbAbort);
 
-	if (drivecontroller->bBack->State() && drivecontroller->bA->RE()) Commands->climbFreeze = true;
+	if (drivecontroller->bBack->State() && drivecontroller->bA->State()) Commands->climbFreeze = true;
 	else Commands->climbFreeze= false;
 	frc::SmartDashboard::PutBoolean("climbFreeze", Commands->climbFreeze);
 

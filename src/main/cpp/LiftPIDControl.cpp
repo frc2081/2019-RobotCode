@@ -183,10 +183,10 @@ void LiftPIDControl::liftPIDControlTeleopPeriodic() {
   double liftRearSeparation = fabs(rbPos - lbPos);
   frc::SmartDashboard::PutNumber("Lift Front Separation", liftFrontSeparation);
   frc::SmartDashboard::PutNumber("Lift Rear Separation", liftRearSeparation);
-  if(liftFrontSeparation > liftDesyncDistanceThreshold || liftRearSeparation > liftDesyncDistanceThreshold) {disableLiftPID();}
+  if(liftFrontSeparation > liftDesyncDistanceThreshold || liftRearSeparation > liftDesyncDistanceThreshold) {_cmds->climbFreeze = true;}
 
   //implement climb freeze command - freezes lift setpoints at the moment the command is issued
-  if(_cmds->climbFreeze == true){
+  if(_cmds->climbFreeze == true && frozen == false){
     freezeSetPointFront = liftFrontSetPoint;
     freezeSetPointRear = liftRearSetPoint;
     frozen = true;
@@ -210,13 +210,6 @@ double LiftPIDControl::rampToValue(double currVal, double desVal, double rampRat
   else if(desVal > currVal) return currVal + _rampRate;
   else if(desVal < currVal) return currVal - _rampRate;
   else return currVal; //Default case
-}
-
-void LiftPIDControl::disableLiftPID() {
-  liftlfPID->SetSetpoint(_io->liftlfenc->GetDistance());
-  liftrfPID->SetSetpoint(_io->liftrfenc->GetDistance());
-  liftlbPID->SetSetpoint(_io->liftlbenc->GetDistance());
-  liftrbPID->SetSetpoint(_io->liftrbenc->GetDistance());
 }
 
 double LiftPIDControl::setLiftDestination(liftPos liftDest) {
