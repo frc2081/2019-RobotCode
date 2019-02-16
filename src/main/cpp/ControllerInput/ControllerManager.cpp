@@ -41,9 +41,13 @@ void ControllerManager::pollControllers(RobotCommands *Commands){
 	frc::SmartDashboard::PutBoolean("climbCommandL2", Commands->climbCommandLevelTwo);	
 	
 	//stop climbing/abort climb command
-	if (drivecontroller->bB->State()) Commands->climbAbort = true;
+	if (drivecontroller->bBack->State() && drivecontroller->bB->State()) Commands->climbAbort = true;
 	else Commands->climbAbort = false;
-	frc::SmartDashboard::PutBoolean("climbAbort", Commands->climbAbort);	
+	frc::SmartDashboard::PutBoolean("climbAbort", Commands->climbAbort);
+
+	if (drivecontroller->bBack->State() && drivecontroller->bA->State()) Commands->climbFreeze = true;
+	else Commands->climbFreeze= false;
+	frc::SmartDashboard::PutBoolean("climbFreeze", Commands->climbFreeze);
 
 	Commands->hatchPickup = false;
 	Commands->cargoPickup = false;

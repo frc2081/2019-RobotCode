@@ -15,12 +15,15 @@ ElevatorManager::ElevatorManager(IO *io, RobotCommands *cmds) {
     ElevatorManagerCurrentState = ElevatorManagerState::Transit;
 
     ElevHomePos = 0;
-    ElevHatchL1Pos = 4;
+    ElevHatchL1Pos = 0.5;
     ElevHatchL2Pos = 27;
-    ElevBallPickupPos = 4;
-    ElevBallCargoPos = 24;
-    ElevBallL1Pos = 6;
+    ElevBallPickupPos = 2;
+    ElevBallCargoPos = 19;
+    ElevBallL1Pos = 1;
     ElevBallL2Pos = 27;
+    BallArmIntake = -.4;
+    BallArmIdle = 0;
+    BallArmEject = 1;
     extended = true;
     retracted = false;
     BallEjectTimer = 0;
@@ -51,7 +54,7 @@ ElevatorManager::ElevatorManager(IO *io, RobotCommands *cmds) {
     }
     
 void ElevatorManager::ElevatorManagerPeriodic(){
-
+    frc::SmartDashboard::PutNumber("elavator state", static_cast<int>(ElevatorManagerCurrentState) );
     intakeP = frc::SmartDashboard::GetNumber("Intake Motor PID P", intakeP);
     intakeI = frc::SmartDashboard::GetNumber("Intake Motor PID P", intakeI);
     intakeD = frc::SmartDashboard::GetNumber("Intake Motor PID P", intakeD);
@@ -66,7 +69,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
     //If manual mode is active, bypass the state machine and control outputs directly
     //Otherwise let the state machine set the output values
     if(_cmds->manualModeActive){
-
+ 
         if(_cmds->hatchArmToggleManual) {HatchArmPos = !HatchArmPos;}
         if(_cmds->hatchClawManual) {HatchClawPos = !HatchClawPos;}
         if(_cmds->ballArmToggleManual) {BallArmPos = !BallArmPos;}
@@ -99,7 +102,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
 
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
                 if(_cmds->hatchPickup){ElevatorManagerCurrentState = ElevatorManagerState::HatchPickup;}
-                if(_io->hatchDetectorOne->Get() && _io->hatchDetectorTwo->Get()) {ElevatorManagerCurrentState = ElevatorManagerState::HatchPickup;}
+                //if(_io->hatchDetectorOne->Get() && _io->hatchDetectorTwo->Get()) {ElevatorManagerCurrentState = ElevatorManagerState::HatchPickup;}
 
                 break;
             case ElevatorManagerState::HatchPickup: //2
@@ -189,6 +192,11 @@ void ElevatorManager::ElevatorManagerPeriodic(){
                 HatchArmPos = extended;
                 BallIntakeSpeedCmd = BallArmEjectSpeed;
                 BallArmPos = extended;
+                BallEjectTimer++;
+                if(BallEjectTimer == BallEjectTimerLimit){
+                    ElevatorManagerCurrentState = ElevatorManagerState::Transit;
+                    BallEjectTimer = 0;
+                    }
 
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
 
@@ -208,6 +216,10 @@ void ElevatorManager::ElevatorManagerPeriodic(){
                 HatchArmPos = extended;
                 BallIntakeSpeedCmd = BallArmEjectSpeed;
                 BallArmPos = extended;
+                if(BallEjectTimer == BallEjectTimerLimit){
+                    ElevatorManagerCurrentState = ElevatorManagerState::Transit;
+                    BallEjectTimer = 0;
+                    }
 
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
 
@@ -228,6 +240,11 @@ void ElevatorManager::ElevatorManagerPeriodic(){
                 BallIntakeSpeedCmd = BallArmEjectSpeed;
                 BallArmPos = extended;
 
+                if(BallEjectTimer == BallEjectTimerLimit){
+                    ElevatorManagerCurrentState = ElevatorManagerState::Transit;
+                    BallEjectTimer = 0;
+                    }
+
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
 
                 break;
@@ -237,7 +254,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
                 BallEjectTimer++;
                 if(BallEjectTimer == BallEjectTimerLimit){
                     ElevatorManagerCurrentState = ElevatorManagerState::Transit;
-                    BallEjectTimerLimit = 0;
+                    BallEjectTimer = 0;
                     }
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
                 break;
