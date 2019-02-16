@@ -43,15 +43,15 @@ IO::IO() {
 	steerencdrvrb = new frc::AnalogPotentiometer(2,360,0);	
 	steerencdrvlb = new frc::AnalogPotentiometer(3,360,0);
 	//Other Encoders and DIO
-	hatchDetectorOne = new frc::DigitalInput(8);
-	hatchDetectorTwo = new frc::DigitalInput(9);	
+	hatchDetectorOne = new frc::DigitalInput(0);
+	hatchDetectorTwo = new frc::DigitalInput(1);	
 	elevatorenc = new frc::Encoder(10, 11);	
 	liftrfenc = new frc::Encoder(14 ,15);
 	liftlfenc = new frc::Encoder(16, 17);
 	liftrbenc = new frc::Encoder(18, 19);
 	liftlbenc = new frc::Encoder(20, 21);	
-	liftdriveenc = new frc::Counter(22);
-	ballintakeenc = new frc::Encoder(23, 24);
+	liftdriveenc = new frc::Counter(25);
+	ballintakeenc = new frc::Encoder(8, 9);
 
 	//Solenoids
 	//compressor = new frc::Compressor();

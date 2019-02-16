@@ -21,9 +21,9 @@ ElevatorManager::ElevatorManager(IO *io, RobotCommands *cmds) {
     ElevBallCargoPos = 19;
     ElevBallL1Pos = 1;
     ElevBallL2Pos = 27;
-    BallArmIntake = -.4;
-    BallArmIdle = 0;
-    BallArmEject = 1;
+    BallArmIntakeSpeed = -.4;
+    BallArmIdleSpeed = 0;
+    BallArmEjectSpeed = 1;
     extended = true;
     retracted = false;
     BallEjectTimer = 0;
@@ -268,10 +268,13 @@ void ElevatorManager::ElevatorManagerPeriodic(){
     frc::SmartDashboard::PutBoolean("Elevator Hatch Claw Position", HatchClawPos);
     frc::SmartDashboard::PutBoolean("Elevator Ball Arm State:", BallArmPos);
     frc::SmartDashboard::PutNumber("Elevator Ball Intake Power", _io->ballintakemot->Get());
-    frc::SmartDashboard::PutNumber("Elevator Ball Intake Setpoint", BallIntakeSpeedCmd);
+    frc::SmartDashboard::PutNumber("Elevator Ball Intake Setpoint", ballIntakePID->GetSetpoint());
     frc::SmartDashboard::PutBoolean("Elevator Hatch Detect 1", _io->hatchDetectorOne->Get());
     frc::SmartDashboard::PutBoolean("Elevator Hatch Detect 2", _io->hatchDetectorTwo->Get());
     frc::SmartDashboard::PutNumber("Elevator Motor Current", _io->PDP->GetCurrent(13));
+    frc::SmartDashboard::PutNumber("Elevator Ball Intake Dist", _io->ballintakeenc->Get());
+    frc::SmartDashboard::PutNumber("Elevator Ball Intake Speed", _io->ballintakeenc->GetRate());
+    frc::SmartDashboard::PutNumber("Elevator Ball Intake Error", ballIntakePID->GetError());    
 
 }
 
