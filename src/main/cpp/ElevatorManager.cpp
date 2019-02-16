@@ -15,7 +15,7 @@ ElevatorManager::ElevatorManager(IO *io, RobotCommands *cmds) {
     ElevatorManagerCurrentState = ElevatorManagerState::Transit;
 
     ElevHomePos = 0;
-    ElevHatchL1Pos = 1;
+    ElevHatchL1Pos = 0.5;
     ElevHatchL2Pos = 27;
     ElevBallPickupPos = 2;
     ElevBallCargoPos = 19;
@@ -23,7 +23,7 @@ ElevatorManager::ElevatorManager(IO *io, RobotCommands *cmds) {
     ElevBallL2Pos = 27;
     BallArmIntake = -.4;
     BallArmIdle = 0;
-    BallArmEject = 0.8;
+    BallArmEject = 1;
     extended = true;
     retracted = false;
     BallEjectTimer = 0;
@@ -42,9 +42,9 @@ ElevatorManager::ElevatorManager(IO *io, RobotCommands *cmds) {
     }
     
 void ElevatorManager::ElevatorManagerPeriodic(){
-
+    frc::SmartDashboard::PutNumber("elavator state", static_cast<int>(ElevatorManagerCurrentState) );
     if(_cmds->manualModeActive){
-
+ 
         if(_cmds->hatchArmToggleManual) {HatchArmPos = !HatchArmPos;}
         if(_cmds->hatchClawManual) {HatchClawPos = !HatchClawPos;}
         if(_cmds->ballArmToggleManual) {BallArmPos = !BallArmPos;}
@@ -77,7 +77,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
 
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
                 if(_cmds->hatchPickup){ElevatorManagerCurrentState = ElevatorManagerState::HatchPickup;}
-                if(_io->hatchDetectorOne->Get() && _io->hatchDetectorTwo->Get()) {ElevatorManagerCurrentState = ElevatorManagerState::HatchPickup;}
+                //if(_io->hatchDetectorOne->Get() && _io->hatchDetectorTwo->Get()) {ElevatorManagerCurrentState = ElevatorManagerState::HatchPickup;}
 
                 break;
             case ElevatorManagerState::HatchPickup: //2
@@ -167,6 +167,11 @@ void ElevatorManager::ElevatorManagerPeriodic(){
                 HatchArmPos = extended;
                 BallIntakePowerCmd = BallArmEject;
                 BallArmPos = extended;
+                BallEjectTimer++;
+                if(BallEjectTimer == BallEjectTimerLimit){
+                    ElevatorManagerCurrentState = ElevatorManagerState::Transit;
+                    BallEjectTimer = 0;
+                    }
 
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
 
@@ -186,6 +191,10 @@ void ElevatorManager::ElevatorManagerPeriodic(){
                 HatchArmPos = extended;
                 BallIntakePowerCmd = BallArmEject;
                 BallArmPos = extended;
+                if(BallEjectTimer == BallEjectTimerLimit){
+                    ElevatorManagerCurrentState = ElevatorManagerState::Transit;
+                    BallEjectTimer = 0;
+                    }
 
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
 
@@ -206,6 +215,11 @@ void ElevatorManager::ElevatorManagerPeriodic(){
                 BallIntakePowerCmd = BallArmEject;
                 BallArmPos = extended;
 
+                if(BallEjectTimer == BallEjectTimerLimit){
+                    ElevatorManagerCurrentState = ElevatorManagerState::Transit;
+                    BallEjectTimer = 0;
+                    }
+
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
 
                 break;
@@ -215,7 +229,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
                 BallEjectTimer++;
                 if(BallEjectTimer == BallEjectTimerLimit){
                     ElevatorManagerCurrentState = ElevatorManagerState::Transit;
-                    BallEjectTimerLimit = 0;
+                    BallEjectTimer = 0;
                     }
                 if(_cmds->elevatorHome){ElevatorManagerCurrentState = ElevatorManagerState::Transit;}
                 break;
