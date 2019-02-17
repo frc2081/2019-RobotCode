@@ -48,6 +48,7 @@ LiftPIDControl::LiftPIDControl(IO *io, RobotCommands *cmds) {
   liftlfPID->SetPercentTolerance(3);
   liftrbPID->SetPercentTolerance(3);
   liftlbPID->SetPercentTolerance(3);
+
   liftrfPID->Enable(); 
   liftlfPID->Enable();
   liftlbPID->Enable();
@@ -65,6 +66,7 @@ LiftPIDControl::LiftPIDControl(IO *io, RobotCommands *cmds) {
   frc::SmartDashboard::PutNumber("Lift Rear Hab Level 1 Set Point", liftPosExtendedLevelOneRear);
   frc::SmartDashboard::PutNumber("Lift Rear Hab Level 2 Set Point", liftPosExtendedLevelTwoRear);
   frc::SmartDashboard::PutNumber("Lift Movement Rate", liftMovementRate);
+  frc::SmartDashboard::PutBoolean("Lift Freeze", frozen);
 
 }    
 

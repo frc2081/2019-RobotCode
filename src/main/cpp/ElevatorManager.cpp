@@ -17,7 +17,7 @@ ElevatorManager::ElevatorManager(IO *io, RobotCommands *cmds) {
     ElevHomePos = 0;
     ElevHatchL1Pos = 0.5;
     ElevHatchL2Pos = 27;
-    ElevBallPickupPos = 2;
+    ElevBallPickupPos = 0;
     ElevBallCargoPos = 19;
     ElevBallL1Pos = 1;
     ElevBallL2Pos = 27;

@@ -36,7 +36,7 @@ IO::IO() {
 	encdrvrf = new frc::Encoder(0, 1, false, frc::Encoder::EncodingType::k4X);
 	encdrvlf = new frc::Encoder(2, 3, false, frc::Encoder::EncodingType::k4X);
 	encdrvrb = new frc::Encoder(4, 5, false, frc::Encoder::EncodingType::k4X);
-	encdrvlb = new frc::Encoder(6, 7, false, frc::Encoder::EncodingType::k4X);	
+	//encdrvlb = new frc::Encoder(6, 7, false, frc::Encoder::EncodingType::k4X);	
 	//DIO 10-13 are used as PWM outputs for climb motors		
 	steerencdrvrf = new frc::AnalogPotentiometer(0,360,0);	
 	steerencdrvlf = new frc::AnalogPotentiometer(1,360,0);	

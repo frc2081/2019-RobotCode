@@ -186,13 +186,16 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
             */
            timer = 0;
            lift->liftRearPosDes = lift->liftPos::RETRACTED;
+                lift->moveFast = false;
+            lift->syncFrontRearLifts = false;
+           
 
            //liftdrivemot needs to be turned off
            _io->liftdrivemot->Set(0);
            //swerve motors need to be off
             _cmds->guidanceSysActive = true;
-            _cmds->autodrvang = 0;
-            _cmds->autodrvmag = drivetrainPowerHold;
+            _cmds->autodrvang = 90;
+            _cmds->autodrvmag = .01;
             _cmds->autodrvrot = 0;
 
            if (_cmds->climbAbort ||
@@ -215,7 +218,7 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
            //swerve drive motors need to be turned on
             _cmds->guidanceSysActive = true;
             _cmds->autodrvang = 0;
-            _cmds->autodrvmag = drivetrainPowerPullForward;
+            _cmds->autodrvmag = 0;
             _cmds->autodrvrot = 0;
             
             //Add 20ms to climb timer
