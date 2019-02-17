@@ -42,6 +42,7 @@ public:
 	bool autoPlaceCargoInShip;
 	bool autoPlaceCargoRocketOne;
 	bool autoPlaceCargoRocketTwo;
+	bool autoAlign;
 
 	bool hatchArmToggleManual;
 	bool ballArmMotorIntakeManual;

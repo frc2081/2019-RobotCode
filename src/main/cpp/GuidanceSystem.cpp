@@ -33,7 +33,7 @@ void GuidanceSystem::GuidanceSystemPeriodic(){
     //Set the guidance system active if any auto command is active
     if(_cmds->autoHatchPickup || _cmds->autoPlaceHatchOne ||
         _cmds->autoPlaceHatchTwo ||  _cmds->autoPlaceCargoInShip ||
-       _cmds->autoPlaceCargoRocketOne || _cmds->autoPlaceCargoRocketTwo) 
+       _cmds->autoPlaceCargoRocketOne || _cmds->autoPlaceCargoRocketTwo || _cmds->autoAlign) 
        {guidanceSysActive = true;}
     else {guidanceSysActive = false;}
 
@@ -69,16 +69,16 @@ void GuidanceSystem::GuidanceSystemPeriodic(){
             applyDriveCommands();
             //Set all elevator commands false to hold the elevator system in
             //place until the robot is ready to place the game piece.
-            _cmds->hatchPickup = false;
-            _cmds->placeHatchOne = false;
-            _cmds->placeHatchTwo = false;
-            _cmds->placeCargoInShip = false;
-            _cmds->placeCargoRocketOne = false;
-            _cmds->placeCargoRocketTwo = false;
+           // _cmds->hatchPickup = false;
+           // _cmds->placeHatchOne = false;
+           // _cmds->placeHatchTwo = false;
+           // _cmds->placeCargoInShip = false;
+           // _cmds->placeCargoRocketOne = false;
+            //_cmds->placeCargoRocketTwo = false;
 
             //Exit when robot has approached close enough to lose target tracking
-            if(guidanceSysActive == false) {GuidanceState = GuidanceSysState::NOTACTIVE;}
-            else if (targetAcquired == false || checkError()) {GuidanceState = GuidanceSysState::FINALAPPROACH;}
+            if(guidanceSysActive == false || targetAcquired == false) {GuidanceState = GuidanceSysState::NOTACTIVE;}
+            else if (targetAcquired == false || checkError()) {GuidanceState = GuidanceSysState::TRACKING;}
             break;
         
         //Timed drive forward to close the last distance with the target after the vision system has lost tracking
@@ -263,11 +263,11 @@ void GuidanceSystem::updateDashboard()
 void GuidanceSystem::applyDriveCommands(){
     _cmds->guidanceSysActive = true;
 
-    if(drvMagFinal > maxDriveCommand) drvMagFinal = maxDriveCommand;
-    else if(drvMagFinal < -maxDriveCommand) drvMagFinal = -maxDriveCommand;
+    //if(drvMagFinal > maxDriveCommand) drvMagFinal = maxDriveCommand;
+    //else if(drvMagFinal < -maxDriveCommand) drvMagFinal = -maxDriveCommand;
     _cmds->autodrvang = drvAng;
-    _cmds->autodrvmag = drvMagFinal;
-    _cmds->autodrvrot = drvRot;
+    _cmds->autodrvmag = _cmds->drvmag;
+    _cmds->autodrvrot = _cmds->drvrot;
 }
 
 bool GuidanceSystem::checkError(){
