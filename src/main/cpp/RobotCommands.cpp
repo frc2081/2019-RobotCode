@@ -37,6 +37,7 @@ RobotCommands::RobotCommands() {
 	autoPlaceCargoInShip = false;
 	autoPlaceCargoRocketOne = false;
 	autoPlaceCargoRocketTwo = false;
+	autoAlign = false;
 
 	hatchArmToggleManual = false;
 	ballArmMotorIntakeManual = false;

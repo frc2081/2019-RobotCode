@@ -17,6 +17,8 @@ class GuidanceSystem{
         RobotCommands *_cmds;
         void calcHomingVectors();
         void updateDashboard();
+        void applyDriveCommands();
+        bool checkError();
 
         std::shared_ptr<NetworkTable> table; 
 
@@ -50,9 +52,13 @@ class GuidanceSystem{
         int widthRightTarget = 55;
         int heightLeftTarget = 55;
         int heightRightTarget = 110;
+        double desiredErrorCenter = 20;
+        double desiredErrorHeight = 20;
+        double maxDriveCommand = .25;
+        int centerOffset = 100;
         
         //Height of the targets in pixels when the robot has moved to the hatch placement final approach position
-        int targetDesiredHeight = 130;
+        int targetDesiredHeight = 100;
 
         //Indicates if guidance system is in control of the robot
         bool guidanceSysActive = false;
@@ -64,10 +70,10 @@ class GuidanceSystem{
         double homingErrorTolerance = 10;
 
         //Proportional Coefficients     
-        double kpCenterAng = .5;
-        double kpCenterMag = .5;
+        double kpCenterAng = -.15;
+        double kpCenterMag = 0.005;
         double kpAngle = -.5;
-        double kpRange = .5;
+        double kpRange = .01;
 
         //Actual Errors in image pixels
         double errorCenter;
