@@ -81,7 +81,7 @@ void ControllerManager::pollControllers(RobotCommands *Commands){
 	frc::SmartDashboard::PutBoolean("climbFreeze", Commands->climbFreeze);
 
 	//Auto align robot to target
-	if (drivecontroller->bA->State()) Commands->autoAlign = true;
+	if (drivecontroller->RTrig > 0.5) Commands->autoAlign = true;
 	else Commands->autoAlign = false;
 	frc::SmartDashboard::PutBoolean("autoAlign", Commands->autoAlign);
 

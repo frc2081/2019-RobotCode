@@ -54,7 +54,8 @@ class GuidanceSystem{
         int heightRightTarget = 110;
         double desiredErrorCenter = 20;
         double desiredErrorHeight = 20;
-        double maxDriveCommand = .4;
+        double maxDriveCommand = .25;
+        int centerOffset = 100;
         
         //Height of the targets in pixels when the robot has moved to the hatch placement final approach position
         int targetDesiredHeight = 100;
@@ -69,7 +70,7 @@ class GuidanceSystem{
         double homingErrorTolerance = 10;
 
         //Proportional Coefficients     
-        double kpCenterAng = .5;
+        double kpCenterAng = -.15;
         double kpCenterMag = 0.005;
         double kpAngle = -.5;
         double kpRange = .01;

@@ -26,6 +26,7 @@ GuidanceSystem::GuidanceSystem(RobotCommands *cmds){
     frc::SmartDashboard::PutNumber("Guide kp Angle", kpAngle);
     frc::SmartDashboard::PutNumber("Guide kp Center Angle", kpCenterAng);
     frc::SmartDashboard::PutNumber("Guide kp Center Mag", kpCenterMag);
+    frc::SmartDashboard::PutNumber("Guide Center Offset", centerOffset);
     }
 
 void GuidanceSystem::GuidanceSystemPeriodic(){
@@ -180,7 +181,7 @@ void GuidanceSystem::calcHomingVectors() {
         //targets in the camera image
         //Calculates drive angle as -180 to 180
         //Must be converted to 0 to 360 for swerve drive
-        errorCenter = (distanceLeftTarget + distanceRightTarget);
+        errorCenter = (distanceLeftTarget + distanceRightTarget) - centerOffset;
         drvAng = errorCenter * kpCenterAng;
         drvMagCenter = errorCenter * kpCenterMag;
 
@@ -206,6 +207,9 @@ void GuidanceSystem::calcHomingVectors() {
         if(fabs(drvMagRange) >= fabs(drvMagCenter)) drvMagFinal = drvMagRange;
         else if(fabs(drvMagCenter) >= fabs(drvMagRange)) drvMagFinal = drvMagCenter;
 
+        //Limit drive angle commands
+        if(drvAng > 90) drvAng = 90;
+        else if (drvAng< -90) drvAng = -90;
         //Convert drive angle from "-180 to 180" degrees to "0 to 360" degrees 
         if(drvAng < 0) { drvAng += 360;}
     } 
@@ -247,6 +251,7 @@ void GuidanceSystem::updateDashboard()
     finalApproachDrvMag = frc::SmartDashboard::GetNumber("Guide Final DrvMag tune", finalApproachDrvMag);
     homingInStages = frc::SmartDashboard::GetBoolean("Guide Homing In Stages", homingInStages);
     homingErrorTolerance = frc::SmartDashboard::GetNumber("Guide Homing Stages Err Tol", homingErrorTolerance);
+    centerOffset = frc::SmartDashboard::GetNumber("Guide Center Offset", centerOffset);
 
     frc::SmartDashboard::PutNumber("Guide Final Drv Mag", drvMagFinal);
     frc::SmartDashboard::PutNumber("Guide error Center", errorCenter);
@@ -266,6 +271,9 @@ void GuidanceSystem::applyDriveCommands(){
     //if(drvMagFinal > maxDriveCommand) drvMagFinal = maxDriveCommand;
     //else if(drvMagFinal < -maxDriveCommand) drvMagFinal = -maxDriveCommand;
     _cmds->autodrvang = drvAng;
+
+    //limit drivetrain speed to a level the auto system can handle
+    if(_cmds->drvmag > maxDriveCommand) _cmds->drvmag = maxDriveCommand;
     _cmds->autodrvmag = _cmds->drvmag;
     _cmds->autodrvrot = _cmds->drvrot;
 }
