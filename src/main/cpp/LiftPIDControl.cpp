@@ -114,6 +114,7 @@ void LiftPIDControl::liftPIDControlRobotPeriodic(){
   frc::SmartDashboard::PutNumber("Lift RF Motor Power", _io->liftrfmot->Get());
   frc::SmartDashboard::PutNumber("Lift LB Motor Power", _io->liftlbmot->Get());
   frc::SmartDashboard::PutNumber("Lift RB Motor Power", _io->liftrbmot->Get());
+  frc::SmartDashboard::PutNumber("Lift Frozen", frozen);
 }
 
 void LiftPIDControl::liftPIDControlTeleopPeriodic() {

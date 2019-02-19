@@ -181,7 +181,7 @@ void GuidanceSystem::calcHomingVectors() {
         //targets in the camera image
         //Calculates drive angle as -180 to 180
         //Must be converted to 0 to 360 for swerve drive
-        errorCenter = (distanceLeftTarget + distanceRightTarget) - centerOffset;
+        errorCenter = (distanceLeftTarget + distanceRightTarget);
         drvAng = errorCenter * kpCenterAng;
         drvMagCenter = errorCenter * kpCenterMag;
 
