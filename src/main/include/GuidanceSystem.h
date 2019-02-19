@@ -9,12 +9,13 @@
 
 class GuidanceSystem{
     public:
-        GuidanceSystem(RobotCommands *cmds);
+        GuidanceSystem(RobotCommands *cmds, IO *io);
         void GuidanceSystemPeriodic();
         void GuidanceSystemRobotPeriodic();
 
     private:
         RobotCommands *_cmds;
+        IO *_io;
         void calcHomingVectors();
         void updateDashboard();
         void applyDriveCommands();
@@ -72,7 +73,7 @@ class GuidanceSystem{
         //Proportional Coefficients     
         double kpCenterAng = -.15;
         double kpCenterMag = 0.005;
-        double kpAngle = -.5;
+        double kpAngle = -1;
         double kpRange = .01;
 
         //Actual Errors in image pixels

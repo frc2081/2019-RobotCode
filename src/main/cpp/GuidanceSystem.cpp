@@ -1,7 +1,8 @@
 #include "GuidanceSystem.h"
 
-GuidanceSystem::GuidanceSystem(RobotCommands *cmds){
+GuidanceSystem::GuidanceSystem(RobotCommands *cmds, IO *io){
     _cmds = cmds;
+    _io = io;
     errorCenter = 0;
     errorAngle = 0;
     errorHeight = 0;
@@ -194,6 +195,9 @@ void GuidanceSystem::calcHomingVectors() {
             drvRot = errorAngle * kpAngle;
         }*/
 
+        errorAngle = _io->hatchRangeSensorLeft->GetVoltage() - _io->hatchRangeSensorRight->GetVoltage();
+        drvRot = errorAngle * kpAngle;
+
         //Drive the robot forward until the targets match a
         //predetermined desires height that puts the robot at the
         //correct distance from the target
@@ -221,6 +225,9 @@ void GuidanceSystem::GuidanceSystemRobotPeriodic(){
 
 void GuidanceSystem::updateDashboard()
 {
+    frc::SmartDashboard::PutNumber("Hatch Range Right Volts", _io->hatchRangeSensorRight->GetVoltage());
+    frc::SmartDashboard::PutNumber("Hatch Range Left Volts", _io->hatchRangeSensorLeft->GetVoltage());
+    
     targetAcquired = table->GetBoolean("TargetDataValid", false);
     visionHeartbeat = table->GetNumber("VisionHeartbeat", -2);
     distanceLeftTarget = table->GetNumber("LeftTargetDistFromCenter", -2);
@@ -274,8 +281,10 @@ void GuidanceSystem::applyDriveCommands(){
 
     //limit drivetrain speed to a level the auto system can handle
     if(_cmds->drvmag > maxDriveCommand) _cmds->drvmag = maxDriveCommand;
+    if(_cmds->drvrot > 1) _cmds->drvrot = 1;
+    else if (_cmds->drvrot < -1) _cmds->drvrot = -1;
     _cmds->autodrvmag = _cmds->drvmag;
-    _cmds->autodrvrot = _cmds->drvrot;
+    _cmds->autodrvrot = drvRot;
 }
 
 bool GuidanceSystem::checkError(){
