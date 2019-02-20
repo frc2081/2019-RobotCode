@@ -874,7 +874,7 @@
           },
           "0,2": {
             "size": [
-              2,
+              3,
               3
             ],
             "content": {
@@ -974,9 +974,9 @@
               "_title": "SmartDashboard/Target Target Height"
             }
           },
-          "2,2": {
+          "3,2": {
             "size": [
-              2,
+              3,
               2
             ],
             "content": {
@@ -1007,7 +1007,7 @@
               ]
             }
           },
-          "6,2": {
+          "8,2": {
             "size": [
               2,
               2
@@ -1040,7 +1040,7 @@
               ]
             }
           },
-          "4,2": {
+          "6,2": {
             "size": [
               2,
               2
@@ -1106,15 +1106,37 @@
               "_source0": "network_table:///SmartDashboard/Guide Final Drv Mag",
               "_title": "SmartDashboard/Guide Final Drv Mag"
             }
+          },
+          "6,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Hatch Range Left Volts",
+              "_title": "/SmartDashboard/Hatch Range Left Volts"
+            }
+          },
+          "6,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Hatch Range Right Volts",
+              "_title": "/SmartDashboard/Hatch Range Right Volts"
+            }
           }
         }
       }
     }
   ],
   "windowGeometry": {
-    "x": 6.0,
-    "y": 32.66666793823242,
-    "width": 1271.3333740234375,
-    "height": 640.6666870117188
+    "x": -6.400000095367432,
+    "y": -6.400000095367432,
+    "width": 1548.800048828125,
+    "height": 836.7999877929688
   }
 }

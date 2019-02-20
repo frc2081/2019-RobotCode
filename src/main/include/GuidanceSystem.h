@@ -70,7 +70,7 @@ class GuidanceSystem{
         double homingErrorTolerance = 10;
 
         //Proportional Coefficients     
-        double kpCenterAng = -.11;
+        double kpCenterAng = -.15;
         double kpCenterMag = 0.005;
         double kpAngle = -.5;
         double kpRange = .01;
