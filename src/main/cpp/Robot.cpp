@@ -45,7 +45,11 @@ void Robot::AutonomousInit() {}
 void Robot::AutonomousPeriodic() {
   Drivetrain->DriveManagerPeriodic();
   Elevator->ElevatorManagerPeriodic();
+  Elevator->ElevatorManagerMechanism(RioIO);
   RioIO->ioPeriodic();
+  //Guidance must be called BEFORE climber
+  Guidance->GuidanceSystemPeriodic();
+  Climber->ClimbManagerTeleopPeriodic();
 }
 
 void Robot::TeleopInit() {}
