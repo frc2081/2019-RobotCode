@@ -218,7 +218,7 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
            //swerve drive motors need to be turned on
             _cmds->guidanceSysActive = true;
             _cmds->autodrvang = 0;
-            _cmds->autodrvmag = 0;
+            _cmds->autodrvmag = .3;
             _cmds->autodrvrot = 0;
             
             //Add 20ms to climb timer

@@ -59,6 +59,7 @@ void ElevatorManager::ElevatorManagerPeriodic(){
                 HatchArmPos = extended;
                 BallIntakePowerCmd = BallArmIdle;
                 BallArmPos = extended;
+                HatchClawPos = extended;
 
                 if(_cmds->hatchPickup){ElevatorManagerCurrentState = ElevatorManagerState::HatchPickupWait;}
                 if(_cmds->cargoPickup){ElevatorManagerCurrentState = ElevatorManagerState::BallPickup;}

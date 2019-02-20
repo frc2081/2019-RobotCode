@@ -42,7 +42,7 @@ class ClimbManager {
     //13.25 inches / 2.71 inches per sec = 4.89 seconds = 4890 milliseconds
     //Tuned down based on experience
     int moveForwardStage2Duration = 4600;
-    int moveForwardStage3Duration = 500;
+    int moveForwardStage3Duration = 700;
     int timer;
 
     double initialLiftDriveEncoderValue = 0;
