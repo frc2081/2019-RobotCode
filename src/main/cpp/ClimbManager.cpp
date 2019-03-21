@@ -38,8 +38,10 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
     frc::SmartDashboard::PutBoolean("Abort Climb Command is Active", _cmds->climbAbort);
     frc::SmartDashboard::PutBoolean("Start Climb lvl2 Command is Active", _cmds->climbCommandLevelTwo);
     frc::SmartDashboard::PutBoolean("Start Climb lvl1 Command is Active", _cmds->climbCommandLevelOne);
+    frc::SmartDashboard::PutNumber("Timer Value", timer);
     //state machine
     switch(climbState) {
+
         case ClimbSTATE::robotOnFirstLevel:
             /*
             STATE FEATURES:
