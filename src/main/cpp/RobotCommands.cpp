@@ -15,6 +15,7 @@ RobotCommands::RobotCommands() {
 	autodrvang = 0;
 	autodrvrot = 0;
 	guidanceSysActive = false;
+	fieldOrientedDrive = true;
 
 	climbCommandLevelOne = false;
 	climbCommandLevelTwo = false;

@@ -20,6 +20,7 @@ public:
 	double autodrvmag;
 	double autodrvrot;
 	bool guidanceSysActive;
+	bool fieldOrientedDrive;
 
 	bool climbCommandLevelOne;
 	bool climbCommandLevelTwo;

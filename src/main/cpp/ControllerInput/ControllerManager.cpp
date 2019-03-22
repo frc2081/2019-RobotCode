@@ -85,6 +85,10 @@ void ControllerManager::pollControllers(RobotCommands *Commands){
 	else Commands->autoAlign = false;
 	frc::SmartDashboard::PutBoolean("autoAlign", Commands->autoAlign);
 
+	//Turn off field Oriented drive
+	if (drivecontroller->bStart->State()) Commands->fieldOrientedDrive = false;
+	frc::SmartDashboard::PutBoolean("Field Oriented Drive", Commands->fieldOrientedDrive);
+
 	//**************************************
 	//*******MECHANISM CONTROLLER***********
 	//**************************************

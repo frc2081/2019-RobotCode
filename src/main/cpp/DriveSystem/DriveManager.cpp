@@ -98,6 +98,9 @@ void DriveManager::DriveManagerInit() {
 	frc::SmartDashboard::PutNumber("Swerve Drive F", drvF);
 
 	frc::SmartDashboard::PutBoolean("Swerve Reset", swerveReset);
+
+	gyroManagerRun = gyroManager::Get();
+	gyroManagerRun->start();
 }
 
 void DriveManager::DriveManagerPeriodic() {
@@ -168,6 +171,7 @@ void DriveManager::CalculateVectors() {
 		_drvang = _commands->drvang;
 		_drvmag = _commands->drvmag;
 		_drvrot = _commands->drvrot;
+		if(_commands->fieldOrientedDrive == true) ApplyFieldOrientedDrive();
 	}
 	
 	_currangrf = _swervelib->whl->angleRF;
@@ -284,6 +288,7 @@ void DriveManager::UpdateDashboard(){
 	frc::SmartDashboard::PutNumber("Swerve Right Front Encoder Offset", _rfwhlangoffset);
 	frc::SmartDashboard::PutNumber("Swerve Left Back Encoder Offset", _lbwhlangoffset);
 	frc::SmartDashboard::PutNumber("Swerve Right Back Encoder Offset", _rbwhlangoffset);
+	frc::SmartDashboard::PutNumber("Gyro Reading", currentGyroReading);
 
 	swerveReset = frc::SmartDashboard::GetBoolean("Swerve Reset", swerveReset);
 }
@@ -334,4 +339,11 @@ void DriveManager::UpdatePIDTunes(){
 	_rbdrvpid->SetI(_drvpidi);
 	_rbdrvpid->SetD(_drvpidd);
 	_rbdrvpid->SetF(_drvpidf);
+}
+
+void DriveManager::ApplyFieldOrientedDrive(){
+	currentGyroReading = gyroManagerRun->getLastValue() - 90;
+	_drvang = _drvang - currentGyroReading;
+	while(_drvang < 0) _drvang += 360;
+	while(_drvang > 360) _drvang -= 360;
 }

@@ -13,6 +13,7 @@
 #include "IO.h"
 #include "RobotCommands.h"
 #include "frc/WPILib.h"
+#include "GyroManager.h"
 
 	class DriveManager {
 	public:
@@ -23,6 +24,7 @@
 		void DriveManagerAutoPeriodic();
 		void DriveManagerDisabled();
 		void UpdateDashboard();
+		void ApplyFieldOrientedDrive();
 
 		//Drive Base dimesions
 		double drivebaseXDimesion = 29;
@@ -54,6 +56,9 @@
 
 		double _lfwhlangoffset, _rfwhlangoffset, _lbwhlangoffset, _rbwhlangoffset;
 		double _drvang, _drvmag, _drvrot;
+
+		gyroManager *gyroManagerRun;
+		double currentGyroReading = 0;
 
 		bool swerveReset;
 
