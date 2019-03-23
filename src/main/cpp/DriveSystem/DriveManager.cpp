@@ -99,8 +99,8 @@ void DriveManager::DriveManagerInit() {
 
 	frc::SmartDashboard::PutBoolean("Swerve Reset", swerveReset);
 
-	gyroManagerRun = gyroManager::Get();
-	gyroManagerRun->start();
+	//gyroManagerRun = gyroManager::Get();
+	//////gyroManagerRun->start();
 }
 
 void DriveManager::DriveManagerPeriodic() {
@@ -171,7 +171,7 @@ void DriveManager::CalculateVectors() {
 		_drvang = _commands->drvang;
 		_drvmag = _commands->drvmag;
 		_drvrot = _commands->drvrot;
-		if(_commands->fieldOrientedDrive == true) ApplyFieldOrientedDrive();
+		//if(_commands->fieldOrientedDrive == true) ApplyFieldOrientedDrive();
 	}
 	
 	_currangrf = _swervelib->whl->angleRF;

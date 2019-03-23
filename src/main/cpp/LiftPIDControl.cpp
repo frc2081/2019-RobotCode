@@ -27,7 +27,7 @@ LiftPIDControl::LiftPIDControl(IO *io, RobotCommands *cmds) {
   liftPIDd = 0;
   liftPIDf = 0;
   liftPIDPeriod = 0.05;
-  liftDesyncDistanceThreshold = 1; //Limit of how differnt the lift leg heights are allowed to be before the lifts are shut down
+  liftDesyncDistanceThreshold = 2; //Limit of how differnt the lift leg heights are allowed to be before the lifts are shut down
   liftPosTolerance = .5; //How close lift will attempt to get to the desired position
 
   //Lift position constants
@@ -37,7 +37,7 @@ LiftPIDControl::LiftPIDControl(IO *io, RobotCommands *cmds) {
   liftPosRetractedRear = 0; //Lift rear leg position in cm to fully retract the legs
   liftPosExtendedLevelOneRear = 9; //Lift rear leg position in inches to raise the robot to Hab level 1
   liftPosExtendedLevelTwoRear = 22; //Lift rear leg position in inches to raise the robot to Hab level 2
-  liftMovementRate = .15; //Speed in inches per loop that the lift should move at when raising or lowering the robot
+  liftMovementRate = .12; //Speed in inches per loop that the lift should move at when raising or lowering the robot
 
   liftrfPID = new frc::PIDController(liftPIDp, liftPIDi, liftPIDd, liftPIDf, _io->liftrfenc, _io->liftrfmot, liftPIDPeriod);
   liftlfPID = new frc::PIDController(liftPIDp, liftPIDi, liftPIDd, liftPIDf, _io->liftlfenc, _io->liftlfmot, liftPIDPeriod);
@@ -174,6 +174,9 @@ void LiftPIDControl::liftPIDControlTeleopPeriodic() {
   frc::SmartDashboard::PutNumber("Lift Rear Separation", liftRearSeparation);
   if(liftFrontSeparation > liftDesyncDistanceThreshold || liftRearSeparation > liftDesyncDistanceThreshold) {_cmds->climbFreeze = true;}
 
+printf("Front lift dist %f", liftFrontSeparation);
+
+printf("Rear lift dist %f", liftRearSeparation);
   //implement climb freeze command - freezes lift setpoints at the moment the command is issued
   if(_cmds->climbFreeze == true && frozen == false){
     freezeSetPointFront = liftFrontSetPoint;

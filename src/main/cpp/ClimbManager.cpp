@@ -39,10 +39,11 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
     frc::SmartDashboard::PutBoolean("Start Climb lvl2 Command is Active", _cmds->climbCommandLevelTwo);
     frc::SmartDashboard::PutBoolean("Start Climb lvl1 Command is Active", _cmds->climbCommandLevelOne);
     frc::SmartDashboard::PutNumber("Timer Value", timer);
+   
     //state machine
     switch(climbState) {
 
-        case ClimbSTATE::robotOnFirstLevel:
+        case ClimbSTATE::robotOnFirstLevel: //1
             /*
             STATE FEATURES:
             front extension motor: stopped
@@ -63,7 +64,7 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
                climbState = ClimbSTATE::prepareToClimb;
            }
            break;
-        case ClimbSTATE::prepareToClimb:
+        case ClimbSTATE::prepareToClimb: //2
             /*
             STATE FEATURES:
             front extension motor: extending
@@ -96,7 +97,7 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
                break;
            }
            break;
-        case ClimbSTATE::moveForwardStage1:
+        case ClimbSTATE::moveForwardStage1: //3
             /*
             STATE FEATURES:
             front extension motor: stopped
@@ -123,7 +124,7 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
                break;*/
            }
            break;
-        case ClimbSTATE::robotStoppedHalfway:
+        case ClimbSTATE::robotStoppedHalfway: //4
             /*
             STATE FEATURES:
             front extension motor: retracting
@@ -145,7 +146,7 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
                break;
            }
             break;
-        case ClimbSTATE::moveForwardStage2:
+        case ClimbSTATE::moveForwardStage2: //5
             /*
             STATE FEATURES:
             front extension motor: stopped
@@ -164,6 +165,8 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
             
             //Add 20ms to climb timer
             timer += 20;
+            printf("Climb State Moveforwardstage2");
+             printf("Climb State Timer: %i \n", timer);
 
            if (_cmds->climbAbort) {
                 climbState = ClimbSTATE::robotClimbComplete;
@@ -178,7 +181,7 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
                 break; */
            }
             break;
-        case ClimbSTATE::robotStoppedOnPlatform:
+        case ClimbSTATE::robotStoppedOnPlatform: //6
             /*
             STATE FEATURES:
             front extension motor: stopped
@@ -188,10 +191,9 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
             */
            timer = 0;
            lift->liftRearPosDes = lift->liftPos::RETRACTED;
-                lift->moveFast = false;
+            lift->moveFast = false;
             lift->syncFrontRearLifts = false;
-           
-
+             
            //liftdrivemot needs to be turned off
            _io->liftdrivemot->Set(0);
            //swerve motors need to be off
