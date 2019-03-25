@@ -15,6 +15,7 @@ LiftPIDControl::LiftPIDControl(IO *io, RobotCommands *cmds) {
   liftRearSetPoint = 0;
   liftDestinationRear = 0;
   liftDestinationFront = 0;
+  stopLiftManual = false;
 
   freezeSetPointFront = 0;
   freezeSetPointRear = 0;
@@ -193,6 +194,18 @@ printf("Rear lift dist %f", liftRearSeparation);
   liftlfPID->SetSetpoint(liftFrontSetPoint);
   liftlbPID->SetSetpoint(liftRearSetPoint);
   liftrbPID->SetSetpoint(liftRearSetPoint);
+  if(_cmds->rackReturn == true){
+    liftlbPID->Disable();
+    liftrbPID->Disable();
+    _io->liftlbmot->Set(-0.7);
+    _io->liftrbmot->Set(-0.7);
+    stopLiftManual = true;
+  } else if(stopLiftManual == true){
+      _io->liftlbmot->Set(0);
+    _io->liftrbmot->Set(0);
+    stopLiftManual = false;
+  }
+
 }
 
 

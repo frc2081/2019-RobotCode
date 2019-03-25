@@ -20,12 +20,13 @@ public:
 	double autodrvmag;
 	double autodrvrot;
 	bool guidanceSysActive;
-	bool fieldOrientedDrive;
+	bool climbManualProceed;
 
 	bool climbCommandLevelOne;
 	bool climbCommandLevelTwo;
 	bool climbAbort;
 	bool climbFreeze;
+	bool rackReturn;
 
 	bool hatchPickup;
 	bool cargoPickup;

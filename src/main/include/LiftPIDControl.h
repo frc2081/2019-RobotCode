@@ -35,6 +35,7 @@ private:
   double liftMovementRate;
   double liftDesyncDistanceThreshold;
   double liftPosTolerance;
+  bool stopLiftManual;
 
 
   //variables to store climb set point at moment of climb freeze command

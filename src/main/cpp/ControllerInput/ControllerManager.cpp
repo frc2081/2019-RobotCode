@@ -85,9 +85,14 @@ void ControllerManager::pollControllers(RobotCommands *Commands){
 	else Commands->autoAlign = false;
 	frc::SmartDashboard::PutBoolean("autoAlign", Commands->autoAlign);
 
-	//Turn off field Oriented drive
-	if (drivecontroller->bStart->State()) Commands->fieldOrientedDrive = false;
-	frc::SmartDashboard::PutBoolean("Field Oriented Drive", Commands->fieldOrientedDrive);
+	//Force climb advance
+	if (drivecontroller->bStart->RE()) Commands->climbManualProceed = true;
+	else{Commands->climbManualProceed = false;}
+	frc::SmartDashboard::PutBoolean("Climb Manual Proceed", Commands->climbManualProceed);
+
+	//Force lift return
+	if (drivecontroller->bLB->State() && drivecontroller->bRB->State() && drivecontroller->bBack->State()) Commands->rackReturn = true;
+	else{Commands->rackReturn = false;}
 
 	//**************************************
 	//*******MECHANISM CONTROLLER***********

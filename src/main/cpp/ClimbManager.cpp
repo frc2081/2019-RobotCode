@@ -171,7 +171,7 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
            if (_cmds->climbAbort) {
                 climbState = ClimbSTATE::robotClimbComplete;
                 break;
-           } else if (timer >= moveForwardStage2Duration) {
+           } else if (timer >= moveForwardStage2Duration || _cmds->climbManualProceed) {
               climbState = ClimbSTATE::robotStoppedOnPlatform;
               timer = 0;
               break;

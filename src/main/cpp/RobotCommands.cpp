@@ -15,12 +15,12 @@ RobotCommands::RobotCommands() {
 	autodrvang = 0;
 	autodrvrot = 0;
 	guidanceSysActive = false;
-	fieldOrientedDrive = true;
-
+	climbManualProceed = false;
 	climbCommandLevelOne = false;
 	climbCommandLevelTwo = false;
 	climbAbort = false;
 	climbFreeze = false;
+	rackReturn = false;
 
 	hatchPickup = false;
 	cargoPickup = false;
