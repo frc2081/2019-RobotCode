@@ -169,7 +169,7 @@ void DriveManager::CalculateVectors() {
 		_drvrot = _commands->autodrvrot;
 	} else {
 		_drvang = _commands->drvang;
-		_drvmag = _commands->drvmag;
+		_drvmag = pow(_commands->drvmag, 2);
 		_drvrot = _commands->drvrot;
 		//if(_commands->fieldOrientedDrive == true) ApplyFieldOrientedDrive();
 	}
