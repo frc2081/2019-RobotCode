@@ -11,6 +11,7 @@
 
 #include "frc/WPILib.h"
 #include "ctre/Phoenix.h"
+#include "rev/CANSparkMax.h"
 
 /*
  * Contains an instance of all sensors, motors, and actuators to be passed
@@ -43,10 +44,10 @@ public:
 	frc::Compressor *PCM;
 
 	//Swerve Drive Motors
-	WPI_VictorSPX *drvlbmot;
-	WPI_VictorSPX *drvrbmot;
-	WPI_VictorSPX *drvlfmot;
-	WPI_VictorSPX *drvrfmot;
+	rev::CANSparkMax *drvlbmot;
+	rev::CANSparkMax *drvrbmot;
+	rev::CANSparkMax *drvlfmot;
+	rev::CANSparkMax *drvrfmot;
 	WPI_VictorSPX *turnlbmot;
 	WPI_VictorSPX *turnrbmot;
 	WPI_VictorSPX *turnlfmot;

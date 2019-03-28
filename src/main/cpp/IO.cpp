@@ -13,10 +13,10 @@ IO::IO() {
 	PCM = new frc::Compressor(0);
 
 	//Swerve Drive Motors
-	drvrfmot = new WPI_VictorSPX(0);		
-	drvlfmot = new WPI_VictorSPX(1);
-	drvrbmot = new WPI_VictorSPX(2);
-	drvlbmot = new WPI_VictorSPX(3);
+	drvrfmot = new rev::CANSparkMax(0, rev::CANSparkMax::MotorType::kBrushless);
+	drvlfmot = new rev::CANSparkMax(1, rev::CANSparkMax::MotorType::kBrushless);
+	drvrbmot = new rev::CANSparkMax(2, rev::CANSparkMax::MotorType::kBrushless);
+	drvlbmot = new rev::CANSparkMax(3, rev::CANSparkMax::MotorType::kBrushless);
 	turnrfmot = new WPI_VictorSPX(4);
 	turnlfmot = new WPI_VictorSPX(5);
 	turnrbmot = new WPI_VictorSPX(6);
