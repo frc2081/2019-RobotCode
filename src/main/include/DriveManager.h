@@ -45,7 +45,7 @@
 		IO *_io;
 		RobotCommands *_commands;
 		ControllerManager *_cntls;
-		frc::PIDController *_lfdrvpid, *_rfdrvpid, *_lbdrvpid, *_rbdrvpid;
+		rev::CANPIDController *_lfdrvpid, *_rfdrvpid, *_lbdrvpid, *_rbdrvpid;
 		frc::PIDController *_lfturnpid, *_rfturnpid, *_lbturnpid, *_rbturnpid;
 		frc::Preferences *_prefs;
 		double _drvpidi, _drvpidp, _drvpidd, _drvpidf;

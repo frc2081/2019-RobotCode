@@ -54,10 +54,6 @@ public:
 	WPI_VictorSPX *turnrfmot;
 
 	//Swerve Drive Encoders
-	frc::Encoder *encdrvlb;
-	frc::Encoder *encdrvlf;
-	frc::Encoder *encdrvrb;
-	frc::Encoder *encdrvrf;
 	frc::AnalogPotentiometer *steerencdrvlb;
 	frc::AnalogPotentiometer *steerencdrvlf;
 	frc::AnalogPotentiometer *steerencdrvrb;
