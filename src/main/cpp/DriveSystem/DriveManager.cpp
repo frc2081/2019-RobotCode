@@ -76,13 +76,9 @@ DriveManager::DriveManager(IO *io, RobotCommands *com, ControllerManager *cntls)
 	_lbwhlangoffset = _prefs->GetDouble("LBOffset", 0);
 	_rbwhlangoffset = _prefs->GetDouble("RBOffset", 0);
 
-	rev::CANPIDController *test = new rev::CANPIDController(*_io->drvlbmot) ;
-	//test = rev::CANPIDController(_io->drvlbmot->GetPIDController());
-//
-	//_lfdrvpid = new rev::CANPIDController(*_io->drvlbmot);
 
-	//_lfdrvpid = _io->drvlfmot->GetPIDController();
-	///_rfdrvpid = _io->drvrfmot->GetPIDController();
+	//_lfdrvpid = new rev::CANPIDController(*_io->drvlfmot);
+	//_rfdrvpid = _io->drvrfmot->GetPIDController();
 	//_lbdrvpid = _io->drvlbmot->GetPIDController();
 	//_rbdrvpid = _io->drvrbmot->GetPIDController();
 }

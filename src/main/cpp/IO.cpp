@@ -33,7 +33,9 @@ IO::IO() {
 	ballintakemot = new WPI_VictorSPX(14);
 
 	//Swerve Drive Encoders
-	//DIO 10-13 are used as PWM outputs for climb motors		
+	//DIO 10-13 are used as PWM outputs for climb motors
+	drvrfenc = new rev::CANEncoder(*drvrfmot);
+
 	steerencdrvrf = new frc::AnalogPotentiometer(0,360,0);	
 	steerencdrvlf = new frc::AnalogPotentiometer(1,360,0);	
 	steerencdrvrb = new frc::AnalogPotentiometer(2,360,0);	
@@ -116,5 +118,7 @@ void IO::ioRobotPeriodic(){
 	frc::SmartDashboard::PutNumber("Elevator Motor Power", emotpower);
 	elevatorMovePower = frc::SmartDashboard::GetNumber("Elevator Move Power", elevatorMovePower);
 	elevatorPosTolerance = frc::SmartDashboard::GetNumber("Elevator Pos Tolerance", elevatorPosTolerance);
+
+	frc::SmartDashboard::PutNumber("Swerve Velocity RF", drvrfenc->GetVelocity());
 
 }
