@@ -23,7 +23,7 @@ LiftPIDControl::LiftPIDControl(IO *io, RobotCommands *cmds) {
 
   //Init lift PID control parameters
   //PID tunes are the same for all four lifts
-  liftPIDp = 1;
+  liftPIDp = .6;
   liftPIDi = 0;
   liftPIDd = 0;
   liftPIDf = 0;
@@ -38,7 +38,7 @@ LiftPIDControl::LiftPIDControl(IO *io, RobotCommands *cmds) {
   liftPosRetractedRear = 0; //Lift rear leg position in cm to fully retract the legs
   liftPosExtendedLevelOneRear = 9; //Lift rear leg position in inches to raise the robot to Hab level 1
   liftPosExtendedLevelTwoRear = 22; //Lift rear leg position in inches to raise the robot to Hab level 2
-  liftMovementRate = .12; //Speed in inches per loop that the lift should move at when raising or lowering the robot
+  liftMovementRate = .1; //Speed in inches per loop that the lift should move at when raising or lowering the robot
 
   liftrfPID = new frc::PIDController(liftPIDp, liftPIDi, liftPIDd, liftPIDf, _io->liftrfenc, _io->liftrfmot, liftPIDPeriod);
   liftlfPID = new frc::PIDController(liftPIDp, liftPIDi, liftPIDd, liftPIDf, _io->liftlfenc, _io->liftlfmot, liftPIDPeriod);
@@ -74,7 +74,7 @@ LiftPIDControl::LiftPIDControl(IO *io, RobotCommands *cmds) {
 void LiftPIDControl::liftPIDControlRobotPeriodic(){
 
 //Get all dashboard-adjustable cal values and set them
-  liftPIDp = frc::SmartDashboard::GetNumber("Climb P", liftPIDp);
+ /* liftPIDp = frc::SmartDashboard::GetNumber("Climb P", liftPIDp);
   liftPIDi = frc::SmartDashboard::GetNumber("Climb I", liftPIDi);
   liftPIDd = frc::SmartDashboard::GetNumber("Climb D", liftPIDd);
   liftPIDf = frc::SmartDashboard::GetNumber("Climb F", liftPIDf);
@@ -115,7 +115,7 @@ void LiftPIDControl::liftPIDControlRobotPeriodic(){
   frc::SmartDashboard::PutNumber("Lift RF Motor Power", _io->liftrfmot->Get());
   frc::SmartDashboard::PutNumber("Lift LB Motor Power", _io->liftlbmot->Get());
   frc::SmartDashboard::PutNumber("Lift RB Motor Power", _io->liftrbmot->Get());
-  frc::SmartDashboard::PutNumber("Lift Frozen", frozen);
+  frc::SmartDashboard::PutNumber("Lift Frozen", frozen);*/
 }
 
 void LiftPIDControl::liftPIDControlTeleopPeriodic() {
@@ -169,15 +169,23 @@ void LiftPIDControl::liftPIDControlTeleopPeriodic() {
 
   //Safety code to stop the lifts if they get out of sync with each other
   //Might improve this in the future to keep them running and limit command so they stay in sync
-  double liftFrontSeparation = fabs(rfPos - lfPos);
-  double liftRearSeparation = fabs(rbPos - lbPos);
+  liftFrontSeparation = fabs(rfPos - lfPos);
+  liftRearSeparation = fabs(rbPos - lbPos);
   frc::SmartDashboard::PutNumber("Lift Front Separation", liftFrontSeparation);
   frc::SmartDashboard::PutNumber("Lift Rear Separation", liftRearSeparation);
-  if(liftFrontSeparation > liftDesyncDistanceThreshold || liftRearSeparation > liftDesyncDistanceThreshold) {_cmds->climbFreeze = true;}
+  
+  if(liftFrontSeparation > liftDesyncDistanceThreshold || liftRearSeparation > liftDesyncDistanceThreshold && _cmds->climbFreeze == false) {
+      _cmds->climbFreeze = true;
+      printf("\n\n");
+      printf("*******************************\n");
+      printf("**********LIFT DESYNC**********\n");
+      printf("*******************************\n");
+      printf("\n\n");
+    }
 
-printf("Front lift dist %f", liftFrontSeparation);
+//printf("Front lift dist %f ", liftFrontSeparation);
 
-printf("Rear lift dist %f", liftRearSeparation);
+//printf("Rear lift dist %f\n", liftRearSeparation);
   //implement climb freeze command - freezes lift setpoints at the moment the command is issued
   if(_cmds->climbFreeze == true && frozen == false){
     freezeSetPointFront = liftFrontSetPoint;
@@ -232,3 +240,6 @@ bool LiftPIDControl::liftOnTarget(double targetPos, double actualPos, double tol
   if(actualPos < targetPos + tolerance && actualPos > targetPos - tolerance) return true;
   else return false;
 }
+
+double LiftPIDControl::getFrontSetPoint(){ return liftFrontSetPoint;}
+double LiftPIDControl::getRearSetPoint(){ return liftRearSetPoint;}

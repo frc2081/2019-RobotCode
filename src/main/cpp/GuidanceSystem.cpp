@@ -221,7 +221,7 @@ void GuidanceSystem::GuidanceSystemRobotPeriodic(){
 
 void GuidanceSystem::updateDashboard()
 {
-    targetAcquired = table->GetBoolean("TargetDataValid", false);
+   /* targetAcquired = table->GetBoolean("TargetDataValid", false);
     visionHeartbeat = table->GetNumber("VisionHeartbeat", -2);
     distanceLeftTarget = table->GetNumber("LeftTargetDistFromCenter", -2);
     distanceRightTarget = table->GetNumber("RightTargetDistFromCenter", -2);
@@ -262,7 +262,7 @@ void GuidanceSystem::updateDashboard()
     frc::SmartDashboard::PutNumber("Guide Drv Angle", drvAng);
     frc::SmartDashboard::PutNumber("Guide Drv Rotation", drvRot);
     frc::SmartDashboard::PutNumber("Guide System State", static_cast<int>(GuidanceState));
-    frc::SmartDashboard::PutBoolean("Guide System Active", guidanceSysActive);
+    frc::SmartDashboard::PutBoolean("Guide System Active", guidanceSysActive);*/
 }
 
 void GuidanceSystem::applyDriveCommands(){

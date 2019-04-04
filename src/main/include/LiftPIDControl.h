@@ -17,6 +17,8 @@ class LiftPIDControl {
 
   liftPos liftFrontPosDes, liftFrontPosAct, liftRearPosDes, liftRearPosAct;
   bool moveFast, syncFrontRearLifts;
+  double getFrontSetPoint();
+  double getRearSetPoint();
 
   void liftPIDControlTeleopPeriodic();
   void liftPIDControlRobotPeriodic();
@@ -36,6 +38,7 @@ private:
   double liftDesyncDistanceThreshold;
   double liftPosTolerance;
   bool stopLiftManual;
+  double liftFrontSeparation, liftRearSeparation;
 
 
   //variables to store climb set point at moment of climb freeze command
@@ -47,5 +50,4 @@ private:
   void disableLiftPID();
   double setLiftDestination(liftPos lift);
   bool liftOnTarget(double targetPos, double actualPos, double tolerance);
-
 };
