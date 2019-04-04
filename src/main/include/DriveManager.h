@@ -53,6 +53,7 @@
 		double _pidpollrate;
 		double _maxdrivespeed; //Speed is in encoder pulses
 		double _currangrf, _curranglf, _curranglb, _currangrb;
+		double _drvangprevious;
 
 		double _lfwhlangoffset, _rfwhlangoffset, _lbwhlangoffset, _rbwhlangoffset;
 		double _drvang, _drvmag, _drvrot;
@@ -70,11 +71,5 @@
 		void ApplyPIDControl();
 		void UpdatePIDTunes();
 	};
-
-
-
-
-
-
 
 #endif /* SRC_DRIVESYSTEM_DRIVEMANAGER_H_ */

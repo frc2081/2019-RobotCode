@@ -99,7 +99,6 @@ void DriveManager::DriveManagerInit() {
 	frc::SmartDashboard::PutNumber("Swerve Drive F", drvF);
 
 	frc::SmartDashboard::PutBoolean("Swerve Reset", swerveReset);
-
 }
 
 void DriveManager::DriveManagerPeriodic() {
@@ -132,13 +131,15 @@ void DriveManager::ZeroEncoders() {
 	_prefs->PutDouble("RBOffset", _rbwhlangoffset);
 
 	printf("\n\n");
-	printf("**************************************\n");
-	printf("**Swerve Encoder Offsets Calibrated!**\n");
-	printf("**************************************\n");
+	printf("***********************************************\n");
+	printf("**Swerve Steering Encoder Offsets Calibrated!**\n");
+	printf("***********************************************\n");
 	printf("New LF offset: %.2f  ", _lfwhlangoffset);
 	printf("New RF offset: %.2f  ", _rfwhlangoffset);
 	printf("New LB offset: %.2f  ", _lbwhlangoffset);
 	printf("New RB offset: %.2f  ", _rbwhlangoffset);
+	printf("***********************************************\n");
+	printf("***********************************************\n");
 	printf("\n\n");
 }
 
@@ -162,21 +163,34 @@ void DriveManager::CalculateVectors() {
 
 	//Determine if the driver or the guidance system is in control of the drivetrain
 	//and use the appropriate drive commands
+	_drvangprevious = _drvang;
 	if(_commands->guidanceSysActive == true){
 		_drvang = _commands->autodrvang;
 		_drvmag = _commands->autodrvmag;
 		_drvrot = _commands->autodrvrot;
 	} else {
-		_drvang = _commands->drvang;
+		 if(fabs(_commands->drvmag) < 0.05) _drvang = _drvangprevious;
+		 else _drvang = _commands->drvang;
+
 		_drvmag = pow(_commands->drvmag, 2);
-		_drvrot = _commands->drvrot;
+		
+		if(fabs(_commands->drvrot) < 0.05) _drvrot = 0;
+		else _drvrot = _commands->drvrot;
+
+		if(_drvrot > 0) _drvrot = pow(_drvrot, 2);
+		else _drvrot = -pow(_drvrot, 2);
 		//if(_commands->fieldOrientedDrive == true) ApplyFieldOrientedDrive();
 	}
-	
+
+	//prevent the swerve from reorienting the wheels if the drive command is zero
+	//otherwise the wheels will snap to a new vector while the robot is still
+	//moving and possibly tip the robot	
 	_currangrf = _swervelib->whl->angleRF;
 	_curranglf = _swervelib->whl->angleLF;
 	_currangrb = _swervelib->whl->angleRB;
 	_curranglb = _swervelib->whl->angleLB;
+
+	//TODO: Don't use an equivalency comparator with doubles!
 	if (_drvmag != 0 || _drvrot != 0) {
 		_swervelib->CalcWheelVect(_drvmag, _drvang, _drvrot);
 	} else {
