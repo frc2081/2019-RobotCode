@@ -47,10 +47,10 @@ class ClimbManager {
 
     double initialLiftDriveEncoderValue = 0;
     //TODO: get actual drive values; this is incorrect
-    double drivetrainPowerLow = .1; //MUST BE KEPT AT A LOW VALUE! 0.2 MAX!
+    double drivetrainPowerLow = .05; //MUST BE KEPT AT A LOW VALUE! 0.2 MAX!
     double liftMotorPower = 1.0;
     double drivetrainPowerPullForward = .3;
-    double drivetrainPowerHold = 0.05;
+    double drivetrainPowerHold = 0.06;
 
     //state machine initialization
     enum class ClimbSTATE {
