@@ -1,9 +1,3 @@
-/*
-* DriveManager.cpp
-*
-*  Created on: Jan 17, 2018
-*      Author: Matthew
-*/
 #include "DriveManager.h"
 
 DriveManager::DriveManager(IO *io, RobotCommands *com, ControllerManager *cntls) {
@@ -287,13 +281,11 @@ void DriveManager::ApplyPIDControl() {
 
 void DriveManager::UpdateDashboard(){
 
-	//Swerve Desired Wheel Vectors
 	frc::SmartDashboard::PutNumber("Swerve Left Front Angle Desired", _swervelib->whl->angleLF);	
 	frc::SmartDashboard::PutNumber("Swerve Right Front Angle Desired", _swervelib->whl->angleRF);	
 	frc::SmartDashboard::PutNumber("Swerve Left Back Angle Desired", _swervelib->whl->angleLB);	
 	frc::SmartDashboard::PutNumber("Swerve Right Back Angle Desired", _swervelib->whl->angleRB);	
 
-	//Swerve Actual Wheel Vectors
 	frc::SmartDashboard::PutNumber("Swerve Left Front Angle Actual", _io->steerencdrvlf->Get());
 	frc::SmartDashboard::PutNumber("Swerve Right Front Angle Actual", _io->steerencdrvrf->Get());	
 	frc::SmartDashboard::PutNumber("Swerve Left Back Angle Actual", _io->steerencdrvlb->Get());
