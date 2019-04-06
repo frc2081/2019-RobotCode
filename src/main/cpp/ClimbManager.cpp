@@ -27,7 +27,7 @@ void ClimbManager::ClimbManagerRobotPeriodic() {
 void ClimbManager::ClimbManagerTeleopPeriodic() {
     lift->liftPIDControlTeleopPeriodic();
     //display current values on the Smart Dashboard
-    frc::SmartDashboard::PutNumber("ClimbManager current State", static_cast<int>(climbState));
+   /* frc::SmartDashboard::PutNumber("ClimbManager current State", static_cast<int>(climbState));
     frc::SmartDashboard::PutNumber("Desired FRONT lift position", static_cast<int>(lift->liftFrontPosDes));
     frc::SmartDashboard::PutNumber("Desired REAR lift position", static_cast<int>(lift->liftRearPosDes));
     frc::SmartDashboard::PutNumber("Actual FRONT lift position", static_cast<int>(lift->liftFrontPosAct));
@@ -38,7 +38,7 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
     frc::SmartDashboard::PutBoolean("Abort Climb Command is Active", _cmds->climbAbort);
     frc::SmartDashboard::PutBoolean("Start Climb lvl2 Command is Active", _cmds->climbCommandLevelTwo);
     frc::SmartDashboard::PutBoolean("Start Climb lvl1 Command is Active", _cmds->climbCommandLevelOne);
-    frc::SmartDashboard::PutNumber("Timer Value", timer);
+    frc::SmartDashboard::PutNumber("Timer Value", timer);*/
    
     //state machine
     switch(climbState) {
@@ -81,6 +81,9 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
             }
             lift->moveFast = false;
             lift->syncFrontRearLifts = true;
+            printf("Raising Robot  ");
+            printf("Lift Front SP %f   ", lift->getFrontSetPoint());
+            printf("Lift Rear SP %f\n", lift->getRearSetPoint());
 
             //Take drivetrain control away from the driver
             _cmds->guidanceSysActive = true;
@@ -94,6 +97,7 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
            } else if (lift->liftFrontPosDes == lift->liftFrontPosAct &&
                     lift->liftRearPosDes == lift->liftRearPosAct) {
                climbState = ClimbSTATE::moveForwardStage1;
+               printf("Climb raise robot Complete\n");
                break;
            }
            break;
@@ -110,6 +114,7 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
 
            //Add 20ms to climb timer
            timer += 20;
+           printf("Climb MF1 Timer: %i \n", timer);
 
            if (_cmds->climbAbort) {
                climbState = ClimbSTATE::robotClimbComplete;
@@ -117,6 +122,7 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
            }  else if (timer >= moveForwardStage1Duration) {
               climbState = ClimbSTATE::robotStoppedHalfway;
               timer = 0;
+              printf("Climb MF1 Complete\n");
               break;
            /*else if (_io->liftdriveenc->Get() - initialLiftDriveEncoderValue >=
             moveForwardStage1EncoderValue) {
@@ -134,7 +140,12 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
             */
            lift->liftFrontPosDes = lift->liftPos::RETRACTED;
            lift->moveFast = true;
-           lift->syncFrontRearLifts = false;     
+           lift->syncFrontRearLifts = false;    
+
+            printf("Retracting Front Lift  ");
+            printf("Lift Front SP %f   ", lift->getFrontSetPoint());
+            printf("Lift Rear SP %f\n", lift->getRearSetPoint()); 
+
            //liftdrivemot needs to be turned off
            _io->liftdrivemot->Set(0);
 
@@ -165,14 +176,14 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
             
             //Add 20ms to climb timer
             timer += 20;
-            printf("Climb State Moveforwardstage2");
-             printf("Climb State Timer: %i \n", timer);
+            printf("Climb MF2 Timer: %i \n", timer);
 
            if (_cmds->climbAbort) {
                 climbState = ClimbSTATE::robotClimbComplete;
                 break;
            } else if (timer >= moveForwardStage2Duration || _cmds->climbManualProceed) {
               climbState = ClimbSTATE::robotStoppedOnPlatform;
+              printf("Climb MF2 Complete\n");
               timer = 0;
               break;
                /*else if (_io->liftdriveenc->Get() - initialLiftDriveEncoderValue >=
@@ -193,9 +204,13 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
            lift->liftRearPosDes = lift->liftPos::RETRACTED;
             lift->moveFast = false;
             lift->syncFrontRearLifts = false;
-             
-           //liftdrivemot needs to be turned off
-           _io->liftdrivemot->Set(0);
+
+            printf("Retracting Rear Lift  ");
+            printf("Lift Front SP %f   ", lift->getFrontSetPoint());
+            printf("Lift Rear SP %f\n", lift->getRearSetPoint()); 
+
+           //Run the lift drive to help the wheels climb up the wall
+            _io->liftdrivemot->Set(liftMotorPower);
            //swerve motors need to be off
             _cmds->guidanceSysActive = true;
             _cmds->autodrvang = 90;
@@ -222,11 +237,12 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
            //swerve drive motors need to be turned on
             _cmds->guidanceSysActive = true;
             _cmds->autodrvang = 0;
-            _cmds->autodrvmag = .3;
+            _cmds->autodrvmag = .2;
             _cmds->autodrvrot = 0;
             
             //Add 20ms to climb timer
             timer += 20;
+            printf("Climb MF3 Timer: %i \n", timer);
 
            if (_cmds->climbAbort) {
                 climbState = ClimbSTATE::robotClimbComplete;
@@ -234,6 +250,7 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
            } else if (timer >= moveForwardStage3Duration) {
               climbState = ClimbSTATE::robotClimbComplete;
               timer = 0;
+              printf("Climb MF3 Complete\n");
               break;
                /*else if (_io->liftdriveenc->Get() - initialLiftDriveEncoderValue >=
             moveForwardStage2EncoderValue) {
@@ -253,6 +270,10 @@ void ClimbManager::ClimbManagerTeleopPeriodic() {
            lift->liftRearPosDes = lift->liftPos::RETRACTED;
            lift->syncFrontRearLifts = true;     
            lift->moveFast = false;
+
+           printf("*************************\n");
+           printf("*****Climb Complete!*****\n");
+           printf("*************************\n");
 
            timer = 0;
 

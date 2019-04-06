@@ -13,7 +13,7 @@ IO::IO() {
 	PCM = new frc::Compressor(0);
 
 	//Swerve Drive Motors
-	drvrfmot = new rev::CANSparkMax(0, rev::CANSparkMax::MotorType::kBrushless);
+	drvrfmot = new rev::CANSparkMax(21, rev::CANSparkMax::MotorType::kBrushless);
 	drvlfmot = new rev::CANSparkMax(1, rev::CANSparkMax::MotorType::kBrushless);
 	drvrbmot = new rev::CANSparkMax(2, rev::CANSparkMax::MotorType::kBrushless);
 	drvlbmot = new rev::CANSparkMax(3, rev::CANSparkMax::MotorType::kBrushless);

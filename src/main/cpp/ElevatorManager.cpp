@@ -241,14 +241,14 @@ void ElevatorManager::ElevatorManagerPeriodic(){
     _io->elevatorDesiredPos = ElevatorPosCmd;
     //TODO: Add Robot CG shifter pnuematics
 
-    frc::SmartDashboard::PutNumber("Elevator Current State: ", static_cast<double>(ElevatorManagerCurrentState));
+   /* frc::SmartDashboard::PutNumber("Elevator Current State: ", static_cast<double>(ElevatorManagerCurrentState));
     frc::SmartDashboard::PutBoolean("Elevator Hatch Arm Position", HatchArmPos);
     frc::SmartDashboard::PutBoolean("Elevator Hatch Claw Position", HatchClawPos);
     frc::SmartDashboard::PutBoolean("Elevator Ball Arm State:", BallArmPos);
     frc::SmartDashboard::PutNumber("Elevator Ball Intake Power", _io->ballintakemot->Get());
     frc::SmartDashboard::PutBoolean("Elevator Hatch Detect 1", _io->hatchDetectorOne->Get());
     frc::SmartDashboard::PutBoolean("Elevator Hatch Detect 2", _io->hatchDetectorTwo->Get());
-    frc::SmartDashboard::PutNumber("Elevator Motor Current", _io->PDP->GetCurrent(13));
+    frc::SmartDashboard::PutNumber("Elevator Motor Current", _io->PDP->GetCurrent(13));*/
 
 }
 
