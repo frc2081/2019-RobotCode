@@ -48,6 +48,7 @@ IO::IO() {
 	liftlbenc = new frc::Encoder(20, 21);	
 	liftdriveenc = new frc::Counter(22);
 	ballintakeenc = new frc::Encoder(23, 24);
+	masterAlarmLamp = new frc::DigitalOutput(4);
 
 	//Solenoids
 	//compressor = new frc::Compressor();

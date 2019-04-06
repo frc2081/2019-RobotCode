@@ -87,10 +87,12 @@ public:
 	frc::Solenoid *framestandsolenoidin;	
 	frc::Solenoid *framestandsolenoidout;
 
-
 	//Other Inputs
 	frc::DigitalInput *hatchDetectorOne;
 	frc::DigitalInput *hatchDetectorTwo;
+
+	//Other Outputs
+	frc::DigitalOutput *masterAlarmLamp;
 
 	double armP = .7;
 	double armI = 0;

@@ -49,6 +49,7 @@ RobotCommands::RobotCommands() {
 	elevatorDrivePowerManual = 0;
 
 	manualModeActive = false;
+	masterAlarmState = false;
 
 }
 

@@ -55,6 +55,7 @@ public:
 	double elevatorDrivePowerManual;
 
 	bool manualModeActive;
+	bool masterAlarmState;
 };
 
 #endif /* SRC_ROBOTCOMMANDS_H_ */
