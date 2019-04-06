@@ -46,10 +46,18 @@
 		double _pidpollrate;
 		double _maxdrivespeed; //Speed is in encoder pulses
 		double _currangrf, _curranglf, _curranglb, _currangrb;
-		double _drvangprevious;
+		double _angactrf, _angactlf, _angactlb, _angactrb;
+		double _speedactrf, _speedactlf, _speedactlb, _speedactrb;
 
 		double _lfwhlangoffset, _rfwhlangoffset, _lbwhlangoffset, _rbwhlangoffset;
 		double _drvang, _drvmag, _drvrot;
+		double _drvangprev, _drvmagprev, _drvrotprev;
+
+		//Accerleration Control tunes
+		double _maneuveringHighSpeedThr, _maneurveringLowSpeedThr;
+		double _maneuveringAngRateLow, _maneuveringMagRateLow, _maneuveringRotRateLow;
+		double _drvangRateLimit, _drvmagRateLimit, _drvrotRateLimit; 
+		double _rateUnlimited;	
 
 		gyroManager *gyroManagerRun;
 		double currentGyroReading = 0;
@@ -63,9 +71,10 @@
 		void AutoApplyPIDControl();
 		void ApplyPIDControl();
 		void UpdatePIDTunes();
+		void AccelerationControl();
 
-		double limitValue(double maxLimit, double minLimit, double value);
-		double limitRate(double limit, double value, double prevValue);
+		double limitValue(double value, double maxLimit, double minLimit);
+		double limitRate(double value, double prevValue, double limit);
 	};
 
 #endif /* SRC_DRIVESYSTEM_DRIVEMANAGER_H_ */

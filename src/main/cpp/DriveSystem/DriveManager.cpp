@@ -19,6 +19,21 @@ DriveManager::DriveManager(IO *io, RobotCommands *com, ControllerManager *cntls)
 	_drvang = 0;
 	_drvmag = 0;
 	_drvrot = 0;
+	_drvangprev = 0;
+	_drvmagprev = 0;
+	_drvrotprev = 0;
+
+	_maxdrivespeed = 5670; 
+
+	_maneuveringHighSpeedThr = _maxdrivespeed * .75;
+	_maneurveringLowSpeedThr = _maxdrivespeed * .5;
+	_maneuveringAngRateLow = 0;
+	_maneuveringMagRateLow = 0;
+	_maneuveringRotRateLow = 0;
+	_drvangRateLimit = 1;
+	_drvmagRateLimit = 0.02;
+	_drvrotRateLimit = 0.02;
+	_rateUnlimited = 500000;
 
 	/* Max Speed
 	5676 RPM on NEO brushless motor	
@@ -34,6 +49,14 @@ DriveManager::DriveManager(IO *io, RobotCommands *com, ControllerManager *cntls)
 	_curranglf = 0;
 	_curranglb = 0;
 	_currangrb = 0;
+	_angactlf = 0;
+	_angactrf = 0;	
+	_angactlb = 0;
+	_angactrb = 0;
+	_speedactlf = 0;
+	_speedactrf = 0;
+	_speedactlb = 0;
+	_speedactrb = 0;	
 	_lfwhlangoffset = 0;
 	_rfwhlangoffset = 0;
 	_lbwhlangoffset = 0;
@@ -167,16 +190,27 @@ double DriveManager::WhlAngCalcOffset(double command, double offset) {
 //This prevents the swerve wheels from always returning to "0" angle when there is no command from the driver
 //Doing so makes for much smoother starts and stops
 void DriveManager::CalculateVectors() {
+	_angactlf = _io->steerencdrvlf->Get();
+	_angactrf = _io->steerencdrvrf->Get();
+	_angactlb = _io->steerencdrvlb->Get();
+	_angactrb = _io->steerencdrvrb->Get();
+	_speedactlf = _io->drvlfenc->GetVelocity();
+	_speedactrf = _io->drvrfenc->GetVelocity();
+	_speedactlb = _io->drvlbenc->GetVelocity();
+	_speedactrb = _io->drvrbenc->GetVelocity();
 
 	//Determine if the driver or the guidance system is in control of the drivetrain
 	//and use the appropriate drive commands
-	_drvangprevious = _drvang;
+	_drvangprev = _drvang;
+	_drvmagprev = _drvmag;
+	_drvrotprev = _drvrot;
+
 	if(_commands->guidanceSysActive == true){
 		_drvang = _commands->autodrvang;
 		_drvmag = _commands->autodrvmag;
 		_drvrot = _commands->autodrvrot;
 	} else {
-		 if(fabs(_commands->drvmag) < 0.05) _drvang = _drvangprevious;
+		 if(fabs(_commands->drvmag) < 0.05) _drvang = _drvangprev;
 		 else _drvang = _commands->drvang;
 
 		_drvmag = pow(_commands->drvmag, 2);
@@ -286,20 +320,20 @@ void DriveManager::UpdateDashboard(){
 	frc::SmartDashboard::PutNumber("Swerve Left Back Angle Desired", _swervelib->whl->angleLB);	
 	frc::SmartDashboard::PutNumber("Swerve Right Back Angle Desired", _swervelib->whl->angleRB);	
 
-	frc::SmartDashboard::PutNumber("Swerve Left Front Angle Actual", _io->steerencdrvlf->Get());
-	frc::SmartDashboard::PutNumber("Swerve Right Front Angle Actual", _io->steerencdrvrf->Get());	
-	frc::SmartDashboard::PutNumber("Swerve Left Back Angle Actual", _io->steerencdrvlb->Get());
-	frc::SmartDashboard::PutNumber("Swerve Right Back Angle Actual", _io->steerencdrvrb->Get());
+	frc::SmartDashboard::PutNumber("Swerve Left Front Angle Actual", _angactlf);
+	frc::SmartDashboard::PutNumber("Swerve Right Front Angle Actual", _angactrf);	
+	frc::SmartDashboard::PutNumber("Swerve Left Back Angle Actual", _angactlb);
+	frc::SmartDashboard::PutNumber("Swerve Right Back Angle Actual", _angactrb);
 
 	frc::SmartDashboard::PutNumber("Swerve Left Front Speed Desired", _swervelib->whl->speedLF);	
 	frc::SmartDashboard::PutNumber("Swerve Right Front Speed Desired", _swervelib->whl->speedRF);	
 	frc::SmartDashboard::PutNumber("Swerve Left Back Speed Desired", _swervelib->whl->speedLB);	
 	frc::SmartDashboard::PutNumber("Swerve Right Back Speed Desired", _swervelib->whl->speedRB);
 
-	frc::SmartDashboard::PutNumber("Swerve Left Front Speed Actual", _io->drvlfenc->GetVelocity());
-	frc::SmartDashboard::PutNumber("Swerve Right Front Speed Actual", _io->drvrfenc->GetVelocity());
-	frc::SmartDashboard::PutNumber("Swerve Left Back Speed Actual", _io->drvlbenc->GetVelocity());
-	frc::SmartDashboard::PutNumber("Swerve Right Back Speed Actual", _io->drvrbenc->GetVelocity());
+	frc::SmartDashboard::PutNumber("Swerve Left Front Speed Actual", _speedactlf);
+	frc::SmartDashboard::PutNumber("Swerve Right Front Speed Actual", _speedactrf);
+	frc::SmartDashboard::PutNumber("Swerve Left Back Speed Actual", _speedactlb);
+	frc::SmartDashboard::PutNumber("Swerve Right Back Speed Actual", _speedactrb);
 
 	//Swerve Encoder offset calibrations
 	frc::SmartDashboard::PutNumber("Swerve Left Front Encoder Offset", _lfwhlangoffset);
@@ -379,14 +413,40 @@ void DriveManager::ApplyFieldOrientedDrive(){
 	while(_drvang > 360) _drvang -= 360;
 }
 
-double DriveManager::limitRate(double limit, double value, double prevValue){
+double DriveManager::limitRate(double value, double prevValue, double limit){
   if(value > prevValue) value += limit;
   else if(value < prevValue) value -= limit;
   return value;
 }
 
-double DriveManager::limitValue(double maxLimit, double minLimit, double value){
+double DriveManager::limitValue(double value, double maxLimit, double minLimit){
   if(value > maxLimit) value = maxLimit;
   else if(value < minLimit) value = minLimit;
   return value;
+}
+
+void DriveManager::AccelerationControl(){
+	//Calculate robot speed as a percentage of full speed based on all 4 motors
+	double robotSpeed = fabs((_speedactlf + _speedactrf + _speedactlb + _speedactrb) / 4 / _maxdrivespeed);
+
+	if(robotSpeed > _maneuveringHighSpeedThr) {
+		_drvangRateLimit = _maneuveringAngRateLow;
+		_drvmagRateLimit = _maneuveringMagRateLow;
+		_drvrotRateLimit = _maneuveringRotRateLow;
+	} else if (robotSpeed > _maneurveringLowSpeedThr) {
+		//TODO: implement proportional rate limits
+		_drvangRateLimit = _maneuveringAngRateLow;
+		_drvmagRateLimit = _maneuveringMagRateLow;
+		_drvrotRateLimit = _maneuveringRotRateLow;
+	}
+	else { 
+		_drvangRateLimit = _rateUnlimited;
+		_drvmagRateLimit = _rateUnlimited;
+		_drvrotRateLimit = _rateUnlimited;
+	}
+
+	_drvang = limitRate(_drvang, _drvangprev, _drvangRateLimit);
+	_drvmag = limitRate(_drvmag, _drvmagprev, _drvmagRateLimit);
+	_drvrot = limitRate(_drvrot, _drvrotprev, _drvrotRateLimit);
+
 }
