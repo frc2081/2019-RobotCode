@@ -34,7 +34,7 @@ DriveManager::DriveManager(IO *io, RobotCommands *com, ControllerManager *cntls)
 	851 RPM / 60 seconds/minute * 12.56 inches/rev = 178 inches/sec
 	178 in/s = 14.83 ft/s
 	*/
-	_maxdrivespeed = 1; //Speed is in encoder pulses
+	_maxdrivespeed = 5760; //Speed is in encoder pulses
 
 	_currangrf = 0;
 	_curranglf = 0;
@@ -69,18 +69,35 @@ DriveManager::DriveManager(IO *io, RobotCommands *com, ControllerManager *cntls)
 	_rbturnpid->SetContinuous();
 	_rbturnpid->Enable();
 
+	//Set up swerve drive PID controllers
+	_lfdrvpid = new rev::CANPIDController(*_io->drvlfmot);
+	_rfdrvpid = new rev::CANPIDController(*_io->drvlfmot);
+	_lbdrvpid = new rev::CANPIDController(*_io->drvlfmot);
+	_rbdrvpid = new rev::CANPIDController(*_io->drvlfmot);
+
+	_lfdrvpid->SetP(_drvpidp);
+	_rfdrvpid->SetP(_drvpidp);
+	_lbdrvpid->SetP(_drvpidp);
+	_rbdrvpid->SetP(_drvpidp);	
+	_lfdrvpid->SetI(_drvpidi);
+	_rfdrvpid->SetI(_drvpidi);
+	_lbdrvpid->SetI(_drvpidi);
+	_rbdrvpid->SetI(_drvpidi);	
+	_lfdrvpid->SetD(_drvpidd);
+	_rfdrvpid->SetD(_drvpidd);
+	_lbdrvpid->SetD(_drvpidd);
+	_rbdrvpid->SetD(_drvpidd);	
+	_lfdrvpid->SetFF(_drvpidf);
+	_rfdrvpid->SetFF(_drvpidf);
+	_lbdrvpid->SetFF(_drvpidf);
+	_rbdrvpid->SetFF(_drvpidf);	
+
 	//Preferences file to save swerve drive encoder offset calibrations
 	_prefs = frc::Preferences::GetInstance();
 	_lfwhlangoffset = _prefs->GetDouble("LFOffset", 0);
 	_rfwhlangoffset = _prefs->GetDouble("RFOffset", 0);
 	_lbwhlangoffset = _prefs->GetDouble("LBOffset", 0);
 	_rbwhlangoffset = _prefs->GetDouble("RBOffset", 0);
-
-
-	//_lfdrvpid = new rev::CANPIDController(*_io->drvlfmot);
-	//_rfdrvpid = _io->drvrfmot->GetPIDController();
-	//_lbdrvpid = _io->drvlbmot->GetPIDController();
-	//_rbdrvpid = _io->drvrbmot->GetPIDController();
 }
 
 void DriveManager::DriveManagerInit() {
@@ -262,10 +279,10 @@ void DriveManager::ApplyPIDControl() {
 	_io->drvlbmot->Set(_swervelib->whl->speedLB);
 	_io->drvrbmot->Set(_swervelib->whl->speedRB);
 
-	//_lfdrvpid->SetSetpoint(_swervelib->whl->speedLF);
-	//_rfdrvpid->SetSetpoint(_swervelib->whl->speedRF);
-	//_lbdrvpid->SetSetpoint(_swervelib->whl->speedLB);
-	//_rbdrvpid->SetSetpoint(_swervelib->whl->speedRB);
+	_lfdrvpid->SetReference(_swervelib->whl->speedLF, rev::ControlType::kVelocity);
+	_rfdrvpid->SetReference(_swervelib->whl->speedRF, rev::ControlType::kVelocity);
+	_lbdrvpid->SetReference(_swervelib->whl->speedLB, rev::ControlType::kVelocity);
+	_rbdrvpid->SetReference(_swervelib->whl->speedRB, rev::ControlType::kVelocity);
 }
 
 void DriveManager::UpdateDashboard(){
@@ -276,16 +293,21 @@ void DriveManager::UpdateDashboard(){
 	frc::SmartDashboard::PutNumber("Swerve Left Back Angle Desired", _swervelib->whl->angleLB);	
 	frc::SmartDashboard::PutNumber("Swerve Right Back Angle Desired", _swervelib->whl->angleRB);	
 
-	frc::SmartDashboard::PutNumber("Swerve Left Front Speed Desired", _swervelib->whl->speedLF);	
-	frc::SmartDashboard::PutNumber("Swerve Right Front Speed Desired", _swervelib->whl->speedRF);	
-	frc::SmartDashboard::PutNumber("Swerve Left Back Speed Desired", _swervelib->whl->speedLB);	
-	frc::SmartDashboard::PutNumber("Swerve Right Back Speed Desired", _swervelib->whl->speedRB);
-
 	//Swerve Actual Wheel Vectors
 	frc::SmartDashboard::PutNumber("Swerve Left Front Angle Actual", _io->steerencdrvlf->Get());
 	frc::SmartDashboard::PutNumber("Swerve Right Front Angle Actual", _io->steerencdrvrf->Get());	
 	frc::SmartDashboard::PutNumber("Swerve Left Back Angle Actual", _io->steerencdrvlb->Get());
 	frc::SmartDashboard::PutNumber("Swerve Right Back Angle Actual", _io->steerencdrvrb->Get());
+
+	frc::SmartDashboard::PutNumber("Swerve Left Front Speed Desired", _swervelib->whl->speedLF);	
+	frc::SmartDashboard::PutNumber("Swerve Right Front Speed Desired", _swervelib->whl->speedRF);	
+	frc::SmartDashboard::PutNumber("Swerve Left Back Speed Desired", _swervelib->whl->speedLB);	
+	frc::SmartDashboard::PutNumber("Swerve Right Back Speed Desired", _swervelib->whl->speedRB);
+
+	frc::SmartDashboard::PutNumber("Swerve Left Front Speed Actual", _io->drvlfenc->GetVelocity());
+	frc::SmartDashboard::PutNumber("Swerve Right Front Speed Actual", _io->drvrfenc->GetVelocity());
+	frc::SmartDashboard::PutNumber("Swerve Left Back Speed Actual", _io->drvlbenc->GetVelocity());
+	frc::SmartDashboard::PutNumber("Swerve Right Back Speed Actual", _io->drvrbenc->GetVelocity());
 
 	//Swerve Encoder offset calibrations
 	frc::SmartDashboard::PutNumber("Swerve Left Front Encoder Offset", _lfwhlangoffset);
@@ -298,25 +320,64 @@ void DriveManager::UpdateDashboard(){
 
 void DriveManager::UpdatePIDTunes(){
 
-	_turnpidp = frc::SmartDashboard::GetNumber("Swerve Turn P", turnP);
-	_turnpidi = frc::SmartDashboard::GetNumber("Swerve Turn I", turnI);
-	_turnpidd = frc::SmartDashboard::GetNumber("Swerve Turn D", turnD);
-
-	_lfturnpid->SetP(_turnpidp);
-	_lfturnpid->SetI(_turnpidi);
-	_lfturnpid->SetD(_turnpidd);
+	double turnpidp = frc::SmartDashboard::GetNumber("Swerve Turn P", _turnpidp);
+	double turnpidi = frc::SmartDashboard::GetNumber("Swerve Turn I", _turnpidi);
+	double turnpidd = frc::SmartDashboard::GetNumber("Swerve Turn D", _turnpidd);
 	
-	_rfturnpid->SetP(_turnpidp);
-	_rfturnpid->SetI(_turnpidi);
-	_rfturnpid->SetD(_turnpidd);
+	double drvpidp = frc::SmartDashboard::GetNumber("Swerve Drive P", _drvpidp);
+	double drvpidi = frc::SmartDashboard::GetNumber("Swerve Drive I", _drvpidi);
+	double drvpidd = frc::SmartDashboard::GetNumber("Swerve Drive D", _drvpidd);
+	double drvpidf = frc::SmartDashboard::GetNumber("Swerve Drive F", _drvpidf);
 
-	_lbturnpid->SetP(_turnpidp);
-	_lbturnpid->SetI(_turnpidi);
-	_lbturnpid->SetD(_turnpidd);
-
-	_rbturnpid->SetP(_turnpidp);
-	_rbturnpid->SetI(_turnpidi);
-	_rbturnpid->SetD(_turnpidd);
+	if(_turnpidp != turnpidp) {
+		_turnpidp = turnpidp;
+		_lfturnpid->SetP(_turnpidp);
+		_rfturnpid->SetP(_turnpidp);
+		_lbturnpid->SetP(_turnpidp);
+		_rbturnpid->SetP(_turnpidp);	
+	}
+	if(_turnpidi != turnpidi){
+		_turnpidi = turnpidi;
+		_lfturnpid->SetI(_turnpidi);
+		_rfturnpid->SetI(_turnpidi);	
+		_lbturnpid->SetI(_turnpidi);
+		_rbturnpid->SetI(_turnpidi);
+	}
+	if(_turnpidd != turnpidd){
+		_turnpidd = turnpidd;
+		_lfturnpid->SetD(_turnpidd);
+		_rfturnpid->SetD(_turnpidd);
+		_lbturnpid->SetD(_turnpidd);
+		_rbturnpid->SetD(_turnpidd);
+	}
+	if(_drvpidp != drvpidp) {
+		_drvpidp = drvpidp;
+		_lfdrvpid->SetP(_drvpidp);
+		_rfdrvpid->SetP(_drvpidp);
+		_lbdrvpid->SetP(_drvpidp);
+		_rbdrvpid->SetP(_drvpidp);	
+	}
+	if(_drvpidi != drvpidi) {
+		_drvpidi = drvpidi;
+		_lfdrvpid->SetI(_drvpidi);
+		_rfdrvpid->SetI(_drvpidi);
+		_lbdrvpid->SetI(_drvpidi);
+		_rbdrvpid->SetI(_drvpidi);	
+	}
+	if(_drvpidd != drvpidd) {
+		_drvpidd = drvpidd;
+		_lfdrvpid->SetD(_drvpidd);
+		_rfdrvpid->SetD(_drvpidd);
+		_lbdrvpid->SetD(_drvpidd);
+		_rbdrvpid->SetD(_drvpidd);	
+	}
+	if(_drvpidf != drvpidf) {
+		_drvpidf = drvpidf;
+		_lfdrvpid->SetFF(_drvpidf);
+		_rfdrvpid->SetFF(_drvpidf);
+		_lbdrvpid->SetFF(_drvpidf);
+		_rbdrvpid->SetFF(_drvpidf);	
+	}
 }
 
 void DriveManager::ApplyFieldOrientedDrive(){
@@ -324,4 +385,16 @@ void DriveManager::ApplyFieldOrientedDrive(){
 	_drvang = _drvang - currentGyroReading;
 	while(_drvang < 0) _drvang += 360;
 	while(_drvang > 360) _drvang -= 360;
+}
+
+double DriveManager::limitRate(double limit, double value, double prevValue){
+  if(value > prevValue) value += limit;
+  else if(value < prevValue) value -= limit;
+  return value;
+}
+
+double DriveManager::limitValue(double maxLimit, double minLimit, double value){
+  if(value > maxLimit) value = maxLimit;
+  else if(value < minLimit) value = minLimit;
+  return value;
 }

@@ -70,6 +70,9 @@
 		void AutoApplyPIDControl();
 		void ApplyPIDControl();
 		void UpdatePIDTunes();
+
+		double limitValue(double maxLimit, double minLimit, double value);
+		double limitRate(double limit, double value, double prevValue);
 	};
 
 #endif /* SRC_DRIVESYSTEM_DRIVEMANAGER_H_ */

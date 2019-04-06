@@ -21,25 +21,28 @@ IO::IO() {
 	turnlfmot = new WPI_VictorSPX(5);
 	turnrbmot = new WPI_VictorSPX(6);
 	turnlbmot = new WPI_VictorSPX(7);
-	//Other Motors
-	liftdrivemot = new WPI_VictorSPX(12);	
-	elevatormot = new WPI_VictorSPX(13);
 
+	//Other Motors
 	liftrfmot = new WPI_VictorSPX(8);	
 	liftlfmot = new WPI_VictorSPX(9);
 	liftrbmot = new WPI_VictorSPX(10);
 	liftlbmot = new WPI_VictorSPX(11);
-	//PWM 14-18 used as DIO inputs
+
+	liftdrivemot = new WPI_VictorSPX(12);	
+	elevatormot = new WPI_VictorSPX(13);	
 	ballintakemot = new WPI_VictorSPX(14);
 
 	//Swerve Drive Encoders
-	//DIO 10-13 are used as PWM outputs for climb motors
 	drvrfenc = new rev::CANEncoder(*drvrfmot);
+	drvlfenc = new rev::CANEncoder(*drvlfmot);
+	drvrbenc = new rev::CANEncoder(*drvrbmot);
+	drvlbenc = new rev::CANEncoder(*drvlbmot);
 
 	steerencdrvrf = new frc::AnalogPotentiometer(0,360,0);	
 	steerencdrvlf = new frc::AnalogPotentiometer(1,360,0);	
 	steerencdrvrb = new frc::AnalogPotentiometer(2,360,0);	
 	steerencdrvlb = new frc::AnalogPotentiometer(3,360,0);
+	
 	//Other Encoders and DIO
 	hatchDetectorOne = new frc::DigitalInput(8);
 	hatchDetectorTwo = new frc::DigitalInput(9);	
